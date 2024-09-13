@@ -19,7 +19,8 @@
     "start": "npm run node-es ./dist/index.js",
     "test": "vitest",
     "test:safe": "vitest --no-file-parallelism --maxWorkers 1 --poolOptions.threads.useAtomics false --poolOptions.threads.isolate true",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:reset": "psql postgres://postgres:postgres@localhost:5432/template1 -c 'DROP DATABASE IF EXISTS postgres' -c 'CREATE DATABASE postgres'"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +33,8 @@
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.12.3",
+    "@types/passport": "^1.0.16",
+    "@types/passport-github2": "^1.2.9",
     "@types/pg": "^8.11.6",
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^7.5.0",
@@ -60,6 +63,8 @@
     "jsonwebtoken": "^9.0.2",
     "kysely": "^0.27.3",
     "lodash-es": "^4.17.21",
+    "passport": "^0.7.0",
+    "passport-github2": "^0.1.12",
     "pg": "^8.11.5",
     "superjson": "^2.2.1",
     "trpc-panel": "^1.3.4",
