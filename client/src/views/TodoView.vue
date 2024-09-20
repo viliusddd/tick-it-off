@@ -19,16 +19,23 @@
             >
               <ChevronLeftIcon class="h-6 w-6" />
             </button>
-            <div class="relative mx-2 flex-grow">
+            <div class="relative mx-2 flex flex-grow items-center">
               <button
-                class="w-full cursor-pointer rounded-full border border-gray-300 bg-white px-4 py-2 text-center transition duration-300 ease-in-out hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="flex-grow cursor-pointer rounded-l-full border border-r-0 border-gray-300 bg-white px-4 py-2 text-center transition duration-300 ease-in-out hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 @click="toggleCalendar"
               >
                 {{ formatDate(currentDate) }}
               </button>
+              <button
+                @click="goToToday"
+                class="transform rounded-r-full border border-l-0 border-gray-300 bg-white px-4 py-2 text-blue-500 transition duration-300 ease-in-out hover:bg-gray-50 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                :disabled="isToday"
+              >
+                Today
+              </button>
               <div
                 v-if="showCalendar"
-                class="absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 transform rounded-lg border border-gray-300 bg-white shadow-lg"
+                class="absolute left-0 top-full z-10 mt-2 w-full rounded-lg border border-gray-300 bg-white shadow-lg"
               >
                 <DatePicker
                   v-model="currentDate"
@@ -48,13 +55,6 @@
                 class="h-6 w-6"
                 :class="{ 'cursor-not-allowed opacity-50': isToday }"
               />
-            </button>
-            <button
-              @click="goToToday"
-              class="ml-2 transform rounded-full bg-blue-500 px-4 py-2 text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              :disabled="isToday"
-            >
-              Today
             </button>
           </div>
 
