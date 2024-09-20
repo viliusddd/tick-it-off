@@ -9,8 +9,9 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>
 
 export interface Todo {
   createdAt: Generated<Timestamp>
+  date: Timestamp | null
   id: Generated<number>
-  isCompleted: Generated<boolean>
+  isCompleted: Generated<boolean | null>
   title: string
 }
 
