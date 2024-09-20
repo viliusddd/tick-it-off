@@ -29,14 +29,14 @@
             >
               <input
                 type="checkbox"
-                :checked="todo.completed"
+                :checked="todo.isCompleted"
                 @change="toggleTodo(todo.id)"
                 class="h-5 w-5 rounded border-gray-300 text-blue-600 transition duration-150 ease-in-out focus:ring-blue-500"
               />
               <span
                 :class="{
-                  'text-gray-500 line-through': todo.completed,
-                  'text-gray-800': !todo.completed,
+                  'text-gray-500 line-through': todo.isCompleted,
+                  'text-gray-800': !todo.isCompleted,
                 }"
                 class="flex-grow"
               >
@@ -135,7 +135,7 @@ const toggleTodo = async (id) => {
     if (todoIndex !== -1) {
       todos.value[todoIndex] = {
         ...todos.value[todoIndex],
-        completed: !todos.value[todoIndex].completed,
+        isCompleted: !todos.value[todoIndex].isCompleted,
       }
     }
   } catch (error) {

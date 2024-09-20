@@ -33,11 +33,11 @@ export function todoRepository(db: Database) {
     },
 
     async toggle(id: number): Promise<TodoPublic> {
-      const { completed } = (await this.findById(id)) || {}
+      const { isCompleted } = (await this.findById(id)) || {}
 
       return db
         .updateTable('todo')
-        .set({ completed: !completed })
+        .set({ isCompleted: !isCompleted })
         .where('id', '=', id)
         .returning(todoKeysPublic)
         .executeTakeFirstOrThrow()

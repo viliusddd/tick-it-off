@@ -6,7 +6,7 @@ import { idSchema } from './shared'
 export const todoSchema = z.object({
   id: idSchema,
   title: z.string().trim().min(1).max(255),
-  completed: z.boolean().default(false),
+  isCompleted: z.boolean().default(false),
   createdAt: z.date().default(() => new Date()),
 })
 
