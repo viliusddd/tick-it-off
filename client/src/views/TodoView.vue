@@ -15,7 +15,7 @@
           <div class="mb-6 flex items-center justify-between">
             <button
               @click="changeDate(-1)"
-              class="transform text-blue-500 transition duration-300 ease-in-out hover:scale-110 hover:text-blue-600 focus:outline-none"
+              class="transform text-blue-500 transition duration-300 ease-in-out hover:scale-110 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               <ChevronLeftIcon class="h-6 w-6" />
             </button>
@@ -35,19 +35,23 @@
                   @update:modelValue="onDateSelect"
                   mode="date"
                   :max-date="new Date()"
+                  :attributes="calendarAttributes"
                 />
               </div>
             </div>
             <button
               @click="changeDate(1)"
-              class="transform text-blue-500 transition duration-300 ease-in-out hover:scale-110 hover:text-blue-600 focus:outline-none"
+              class="transform text-blue-500 transition duration-300 ease-in-out hover:scale-110 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               :disabled="isToday"
             >
-              <ChevronRightIcon class="h-6 w-6" />
+              <ChevronRightIcon
+                class="h-6 w-6"
+                :class="{ 'cursor-not-allowed opacity-50': isToday }"
+              />
             </button>
             <button
               @click="goToToday"
-              class="ml-2 transform rounded-full bg-blue-500 px-4 py-2 text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              class="ml-2 transform rounded-full bg-blue-500 px-4 py-2 text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               :disabled="isToday"
             >
               Today
@@ -95,7 +99,7 @@
               </span>
               <button
                 @click="deleteTodo(todo.id)"
-                class="text-red-500 transition duration-150 ease-in-out hover:text-red-600 focus:outline-none"
+                class="text-red-500 transition duration-150 ease-in-out hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
               >
                 <TrashIcon class="h-5 w-5" />
               </button>
@@ -128,10 +132,6 @@ import { ChevronLeftIcon, ChevronRightIcon, TrashIcon } from '@heroicons/vue/24/
 import { DatePicker } from 'v-calendar'
 
 const showCalendar = ref(false)
-
-function toggleCalendar() {
-  showCalendar.value = !showCalendar.value
-}
 const todos = ref([])
 const newTodo = ref('')
 const currentDate = ref(new Date())
@@ -144,6 +144,12 @@ const isToday = computed(() => {
   const today = new Date()
   return currentDate.value.toDateString() === today.toDateString()
 })
+
+const calendarAttributes = computed(() => [
+  {
+    dates: todos.value.map((todo) => new Date(todo.date)),
+  },
+])
 
 const fetchTodos = async () => {
   if (isFetching.value || !hasMore.value) return
@@ -219,6 +225,10 @@ const changeDate = (days) => {
   }
 }
 
+const toggleCalendar = () => {
+  showCalendar.value = !showCalendar.value
+}
+
 const onDateSelect = (date) => {
   currentDate.value = date
   showCalendar.value = false
@@ -237,10 +247,32 @@ const formatDate = (date) => {
   })
 }
 
+const handleClickOutside = (event) => {
+  const calendarElement = document.querySelector('.vc-container')
+  const calendarButton = document.querySelector('button:has(+ div > .vc-container)')
+
+  if (
+    showCalendar.value &&
+    calendarElement &&
+    !calendarElement.contains(event.target) &&
+    event.target !== calendarButton
+  ) {
+    showCalendar.value = false
+  }
+}
+
 watch(currentDate, () => {
   todos.value = []
   hasMore.value = true
   fetchTodos()
+})
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
 })
 </script>
 
