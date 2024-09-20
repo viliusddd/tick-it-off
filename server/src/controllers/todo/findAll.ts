@@ -17,7 +17,7 @@ export default publicProcedure
   )
   .query(async ({ input, ctx: { repos } }) => {
     const todos = await repos.todoRepository.findAll(input)
-    console.log(todos)
+    // console.log(todos)
 
     return todos
   })

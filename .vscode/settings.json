@@ -11,5 +11,13 @@
     "source.fixAll": "explicit",
     "source.fixAll.eslint": "explicit"
   },
-  "eslint.validate": ["typescript", "typescriptreact", "vue"]
+  "eslint.validate": ["typescript", "typescriptreact", "vue"],
+  "[typescript, typescript, json]": {
+    "editor.tabSize": 2,
+    "editor.rulers": [72, 80, 100]
+  },
+  // "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "editor.stickyScroll.enabled": true,
+
 }
