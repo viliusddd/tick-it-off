@@ -7,7 +7,7 @@ export async function up(db: Kysely<any>) {
       c.primaryKey().generatedAlwaysAsIdentity()
     )
     .addColumn('title', 'varchar', (c) => c.notNull())
-    .addColumn('completed', 'boolean', (c) => c.defaultTo(false).notNull())
+    .addColumn('is_completed', 'boolean', (c) => c.defaultTo(false).notNull())
     .addColumn('created_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )

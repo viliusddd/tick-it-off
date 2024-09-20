@@ -20,7 +20,8 @@
     "test": "vitest",
     "test:safe": "vitest --no-file-parallelism --maxWorkers 1 --poolOptions.threads.useAtomics false --poolOptions.threads.isolate true",
     "typecheck": "tsc --noEmit",
-    "db:reset": "psql postgres://postgres:postgres@localhost:5432/template1 -c 'DROP DATABASE IF EXISTS postgres' -c 'CREATE DATABASE postgres'"
+    "pg:reset": "psql postgres://postgres:postgres@localhost:5432/template1 -c 'DROP DATABASE IF EXISTS postgres' -c 'CREATE DATABASE postgres'",
+    "db:reset": "npm run pg:reset && npm run migrate:latest && npm run gen:types"
   },
   "keywords": [],
   "author": "",
