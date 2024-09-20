@@ -59,17 +59,17 @@
           </div>
 
           <div class="mb-6">
-            <div class="flex items-center rounded-full bg-gray-100 p-1">
+            <div class="flex items-center">
               <input
                 v-model="newTodo"
                 @keyup.enter="createTodo"
                 type="text"
                 placeholder="Add a magical task..."
-                class="flex-grow bg-transparent px-4 py-2 focus:outline-none"
+                class="flex-grow rounded-l-full border border-r-0 border-gray-300 bg-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <button
                 @click="createTodo"
-                class="ml-2 transform rounded-full bg-blue-500 px-4 py-2 text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                class="rounded-r-full border border-l-0 border-blue-500 bg-blue-500 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 Add
               </button>
