@@ -7,11 +7,21 @@ export async function up(db: Kysely<any>) {
       c.primaryKey().generatedAlwaysAsIdentity()
     )
     .addColumn('title', 'varchar', (c) => c.notNull())
-    .addColumn('date', 'date')
-    .addColumn('is_completed', 'boolean', (c) => c.defaultTo(false))
     .addColumn('created_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
+    .execute()
+
+  await db.schema
+    .createTable('completion')
+    .addColumn('todo_id', 'integer', (c) =>
+      c.references('todo.id').notNull().onDelete('cascade')
+    )
+    .addColumn('date', 'date', (c) => c.notNull())
+    .addColumn('created_at', 'timestamptz', (c) =>
+      c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
+    )
+    .addUniqueConstraint('todo_id_date_unique', ['todo_id', 'date'])
     .execute()
 
   await db.schema
@@ -30,5 +40,6 @@ export async function up(db: Kysely<any>) {
 
 export async function down(db: Kysely<any>) {
   await db.schema.dropTable('todo').execute()
+  await db.schema.dropTable('completion').execute()
   await db.schema.dropTable('user').execute()
 }

@@ -7,11 +7,15 @@ export type Generated<T> =
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>
 
+export interface Completion {
+  createdAt: Generated<Timestamp>
+  date: Timestamp
+  todoId: number
+}
+
 export interface Todo {
   createdAt: Generated<Timestamp>
-  date: Timestamp | null
   id: Generated<number>
-  isCompleted: Generated<boolean | null>
   title: string
 }
 
@@ -24,6 +28,7 @@ export interface User {
 }
 
 export interface DB {
+  completion: Completion
   todo: Todo
   user: User
 }

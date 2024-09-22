@@ -1,10 +1,12 @@
 import { router } from '../trpc'
-import user from './user'
+import completion from './completion'
 import todo from './todo'
+import user from './user'
 
 export const appRouter = router({
-  user,
+  completion,
   todo,
+  user,
 })
 
 export type AppRouter = typeof appRouter
