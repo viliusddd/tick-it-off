@@ -3,9 +3,12 @@ import {
   type CompletionPublic,
   completionKeysPublic,
 } from '@server/entities/completion'
-import { type Insertable } from 'kysely'
+import type { Insertable } from 'kysely'
 
-type Pagination = { offset: number; limit: number }
+type Pagination = {
+  offset: number
+  limit: number
+}
 
 export function completionRepository(db: Database) {
   return {
@@ -18,13 +21,18 @@ export function completionRepository(db: Database) {
         .executeTakeFirst()
     },
 
-    async findAll({ offset, limit }: Pagination): Promise<CompletionPublic[]> {
+    async findAll(
+      date: any,
+      pagination: Pagination
+    ): Promise<CompletionPublic[]> {
       return db
         .selectFrom('completion')
+        .innerJoin('todo', 'todo.id', 'completion.todoId')
+        .where('completion.date', '=', date)
         .select(completionKeysPublic)
         .orderBy('completion.todoId', 'desc')
-        .offset(offset)
-        .limit(limit)
+        .offset(pagination.offset)
+        .limit(pagination.limit)
         .execute()
     },
 

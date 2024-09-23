@@ -5,7 +5,7 @@ import { createdAtSchema, idSchema } from './shared'
 
 export const completionSchema = z.object({
   todoId: idSchema,
-  date: z.string().date(),
+  date: z.string(),
   createdAt: createdAtSchema,
 })
 
