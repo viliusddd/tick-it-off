@@ -190,29 +190,33 @@ const fetch = async <T,>(queryRef: Ref<T[]>, queryCallback: () => Promise<T[]>) 
 const fetchAll = async () => {
   const fetchedTodos = await fetch(todos, fetchAllTodos)
 
+  // Get the id range for current fetch, so that it can be used in fetching
+  // from completion table
   if (fetchedTodos && fetchedTodos.length !== 0) {
-    const highestId = fetchedTodos.reduce(
-      (max: number, todo: { id: number }) => (todo.id > max ? todo.id : max),
-      fetchedTodos[0].id
-    )
+    const lowestId = getMinMaxId(fetchedTodos, 'min')
+    const highestId = getMinMaxId(fetchedTodos, 'max')
 
-    const lowestId = fetchedTodos.reduce(
-      (min: number, todo: { id: number }) => (todo.id < min ? todo.id : min),
-      fetchedTodos[0].id
-    )
-
-    console.log(todos.value)
     await fetch(completions, () => fetchCompletionsByIdRange(lowestId, highestId))
 
-    todos.value = todos.value.map((todo) => ({
+    // append isCompleted key to todo with todo checkbox status
+    todos.value = todos.value = todos.value.map((todo) => ({
       id: todo.id,
       title: todo.title,
       createdAt: todo.createdAt,
-      isCompleted: completions.value.some((compl) => {
-        return compl.todoId === todo.id
-      }),
+      isCompleted: completions.value.some((compl) => compl.todoId === todo.id),
     }))
   }
+}
+
+type Item = { id: number }
+
+/** Get the lowest or highest id number from array of objects */
+const getMinMaxId = (items: Item[], bar: 'min' | 'max') => {
+  return items.reduce((acc, item) => {
+    if (bar === 'min') return item.id < acc ? item.id : acc
+    else if (bar === 'max') return item.id > acc ? item.id : acc
+    return acc
+  }, items[0].id)
 }
 
 useInfiniteScroll(
