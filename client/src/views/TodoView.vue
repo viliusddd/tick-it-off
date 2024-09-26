@@ -124,16 +124,17 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useInfiniteScroll } from '@vueuse/core'
 import { trpc } from '@/trpc'
 import { ChevronLeftIcon, ChevronRightIcon, TrashIcon } from '@heroicons/vue/24/solid'
 import { DatePicker } from 'v-calendar'
+import type { Ref } from 'vue'
 
 const showCalendar = ref(false)
-const todos = ref([])
-const completions = ref([])
+const todos: Ref<{ id: number; title: string; createdAt: Date; isCompleted?: boolean }[]> = ref([])
+const completions: Ref<{ todoId: number }[]> = ref([])
 const newTodo = ref('')
 const currentDate = ref(new Date())
 const pageSize = 10
@@ -148,7 +149,7 @@ const isToday = computed(() => {
 
 const calendarAttributes = computed(() => [
   {
-    dates: todos.value.map((todo) => new Date(todo.date)),
+    dates: todos.value.map((todo) => new Date(todo.createdAt)),
   },
 ])
 
@@ -163,14 +164,14 @@ const fetchAllTodos = async () => {
   return queryResult
 }
 
-const fetchCompletionsByIdRange = async (firstId, secondId) =>
+const fetchCompletionsByIdRange = async (firstId: number, secondId: number) =>
   trpc.completion.findByRange.query({
     date: currentDate.value,
     firstId,
     secondId,
   })
 
-const fetch = async (queryRef, queryCallback) => {
+const fetch = async <T,>(queryRef: Ref<T[]>, queryCallback: () => Promise<T[]>) => {
   if (isFetching.value || !hasMore.value) return
   isFetching.value = true
   try {
@@ -189,31 +190,30 @@ const fetch = async (queryRef, queryCallback) => {
 const fetchAll = async () => {
   const fetchedTodos = await fetch(todos, fetchAllTodos)
 
-  if (fetchedTodos.length !== 0) {
+  if (fetchedTodos && fetchedTodos.length !== 0) {
     const highestId = fetchedTodos.reduce(
-      (max, todo) => (todo.id > max ? todo.id : max),
+      (max: number, todo: { id: number }) => (todo.id > max ? todo.id : max),
       fetchedTodos[0].id
     )
 
     const lowestId = fetchedTodos.reduce(
-      (min, todo) => (todo.id < min ? todo.id : min),
+      (min: number, todo: { id: number }) => (todo.id < min ? todo.id : min),
       fetchedTodos[0].id
     )
 
+    console.log(todos.value)
     await fetch(completions, () => fetchCompletionsByIdRange(lowestId, highestId))
 
     todos.value = todos.value.map((todo) => ({
       id: todo.id,
       title: todo.title,
+      createdAt: todo.createdAt,
       isCompleted: completions.value.some((compl) => {
         return compl.todoId === todo.id
       }),
     }))
   }
 }
-
-const getLowestId = (objs) =>
-  objs.reduce((min, todo) => (todo.id > min ? todo.id : min), objs[0].id)
 
 useInfiniteScroll(
   loadMoreTrigger,
@@ -230,9 +230,10 @@ const createTodo = async () => {
     try {
       const createdTodo = await trpc.todo.create.mutate({
         title: newTodo.value,
-        date: currentDate.value.toISOString().split('T')[0],
       })
+
       todos.value.unshift(createdTodo)
+
       newTodo.value = ''
     } catch (error) {
       console.error('Error creating todo:', error)
@@ -240,7 +241,7 @@ const createTodo = async () => {
   }
 }
 
-const deleteTodo = async (id) => {
+const deleteTodo = async (id: number) => {
   try {
     await trpc.todo.deleteTodo.mutate({ id })
     todos.value = todos.value.filter((todo) => todo.id !== id)
@@ -249,7 +250,7 @@ const deleteTodo = async (id) => {
   }
 }
 
-const toggleTodo = async (todoId, date) => {
+const toggleTodo = async (todoId: number, date: Date) => {
   try {
     await trpc.completion.toggle.mutate({ todoId, date })
     const todoIndex = todos.value.findIndex((todo) => todo.id === todoId)
@@ -264,7 +265,7 @@ const toggleTodo = async (todoId, date) => {
   }
 }
 
-const changeDate = (days) => {
+const changeDate = (days: number) => {
   const newDate = new Date(currentDate.value.getTime() + days * 24 * 60 * 60 * 1000)
   if (newDate <= new Date()) {
     currentDate.value = newDate
@@ -275,7 +276,7 @@ const toggleCalendar = () => {
   showCalendar.value = !showCalendar.value
 }
 
-const onDateSelect = (date) => {
+const onDateSelect = (date: Date) => {
   currentDate.value = date
   showCalendar.value = false
 }
@@ -284,23 +285,23 @@ const goToToday = () => {
   currentDate.value = new Date()
 }
 
-const formatDate = (date) => {
+const formatDate = (date: Date) => {
   return date.toLocaleDateString('en-US', {
-    weekday: 'long',
+    weekday: 'short',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   })
 }
 
-const handleClickOutside = (event) => {
-  const calendarElement = document.querySelector('.vc-container')
+const handleClickOutside = (event: MouseEvent) => {
+  const calendarElement: Element | null = document.querySelector('.vc-container')
   const calendarButton = document.querySelector('button:has(+ div > .vc-container)')
 
   if (
     showCalendar.value &&
     calendarElement &&
-    !calendarElement.contains(event.target) &&
+    !calendarElement.contains(event.target as Node) &&
     event.target !== calendarButton
   ) {
     showCalendar.value = false
