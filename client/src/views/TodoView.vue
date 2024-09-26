@@ -85,7 +85,7 @@
               <input
                 type="checkbox"
                 :checked="todo.isCompleted"
-                @change="toggleTodo(todo.id)"
+                @change="toggleTodo(todo.id, currentDate)"
                 class="h-5 w-5 rounded border-gray-300 text-blue-600 transition duration-150 ease-in-out focus:ring-blue-500"
               />
               <span
@@ -133,6 +133,7 @@ import { DatePicker } from 'v-calendar'
 
 const showCalendar = ref(false)
 const todos = ref([])
+const completions = ref([])
 const newTodo = ref('')
 const currentDate = ref(new Date())
 const pageSize = 10
@@ -151,29 +152,74 @@ const calendarAttributes = computed(() => [
   },
 ])
 
-const fetchTodos = async () => {
+const fetchAllTodos = async () => {
+  const queryResult = await trpc.todo.findAll.query({
+    offset: todos.value.length,
+    limit: pageSize,
+  })
+
+  hasMore.value = queryResult.length === pageSize
+
+  return queryResult
+}
+
+const fetchCompletionsByIdRange = async (firstId, secondId) =>
+  trpc.completion.findByRange.query({
+    date: currentDate.value,
+    firstId,
+    secondId,
+  })
+
+const fetch = async (queryRef, queryCallback) => {
   if (isFetching.value || !hasMore.value) return
   isFetching.value = true
   try {
-    const result = await trpc.todo.findAll.query({
-      offset: todos.value.length,
-      limit: pageSize,
-      date: currentDate.value.toISOString().split('T')[0],
-    })
-    todos.value = [...todos.value, ...result]
-    hasMore.value = result.length === pageSize
+    const result = await queryCallback()
+
+    queryRef.value = [...queryRef.value, ...result]
+
+    return result
   } catch (error) {
-    console.error('Error fetching todos:', error)
+    console.error('Error fetching:', error)
   } finally {
     isFetching.value = false
   }
 }
 
+const fetchAll = async () => {
+  const fetchedTodos = await fetch(todos, fetchAllTodos)
+
+  if (fetchedTodos.length !== 0) {
+    const highestId = fetchedTodos.reduce(
+      (max, todo) => (todo.id > max ? todo.id : max),
+      fetchedTodos[0].id
+    )
+
+    const lowestId = fetchedTodos.reduce(
+      (min, todo) => (todo.id < min ? todo.id : min),
+      fetchedTodos[0].id
+    )
+
+    await fetch(completions, () => fetchCompletionsByIdRange(lowestId, highestId))
+
+    todos.value = todos.value.map((todo) => ({
+      id: todo.id,
+      title: todo.title,
+      isCompleted: completions.value.some((compl) => {
+        return compl.todoId === todo.id
+      }),
+    }))
+  }
+}
+
+const getLowestId = (objs) =>
+  objs.reduce((min, todo) => (todo.id > min ? todo.id : min), objs[0].id)
+
 useInfiniteScroll(
   loadMoreTrigger,
   () => {
     if (!isFetching.value && hasMore.value) {
-      fetchTodos()
+      fetchAll()
     }
   },
   { distance: 10 }
@@ -203,10 +249,10 @@ const deleteTodo = async (id) => {
   }
 }
 
-const toggleTodo = async (id) => {
+const toggleTodo = async (todoId, date) => {
   try {
-    await trpc.todo.toggle.mutate({ id })
-    const todoIndex = todos.value.findIndex((todo) => todo.id === id)
+    await trpc.completion.toggle.mutate({ todoId, date })
+    const todoIndex = todos.value.findIndex((todo) => todo.id === todoId)
     if (todoIndex !== -1) {
       todos.value[todoIndex] = {
         ...todos.value[todoIndex],
@@ -263,8 +309,9 @@ const handleClickOutside = (event) => {
 
 watch(currentDate, () => {
   todos.value = []
+  completions.value = []
   hasMore.value = true
-  fetchTodos()
+  fetchAll()
 })
 
 onMounted(() => {
