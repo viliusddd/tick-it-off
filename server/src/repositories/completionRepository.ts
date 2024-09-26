@@ -12,6 +12,16 @@ type Pagination = {
 
 export function completionRepository(db: Database) {
   return {
+    async findByRange(firstId: number, secondId: number, date: Date) {
+      return db
+        .selectFrom('completion')
+        .select(completionKeysPublic)
+        .where('completion.date', '=', date)
+        .where('completion.todoId', '>=', firstId)
+        .where('completion.todoId', '<=', secondId)
+        .execute()
+    },
+
     async findById(todoId: number, date: Date) {
       return db
         .selectFrom('completion')
