@@ -1,47 +1,181 @@
-## Setup
+# Tick It Off
+More organised than a queue at the post office, and just as satisfying to get through!
 
-1. `npm install`
-2. Create a PostgreSQL database (or use an existing one).
-3. Setup `.env` files in `client` and `server` based on `.env.example` files.
+- [Tick It Off](#tick-it-off)
+  - [Features](#features)
+  - [Tech Stack](#tech-stack)
+  - [TL;DR Setup](#tldr-setup)
+  - [API Endpoints](#api-endpoints)
+    - [completion](#completion)
+    - [todo](#todo)
+    - [user](#user)
 
-## Tests
+## Features
 
-```bash
-# front end unit and E2E tests
-npm test -w client
+- Keep code inmonorepo.
+- Use pagination for loading todos.
 
-# front end unit tests
-npm run test:unit -w client
+## Tech Stack
 
-# front end E2E tests
-npm run test:e2e -w client
+<a href="https://postgresql.org">
+  <img
+    title="The World's Most Advanced Open Source Relational Database."
+    src="https://shields.io/badge/PostgreSQL-4169e1.svg?logo=postgresql&logoColor=white"
+  >
+</a>
+<a href="https://typescriptlang.org">
+  <img
+    title="TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale."
+    src="https://shields.io/badge/TypeScript-007ACC.svg?logo=typescript&logoColor=white"
+    >
+</a>
+<a href="https://trpc.io">
+  <img
+    title="Move Fast and Break Nothing. End-to-end typesafe APIs made easy."
+    src="https://shields.io/badge/tRPC-2596BE.svg?logo=trpc&logoColor=white"
+  >
+</a>
+<a href="https://zod.dev">
+  <img
+    title="TypeScript-first schema validation with static type inference."
+    src="https://shields.io/badge/Zod-000000.svg?logo=Zod&logoColor=3068B7"
+  >
+</a>
+<a href="https://expressjs.com">
+  <img
+    title="Fast, unopinionated, minimalist web framework for Node.js."
+    src="https://shields.io/badge/Express.js-000000.svg?logo=express&logoColor=white"
+  >
+</a>
+<a href="https://nodejs.org">
+  <img
+    title="Node.js® is a free, open-source, cross-platform JavaScript runtime environment that lets developers create servers, web apps, command line tools and scripts."
+    src="https://shields.io/badge/Node.js-0D121C.svg?logo=node.js&logoColor=5FA04E"
+  >
+</a>
+<a href="https://vitest.dev">
+  <img
+    title="A Vite-native testing framework. It's fast!"
+    src="https://shields.io/badge/Vitest-6E9F18.svg?logo=vitest&logoColor=FCC72B"
+  >
+</a>
 
-# back end tests with an in-memory database
-npm test -w server
+## TL;DR Setup
+
+```sh
+git clone git@github.com:viliusddd/tick-it-off.git && \
+cd tick-it-off && \
+cp .env.example .env && \
+npm i && \
+npm run migrate:latest && \
+npm run migrate:seed && \
+npm run dev
 ```
 
-## Running the project in development
+## API Endpoints
 
-```bash
-# automatically restarts the server
-npm run dev -w server
+### completion
 
-# client can be started separately
-npm run dev -w client
+<details open>
+
+<summary>completion.findAll</summary>
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/completion.findAll
 ```
 
-## Running the project in production
+</details>
 
-Client (when not using a dedicated server application):
+<details>
 
-```bash
-npm run build -w client
-npm run preview -w client
+<summary>completion.create</summary>
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/completion.create
 ```
 
-Server:
+</details>
 
-```bash
-npm run build -w server
-npm run start -w server
+<details>
+
+<summary>completion.deleteById</summary>
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/completion.deleteById
+```
+
+</details>
+
+
+
+<details>
+
+<summary>completion.findByRange</summary>
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/completion.findByRange
+```
+
+</details>
+
+<details>
+
+<summary>completion.toggle</summary>
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/completion.toggle
+```
+
+</details>
+
+### todo
+
+<details>
+
+<summary>todo.create</summary>
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/todo.create
+```
+
+</details>
+
+<details>
+
+<summary>todo.delete</summary>
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/todo.delete
+```
+
+</details>
+
+<details>
+
+<summary>todo.findAll</summary>
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/todo.findAll
+```
+
+</details>
+
+### user
+
+<details>
+
+<summary>user.login</summary>
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/user.login
+```
+
+</details>
+
+<details>
+
+<summary>user.signup</summary>
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/user.signup
 ```
