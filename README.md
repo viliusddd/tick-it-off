@@ -53,6 +53,12 @@ More organised than a queue at the post office, and just as satisfying to get th
     src="https://shields.io/badge/Node.js-0D121C.svg?logo=node.js&logoColor=5FA04E"
   >
 </a>
+<a href="https://vuejs.org">
+  <img
+    title="An approachable, performant and versatile framework for building web user interfaces."
+    src="https://shields.io/badge/Vue.js-35495E.svg?logo=vuedotjs&logoColor=4FC08D"
+  >
+</a>
 <a href="https://vitest.dev">
   <img
     title="A Vite-native testing framework. It's fast!"
