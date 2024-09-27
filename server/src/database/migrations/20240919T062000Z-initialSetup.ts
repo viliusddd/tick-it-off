@@ -29,9 +29,10 @@ export async function up(db: Kysely<any>) {
     .addColumn('id', 'integer', (c) =>
       c.primaryKey().generatedAlwaysAsIdentity()
     )
-    .addColumn('github_id', 'varchar', (c) => c.notNull().unique())
-    .addColumn('email', 'varchar', (c) => c.notNull().unique())
-    .addColumn('image', 'varchar', (c) => c.notNull())
+    .addColumn('first_name', 'text', (c) => c.notNull())
+    .addColumn('last_name', 'text', (c) => c.notNull())
+    .addColumn('email', 'text', (c) => c.notNull().unique())
+    .addColumn('password', 'text', (c) => c.notNull())
     .addColumn('created_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )

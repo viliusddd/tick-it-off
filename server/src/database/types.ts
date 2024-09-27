@@ -22,9 +22,10 @@ export interface Todo {
 export interface User {
   createdAt: Generated<Timestamp>
   email: string
-  githubId: string
+  firstName: string
   id: Generated<number>
-  image: string
+  lastName: string
+  password: string
 }
 
 export interface DB {

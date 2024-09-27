@@ -8,11 +8,7 @@ import { assertError } from '@server/utils/errors'
 import { userSchema } from '@server/entities/user'
 
 export default publicProcedure
-  .use(
-    provideRepos({
-      userRepository,
-    })
-  )
+  .use(provideRepos({ userRepository }))
   .input(
     userSchema.pick({
       email: true,
