@@ -58,6 +58,9 @@ jobs:
       - name: Run database migration
         working-directory: server/src
         run: npm run migrate:latest
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PORT: ${{ vars.PORT }}
 
       - name: Run server unit tests with coverage
         working-directory: server/src
