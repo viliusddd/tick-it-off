@@ -91,15 +91,19 @@ More organised than a queue at the post office, and just as satisfying to get th
 
 ## TL;DR Setup
 
+1. Install dependencies
+
 ```sh
 git clone git@github.com:viliusddd/tick-it-off.git && \
 cd tick-it-off && \
 cp .env.example .env && \
 npm i && \
 npm run migrate:latest && \
-npm run migrate:seed && \
-npm run dev
 ```
+2. Start server:
+  1. Start PostgreSQL
+  2. adjust variables in `.env`
+  3. Start server `npm run dev`
 
 ## API Endpoints
 
