@@ -1,4 +1,4 @@
-name: Lint & Test Coverage
+name: Build
 
 on:
   pull_request:
@@ -41,12 +41,14 @@ jobs:
         run: npm run lint
 
       - name: Run server unit tests with coverage
+        working-directory: server/src
         run: npm run coverage
         env:
           DATABASE_URL: ${{ vars.DATABASE_URL }}
           PORT: ${{ vars.PORT }}
 
       - name: Run client unit tests with coverage
+        working-directory: client/src
         run: npm run coverage
         env:
           DATABASE_URL: ${{ vars.DATABASE_URL }}

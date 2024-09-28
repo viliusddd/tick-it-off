@@ -1,7 +1,7 @@
 <div align="left">
   <a href="https://github.com/viliusddd/tick-it-off/actions/workflows/deploy.yaml">
     <img
-      title="Workflow status badge"
+      title="Lint, test and build action status"
       src="https://github.com/viliusddd/tick-it-off/actions/workflows/deploy.yaml/badge.svg"
     >
   </a>
