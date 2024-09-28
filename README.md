@@ -99,6 +99,7 @@ cd tick-it-off && \
 cp .env.example .env && \
 npm i && \
 npm run migrate:latest && \
+nvm use
 ```
 2. Start server:
   1. Start PostgreSQL
