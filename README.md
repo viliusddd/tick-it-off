@@ -35,6 +35,12 @@ More organised than a queue at the post office, and just as satisfying to get th
     src="https://shields.io/badge/tRPC-2596BE.svg?logo=trpc&logoColor=white"
   >
 </a>
+<a href="https://tailwindcss.com">
+  <img
+    title="A utility-first CSS framework packed with classes like flex, pt-4, text-center and rotate-90 that can be composed to build any design, directly in your markup."
+    src="https://img.shields.io/badge/tailwindcss-0F172A?&logo=tailwindcss"
+  >
+</a>
 <a href="https://zod.dev">
   <img
     title="TypeScript-first schema validation with static type inference."
