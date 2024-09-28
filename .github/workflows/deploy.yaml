@@ -55,6 +55,10 @@ jobs:
         working-directory: client/src
         run: npm run lint
 
+      - name: Run database migration
+        working-directory: server/src
+        run: npm run migrate:latest
+
       - name: Run server unit tests with coverage
         working-directory: server/src
         run: npm run coverage
