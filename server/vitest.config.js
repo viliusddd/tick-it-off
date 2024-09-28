@@ -7,10 +7,9 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     coverage: {
+      reporter: ['json'],
       provider: 'v8',
-      include: [
-        '**/src/**/*.ts',
-      ],
+      include: ['**/src/**/*.ts'],
       exclude: [
         '**/src/database/**',
         '**/src/entities/**',

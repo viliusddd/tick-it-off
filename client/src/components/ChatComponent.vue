@@ -46,7 +46,7 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
 
-const props = defineProps({
+defineProps({
   user: {
     type: Object,
     required: true,

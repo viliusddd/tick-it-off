@@ -32,17 +32,6 @@ export function todoRepository(db: Database) {
         .executeTakeFirstOrThrow()
     },
 
-    async toggle(id: number): Promise<TodoPublic> {
-      const { isCompleted } = (await this.findById(id)) || {}
-
-      return db
-        .updateTable('todo')
-        .set({ isCompleted: !isCompleted })
-        .where('id', '=', id)
-        .returning(todoKeysPublic)
-        .executeTakeFirstOrThrow()
-    },
-
     async delete(id: number) {
       db.deleteFrom('todo').where('todo.id', '=', id).execute()
     },

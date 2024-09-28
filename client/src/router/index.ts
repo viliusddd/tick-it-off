@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import TodoView from '@/views/TodoView.vue'
-import HomeView from '@/views/HomeView.vue'
 import MainLayout from '@/layouts/MainLayout.vue'
 import { authenticate } from './guards'
 
