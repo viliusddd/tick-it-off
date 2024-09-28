@@ -44,14 +44,14 @@ jobs:
         working-directory: server/src
         run: npm run coverage
         env:
-          DATABASE_URL: ${{ vars.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
           PORT: ${{ vars.PORT }}
 
       - name: Run client unit tests with coverage
         working-directory: client/src
         run: npm run coverage
         env:
-          DATABASE_URL: ${{ vars.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
           PORT: ${{ vars.PORT }}
 
       - name: Upload server test coverage reports to Codecov
