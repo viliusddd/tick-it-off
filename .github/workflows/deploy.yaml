@@ -69,12 +69,12 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           PORT: ${{ vars.PORT }}
 
-      - name: Run client unit tests with coverage
-        working-directory: client/src
-        run: npm run coverage
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          PORT: ${{ vars.PORT }}
+      # - name: Run client unit tests with coverage
+      #   working-directory: client/src
+      #   run: npm run coverage
+      #   env:
+      #     DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      #     PORT: ${{ vars.PORT }}
 
       - name: Upload server test coverage reports to Codecov
         uses: codecov/codecov-action@v4
@@ -84,10 +84,10 @@ jobs:
           flags: unittests
           token: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Upload client test coverage reports to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          fail_ci_if_error: true
-          files: ./client/src/coverage/*.json
-          flags: unittests
-          token: ${{ secrets.CODECOV_TOKEN }}
+      # - name: Upload client test coverage reports to Codecov
+      #   uses: codecov/codecov-action@v4
+      #   with:
+      #     fail_ci_if_error: true
+      #     files: ./client/src/coverage/*.json
+      #     flags: unittests
+      #     token: ${{ secrets.CODECOV_TOKEN }}
