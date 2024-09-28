@@ -1,3 +1,5 @@
+# Tick It Off
+
 <div align="left">
   <a href="https://github.com/viliusddd/tick-it-off/actions/workflows/deploy.yaml">
     <img
@@ -12,8 +14,6 @@
     >
   </a>
 </div><br>
-
-# Tick It Off
 
 More organised than a queue at the post office, and just as satisfying to get through!
 

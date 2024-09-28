@@ -1,4 +1,5 @@
 coverage:
+  range: 20..70
   status:
     project:
       default:
