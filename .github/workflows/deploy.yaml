@@ -1,0 +1,69 @@
+name: Lint & Test Coverage
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: ['main']
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install server dependencies
+        working-directory: server/src
+        run: npm install
+
+      - name: Build server
+        working-directory: server/src
+        run: npm run build
+
+      - name: Install client dependencies
+        working-directory: client/src
+        run: npm install
+
+      - name: Run server linter
+        working-directory: server/src
+        run: npm run lint
+
+      - name: Run client linter
+        working-directory: client/src
+        run: npm run lint
+
+      - name: Run server unit tests with coverage
+        run: npm run coverage
+        env:
+          DATABASE_URL: ${{ vars.DATABASE_URL }}
+          PORT: ${{ vars.PORT }}
+
+      - name: Run client unit tests with coverage
+        run: npm run coverage
+        env:
+          DATABASE_URL: ${{ vars.DATABASE_URL }}
+          PORT: ${{ vars.PORT }}
+
+      - name: Upload server test coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          fail_ci_if_error: true
+          files: ./server/src/coverage/*.json
+          flags: unittests
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload client test coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          fail_ci_if_error: true
+          files: ./client/src/coverage/*.json
+          flags: unittests
+          token: ${{ secrets.CODECOV_TOKEN }}

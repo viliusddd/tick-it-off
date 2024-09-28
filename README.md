@@ -1,4 +1,20 @@
+<div align="left">
+  <a href="https://github.com/viliusddd/tick-it-off/actions/workflows/deploy.yaml">
+    <img
+      title="Workflow status badge"
+      src="https://github.com/viliusddd/tick-it-off/actions/workflows/deploy.yaml/badge.svg"
+    >
+  </a>
+  <a href="https://codecov.io/gh/viliusddd/tick-it-off" >
+    <img
+      title="Code test coverage percentage"
+      src="https://codecov.io/gh/viliusddd/tick-it-off/graph/badge.svg?token=6Flp5F3ty0"
+    >
+  </a>
+</div><br>
+
 # Tick It Off
+
 More organised than a queue at the post office, and just as satisfying to get through!
 
 - [Tick It Off](#tick-it-off)
@@ -14,6 +30,7 @@ More organised than a queue at the post office, and just as satisfying to get th
 
 - Keep code inmonorepo.
 - Use pagination for loading todos.
+- Codecov within monorepo.
 
 ## Tech Stack
 
