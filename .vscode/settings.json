@@ -19,5 +19,14 @@
   // "editor.insertSpaces": true,
   "editor.tabSize": 2,
   "editor.stickyScroll.enabled": true,
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "driver": "PostgreSQL",
+      "connectString": "postgres://postgres:postgres@localhost:5432/postgres",
+      "name": "postgres"
+    }
+  ],
 
 }
