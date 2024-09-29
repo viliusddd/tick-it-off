@@ -67,7 +67,7 @@
                   : 'border border-gray-300 bg-white text-gray-900',
               ]"
             >
-              {{ formatDate(curDate) }}
+              {{ formatDate(currentDate) }}
             </button>
             <button
               @click="goToToday"
@@ -83,7 +83,7 @@
             </button>
             <div v-if="showCalendar" class="absolute left-0 top-full z-10 mt-2 w-full">
               <DatePicker
-                v-model="curDate"
+                v-model="currentDate"
                 @update:modelValue="onDateSelect"
                 mode="date"
                 :max-date="new Date()"
@@ -145,7 +145,7 @@
             <input
               type="checkbox"
               :checked="todo.isCompleted"
-              @change="toggleTodo(todo.id, curDate)"
+              @change="toggleTodo(todo.id, currentDate)"
               :class="[
                 'h-5 w-5 rounded focus:ring-2 focus:ring-offset-2',
                 isDarkMode
@@ -225,18 +225,11 @@ import type { Ref } from 'vue'
 const props = defineProps<{ currentDate: Date }>()
 
 const router = useRouter()
-const localCurrentDate = ref(props.currentDate)
-
-watch(localCurrentDate, (newDate) => {
-  const dateString = newDate.toLocaleDateString('lt')
-  router.push({ name: 'SpecificDate', params: { date: dateString } })
-})
-
 const showCalendar = ref(false)
 const todos: Ref<{ id: number; title: string; createdAt: Date; isCompleted?: boolean }[]> = ref([])
 const completions: Ref<{ todoId: number }[]> = ref([])
 const newTodo = ref('')
-const curDate = localCurrentDate
+const currentDate = ref(props.currentDate)
 const pageSize = 10
 const isFetching = ref(false)
 const hasMore = ref(true)
@@ -245,7 +238,7 @@ const isDarkMode = ref(false)
 
 const isToday = computed(() => {
   const today = new Date()
-  return curDate.value.toDateString() === today.toDateString()
+  return currentDate.value.toDateString() === today.toDateString()
 })
 
 const calendarAttributes = computed(() => [
@@ -270,7 +263,7 @@ const fetchAllTodos = async () => {
 
 const fetchCompletionsByIdRange = async (firstId: number, secondId: number) =>
   trpc.completion.findByRange.query({
-    date: curDate.value,
+    date: currentDate.value,
     firstId,
     secondId,
   })
@@ -366,23 +359,40 @@ const toggleTodo = async (todoId: number, date: Date) => {
 }
 
 const changeDate = (days: number) => {
-  const newDate = new Date(curDate.value.getTime() + days * 24 * 60 * 60 * 1000)
-  if (newDate <= new Date()) {
-    curDate.value = newDate
+  const newDate = new Date(currentDate.value.getTime() + days * 24 * 60 * 60 * 1000)
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  if (newDate <= today) {
+    currentDate.value = newDate
+    const dateString = newDate.toISOString().split('T')[0]
+    router.push({ name: 'SpecificDate', params: { date: dateString } })
   }
 }
 
-const toggleCalendar = () => {
-  showCalendar.value = !showCalendar.value
-}
-
 const onDateSelect = (date: Date) => {
-  curDate.value = date
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  if (date <= today) {
+    currentDate.value = date
+    const dateString = date.toISOString().split('T')[0]
+    router.push({ name: 'SpecificDate', params: { date: dateString } })
+  } else {
+    currentDate.value = today
+    const dateString = today.toISOString().split('T')[0]
+    router.push({ name: 'SpecificDate', params: { date: dateString } })
+  }
   showCalendar.value = false
 }
 
 const goToToday = () => {
-  curDate.value = new Date()
+  const today = new Date()
+  currentDate.value = today
+  const dateString = today.toISOString().split('T')[0]
+  router.push({ name: 'SpecificDate', params: { date: dateString } })
+}
+
+const toggleCalendar = () => {
+  showCalendar.value = !showCalendar.value
 }
 
 const formatDate = (date: Date) => {
@@ -422,7 +432,7 @@ const initDarkMode = () => {
   }
 }
 
-watch(curDate, () => {
+watch(currentDate, () => {
   todos.value = []
   completions.value = []
   hasMore.value = true

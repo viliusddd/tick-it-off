@@ -68,9 +68,25 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
   if (to.name === 'Today' || to.name === 'TodayAlias') {
-    const today = new Date().toLocaleDateString('lt')
-    next({ name: 'SpecificDate', params: { date: today }, replace: true })
+    const todayString = today.toLocaleDateString('lt')
+    next({ name: 'SpecificDate', params: { date: todayString }, replace: true })
+  } else if (to.name === 'SpecificDate') {
+    const routeDate = new Date(to.params.date as string)
+    routeDate.setHours(0, 0, 0, 0)
+
+    if (routeDate > today) {
+      next({
+        name: 'SpecificDate',
+        params: { date: today.toLocaleDateString('lt') },
+        replace: true,
+      })
+    } else {
+      next()
+    }
   } else {
     next()
   }
