@@ -28,9 +28,7 @@ More organised than a queue at the post office, and just as satisfying to get th
 
 ## Features
 
-- Keep code inmonorepo.
-- Use pagination for loading todos.
-- Codecov within monorepo.
+- Use pagination.
 
 ## Tech Stack
 
@@ -101,10 +99,10 @@ npm i && \
 npm run migrate:latest && \
 nvm use
 ```
-2. Start server:
-  1. Start PostgreSQL
-  2. adjust variables in `.env`
-  3. Start server `npm run dev`
+2. Run app:
+  1. Start PostgreSQL server.
+  2. Adjust `.env` content.
+  3. Execute `npm run dev`.
 
 ## API Endpoints
 
