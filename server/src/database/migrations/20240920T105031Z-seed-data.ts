@@ -1,4 +1,6 @@
 import type { Kysely } from 'kysely'
+import { hash } from 'bcrypt'
+import config from '@server/config'
 
 const todayDate = new Date()
 const yesterdayDate = new Date(new Date().setDate(todayDate.getDate() - 1))
@@ -11,19 +13,19 @@ export async function up(db: Kysely<any>) {
         first_name: 'Jon',
         last_name: 'Snow',
         email: 'jon@snow.no',
-        password: 'foobar123',
+        password: await hash('foobar123', config.auth.passwordCost),
       },
       {
         first_name: 'foo',
         last_name: 'bar',
         email: 'foo@bar.baz',
-        password: 'foobar123',
+        password: await hash('foobar123', config.auth.passwordCost),
       },
       {
         first_name: 'John',
         last_name: 'Wick',
         email: 'foo@protonmail.com',
-        password: 'foobar123',
+        password: await hash('foobar123', config.auth.passwordCost),
       },
     ])
     .returningAll()
