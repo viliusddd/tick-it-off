@@ -2,11 +2,28 @@ import { type Kysely, sql } from 'kysely'
 
 export async function up(db: Kysely<any>) {
   await db.schema
+    .createTable('user')
+    .addColumn('id', 'integer', (c) =>
+      c.primaryKey().generatedAlwaysAsIdentity()
+    )
+    .addColumn('first_name', 'text', (c) => c.notNull())
+    .addColumn('last_name', 'text', (c) => c.notNull())
+    .addColumn('email', 'text', (c) => c.notNull().unique())
+    .addColumn('password', 'text', (c) => c.notNull())
+    .addColumn('created_at', 'timestamptz', (c) =>
+      c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
+    )
+    .execute()
+
+  await db.schema
     .createTable('todo')
     .addColumn('id', 'integer', (c) =>
       c.primaryKey().generatedAlwaysAsIdentity()
     )
     .addColumn('title', 'varchar', (c) => c.notNull())
+    .addColumn('user_id', 'integer', (c) =>
+      c.references('user.id').notNull().onDelete('cascade')
+    )
     .addColumn('created_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
@@ -22,20 +39,6 @@ export async function up(db: Kysely<any>) {
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
     .addUniqueConstraint('todo_id_date_unique', ['todo_id', 'date'])
-    .execute()
-
-  await db.schema
-    .createTable('user')
-    .addColumn('id', 'integer', (c) =>
-      c.primaryKey().generatedAlwaysAsIdentity()
-    )
-    .addColumn('first_name', 'text', (c) => c.notNull())
-    .addColumn('last_name', 'text', (c) => c.notNull())
-    .addColumn('email', 'text', (c) => c.notNull().unique())
-    .addColumn('password', 'text', (c) => c.notNull())
-    .addColumn('created_at', 'timestamptz', (c) =>
-      c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
-    )
     .execute()
 }
 

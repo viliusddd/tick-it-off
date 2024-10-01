@@ -17,6 +17,7 @@ export interface Todo {
   createdAt: Generated<Timestamp>
   id: Generated<number>
   title: string
+  userId: number
 }
 
 export interface User {
