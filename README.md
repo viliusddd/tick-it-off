@@ -29,6 +29,9 @@ More organised than a queue at the post office, and just as satisfying to get th
 ## Features
 
 - Use pagination.
+- Signin/signup.
+- !TODO: Share todo's with others
+- !TODO: Ability to to the *TODO* item together, see each other's progress.
 
 ## Tech Stack
 

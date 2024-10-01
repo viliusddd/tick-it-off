@@ -6,9 +6,6 @@ import { idSchema } from './shared'
 export const userSchema = z.object({
   id: idSchema,
 
-  // Trim and lowercase all emails so there are no issues
-  // due to users mistyping their emails as "Email@example.com "
-  // either during signup or login.
   email: z.string().trim().toLowerCase().email(),
 
   password: z
