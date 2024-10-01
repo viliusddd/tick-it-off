@@ -45,6 +45,17 @@ const t = initTRPC.context<Context>().create({
   },
 })
 
+// Define the logging middleware
+export const loggingMiddleware = t.middleware(async ({ path, input, next }) => {
+  console.log(`Request made to ${path}`)
+  // console.log('Type: ', type)
+  console.log('Input:', input)
+  // console.log('ctx: ', ctx)
+
+  // Continue to the next middleware/procedure
+  return next()
+})
+
 export const {
   createCallerFactory,
   mergeRouters,

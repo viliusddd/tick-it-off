@@ -5,14 +5,32 @@ import { authenticate } from './guards'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/dashboard',
+    path: '/',
     component: MainLayout,
     beforeEnter: [authenticate],
     children: [
       {
-        path: 'write-article',
-        name: 'WriteArticle',
-        component: () => import('@/views/WriteArticle.vue'),
+        path: '/todo',
+        name: 'TodoToday',
+        component: TodoView,
+        props: () => ({ currentDate: new Date() }),
+      },
+      {
+        path: '/today',
+        name: 'TodayAlias',
+        component: TodoView,
+        props: () => ({ currentDate: new Date() }),
+      },
+      {
+        path: '/:date(\\d{4}-\\d{2}-\\d{2})',
+        name: 'SpecificDate',
+        component: TodoView,
+        props: (route) => ({ currentDate: new Date(route.params.date as string) }),
+      },
+      {
+        path: 'home',
+        name: 'Home',
+        component: () => import('@/views/HomeView.vue'),
       },
     ],
   },
@@ -25,40 +43,6 @@ const routes: RouteRecordRaw[] = [
     path: '/signup',
     name: 'Signup',
     component: () => import('@/views/SignupView.vue'),
-  },
-  {
-    path: '',
-    component: MainLayout,
-    children: [
-      {
-        path: 'article/:id',
-        name: 'Article',
-        component: () => import('@/views/ArticleView.vue'),
-      },
-      {
-        path: '',
-        name: 'Home',
-        component: TodoView,
-      },
-    ],
-  },
-  {
-    path: '/',
-    name: 'Today',
-    component: TodoView,
-    props: () => ({ currentDate: new Date() }),
-  },
-  {
-    path: '/today',
-    name: 'TodayAlias',
-    component: TodoView,
-    props: () => ({ currentDate: new Date() }),
-  },
-  {
-    path: '/:date(\\d{4}-\\d{2}-\\d{2})',
-    name: 'SpecificDate',
-    component: TodoView,
-    props: (route) => ({ currentDate: new Date(route.params.date as string) }),
   },
 ]
 

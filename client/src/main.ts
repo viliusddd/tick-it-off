@@ -1,9 +1,8 @@
 import './assets/style.css'
-
+import 'v-calendar/style.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { setupCalendar } from 'v-calendar'
-import 'v-calendar/style.css'
 
 import App from './App.vue'
 import router from './router'

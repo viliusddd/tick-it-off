@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const links = [{ label: 'Write an article', name: 'WriteArticle' }]
+const links = [{ label: 'Home', name: 'Home' }]
 
 function logoutUser() {
   logout()
