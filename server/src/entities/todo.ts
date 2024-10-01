@@ -5,6 +5,7 @@ import { dateSchema, idSchema } from './shared'
 
 export const todoSchema = z.object({
   id: idSchema,
+  userId: idSchema,
   title: z.string().trim().min(1).max(255),
   createdAt: dateSchema,
 })
