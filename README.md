@@ -202,7 +202,16 @@ curl -s http://localhost:3000/api/v1/trpc/todo.findAll
 <summary>user.login</summary>
 
 ```sh
-curl -s http://localhost:3000/api/v1/trpc/user.login
+curl -s http://localhost:3000/api/v1/trpc/user.login \
+  -H "Content-Type: application/json" \
+  -d @- << EOF | jq
+{
+  "json": {
+    "email": "foo@bar.baz",
+    "password": "foobar123"
+  }
+}
+EOF
 ```
 
 </details>
@@ -212,5 +221,16 @@ curl -s http://localhost:3000/api/v1/trpc/user.login
 <summary>user.signup</summary>
 
 ```sh
-curl -s http://localhost:3000/api/v1/trpc/user.signup
+curl -s http://localhost:3000/api/v1/trpc/user.signup \
+  -H "Content-Type: application/json" \
+  -d @- << EOF | jq
+{
+  "json": {
+    "firstName": "foo",
+    "lastName": "bar",
+    "email": "foo@bar.bazz",
+    "password": "foobar123"
+  }
+}
+EOF
 ```
