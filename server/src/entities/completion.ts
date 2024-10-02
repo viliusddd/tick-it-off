@@ -17,6 +17,12 @@ export const completionPaginationSchema = z.object({
   limit: z.number().int().min(1).max(100).default(20),
 })
 
+export const completionRangeSchema = z.object({
+  firstId: idSchema,
+  secondId: idSchema,
+  date: dateSchema,
+})
+
 export const completionKeysAll = Object.keys(
   completionSchema.shape
 ) as (keyof Completion)[]

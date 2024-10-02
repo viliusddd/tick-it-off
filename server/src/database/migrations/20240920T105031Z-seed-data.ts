@@ -2,8 +2,10 @@ import type { Kysely } from 'kysely'
 import { hash } from 'bcrypt'
 import config from '@server/config'
 
-const todayDate = new Date()
-const yesterdayDate = new Date(new Date().setDate(todayDate.getDate() - 1))
+const todayDate = new Date().toLocaleDateString('lt')
+const yesterdayDate = new Date(
+  new Date().setDate(new Date().getDate() - 1)
+).toLocaleDateString('lt')
 
 export async function up(db: Kysely<any>) {
   const users = await db
