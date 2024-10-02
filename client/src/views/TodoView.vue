@@ -336,7 +336,7 @@ const createTodo = async () => {
 
 const deleteTodo = async (id: number) => {
   try {
-    await trpc.todo.deleteTodo.mutate({ id })
+    await trpc.todo.deleteById.mutate({ id })
     todos.value = todos.value.filter((todo) => todo.id !== id)
   } catch (error) {
     console.error('Error deleting todo:', error)
