@@ -22,8 +22,8 @@ More organised than a queue at the post office, and just as satisfying to get th
   - [Tech Stack](#tech-stack)
   - [TL;DR Setup](#tldr-setup)
   - [API Endpoints](#api-endpoints)
-    - [completion](#completion)
     - [todo](#todo)
+    - [completion](#completion)
     - [user](#user)
 
 ## Features
@@ -103,20 +103,63 @@ npm run migrate:latest && \
 nvm use
 ```
 2. Run app:
-  1. Start PostgreSQL server.
-  2. Adjust `.env` content.
-  3. Execute `npm run dev`.
+  - Start PostgreSQL server.
+  - Adjust `.env` content.
+  - Execute `npm run dev`.
 
 ## API Endpoints
 
-### completion
+With the server running, go to http://localhost:3000/api/v1/trpc-panel to have access to all available routes.
+
+### todo
 
 <details open>
+
+<summary>todo.findAll</summary>
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/todo.findAll | jq
+```
+
+</details>
+
+<details>
+
+<summary>todo.create</summary>
+
+> [!IMPORTANT] Need to login with user.login endpoint first and ant then pass the accessToken below.
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/todo.create?batch=1 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer accessToken" \
+  -d '{"0": {"json": {"title": "bar"}}}' | jq
+```
+
+</details>
+
+<details>
+
+<summary>todo.deleteById</summary>
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/todo.deleteById?batch=1 \
+  -H "Content-Type: application/json" \
+  -d '{"0": {"json": {"id": 1}}}' | jq
+```
+
+</details>
+
+### completion
+
+<details>
 
 <summary>completion.findAll</summary>
 
 ```sh
-curl -s http://localhost:3000/api/v1/trpc/completion.findAll
+curl -s http://localhost:3000/api/v1/trpc/completion.findAll?batch=1 \
+  -H 'Content-Type: application/json' \
+  -d '{"offset": 0, "limit": 10}' | jq
 ```
 
 </details>
@@ -136,12 +179,12 @@ curl -s http://localhost:3000/api/v1/trpc/completion.create
 <summary>completion.deleteById</summary>
 
 ```sh
-curl -s http://localhost:3000/api/v1/trpc/completion.deleteById
+curl -sX POST http://localhost:3000/api/v1/trpc/completion.deleteById \
+  -H "Content-Type: application/json" \
+  -d '{"id": 1}' | jq
 ```
 
 </details>
-
-
 
 <details>
 
@@ -159,38 +202,6 @@ curl -s http://localhost:3000/api/v1/trpc/completion.findByRange
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/completion.toggle
-```
-
-</details>
-
-### todo
-
-<details>
-
-<summary>todo.create</summary>
-
-```sh
-curl -s http://localhost:3000/api/v1/trpc/todo.create
-```
-
-</details>
-
-<details>
-
-<summary>todo.delete</summary>
-
-```sh
-curl -s http://localhost:3000/api/v1/trpc/todo.delete
-```
-
-</details>
-
-<details>
-
-<summary>todo.findAll</summary>
-
-```sh
-curl -s http://localhost:3000/api/v1/trpc/todo.findAll
 ```
 
 </details>
