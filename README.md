@@ -167,9 +167,9 @@ curl -s http://localhost:3000/api/v1/trpc/completion.create
 <summary>completion.deleteById</summary>
 
 ```sh
-curl -sX POST http://localhost:3000/api/v1/trpc/completion.deleteById \
+curl -s http://localhost:3000/api/v1/trpc/completion.deleteById \
   -H "Content-Type: application/json" \
-  -d '{"id": 1}' | jq
+  -d '{"json": {"todoId": 1}}' | jq
 ```
 
 </details>
@@ -178,8 +178,11 @@ curl -sX POST http://localhost:3000/api/v1/trpc/completion.deleteById \
 
 <summary>completion.findByRange</summary>
 
+`date` is optional. By default it's current day.
+
 ```sh
-curl -s http://localhost:3000/api/v1/trpc/completion.findByRange
+curl -X GET http://localhost:3000/api/v1/trpc/completion.findByRange \
+  --data '{"0": {"json": {"firstId": 1,"secondId": 20, "date": "2024-10-2"}}}'
 ```
 
 </details>
