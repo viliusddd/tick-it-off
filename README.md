@@ -154,18 +154,6 @@ curl -s http://localhost:3000/api/v1/trpc/todo.deleteById?batch=1 \
 
 <details>
 
-<summary>completion.findAll</summary>
-
-```sh
-curl -s http://localhost:3000/api/v1/trpc/completion.findAll?batch=1 \
-  -H 'Content-Type: application/json' \
-  -d '{"offset": 0, "limit": 10}' | jq
-```
-
-</details>
-
-<details>
-
 <summary>completion.create</summary>
 
 ```sh
