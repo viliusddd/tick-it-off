@@ -1,6 +1,6 @@
 import type { Database, Todo } from '@server/database'
 import { type TodoPublic, todoKeysPublic } from '@server/entities/todo'
-import { type Insertable, type Updateable } from 'kysely'
+import { type Insertable, type Selectable } from 'kysely'
 
 type Pagination = { offset: number; limit: number }
 
@@ -32,11 +32,13 @@ export function todoRepository(db: Database) {
         .executeTakeFirstOrThrow()
     },
 
-    async update(todo: Updateable<Todo>): Promise<TodoPublic> {
+    async update(
+      todo: Selectable<Pick<Todo, 'id' | 'title'>>
+    ): Promise<TodoPublic> {
       return db
         .updateTable('todo')
         .set({ title: todo.title })
-        .where('todo.id', '=', todo.id as number)
+        .where('todo.id', '=', todo.id)
         .returning(todoKeysPublic)
         .executeTakeFirstOrThrow()
     },
