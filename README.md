@@ -127,7 +127,8 @@ curl -s http://localhost:3000/api/v1/trpc/todo.findAll | jq
 
 <summary>todo.create</summary>
 
-> [!IMPORTANT] Need to login with user.login endpoint first and ant then pass the accessToken below.
+> [!IMPORTANT]
+> Need to login with user.login endpoint first and ant then pass the accessToken below.
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/todo.create \
@@ -182,7 +183,9 @@ curl -s http://localhost:3000/api/v1/trpc/completion.deleteById \
 
 `date` is optional. By default it's current day.
 
+```sh
 N/A
+```
 
 </details>
 
