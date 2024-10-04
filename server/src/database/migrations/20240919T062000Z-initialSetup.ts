@@ -40,10 +40,21 @@ export async function up(db: Kysely<any>) {
     )
     .addUniqueConstraint('todo_id_date_unique', ['todo_id', 'date'])
     .execute()
+
+  await db.schema
+    .createTable('shared_todo')
+    .addColumn('todo_id', 'integer', (c) =>
+      c.references('todo.id').notNull().onDelete('cascade')
+    )
+    .addColumn('user_id', 'integer', (c) =>
+      c.references('user.id').notNull().onDelete('cascade')
+    )
+    .execute()
 }
 
 export async function down(db: Kysely<any>) {
   await db.schema.dropTable('todo').execute()
   await db.schema.dropTable('completion').execute()
   await db.schema.dropTable('user').execute()
+  await db.schema.dropTable('shared_todo').execute()
 }
