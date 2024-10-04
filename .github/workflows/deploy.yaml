@@ -39,10 +39,6 @@ jobs:
         working-directory: server/src
         run: npm install
 
-      - name: Build server
-        working-directory: server/src
-        run: npm run build
-
       - name: Install client dependencies
         working-directory: client/src
         run: npm install
@@ -50,6 +46,10 @@ jobs:
       - name: Run server linter
         working-directory: server/src
         run: npm run lint
+
+      - name: Build server
+        working-directory: server/src
+        run: npm run build
 
       - name: Run client linter
         working-directory: client/src

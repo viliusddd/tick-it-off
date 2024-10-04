@@ -12,7 +12,7 @@ type Pagination = {
 
 export function completionRepository(db: Database) {
   return {
-    async findByRange(firstId: number, secondId: number, date: string) {
+    async findByRange(firstId: number, secondId: number, date: Date) {
       return db
         .selectFrom('completion')
         .select(completionKeysPublic)
@@ -22,7 +22,7 @@ export function completionRepository(db: Database) {
         .execute()
     },
 
-    async findById(todoId: number, date: string) {
+    async findById(todoId: number, date: Date) {
       return db
         .selectFrom('completion')
         .select(completionKeysPublic)
@@ -32,7 +32,7 @@ export function completionRepository(db: Database) {
     },
 
     async findAll(
-      date: string,
+      date: Date,
       pagination: Pagination
     ): Promise<CompletionPublic[]> {
       return db
@@ -57,13 +57,13 @@ export function completionRepository(db: Database) {
     },
 
     /** Create a new entry if it doesn't exist; otherwise, delete the existing one. */
-    async toggle(todoId: number, date: string) {
+    async toggle(todoId: number, date: Date) {
       const foo = await this.findById(todoId, date)
       if (!foo) return this.create({ todoId, date })
       return this.delete(todoId, date)
     },
 
-    async delete(todoId: number, date: string) {
+    async delete(todoId: number, date: Date) {
       db.deleteFrom('completion')
         .where('completion.todoId', '=', todoId)
         .where('completion.date', '=', date)
