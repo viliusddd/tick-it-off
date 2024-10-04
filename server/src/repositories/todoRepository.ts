@@ -33,7 +33,7 @@ export function todoRepository(db: Database) {
     },
 
     async update(
-      todo: Selectable<Pick<Todo, 'id' | 'title'>>
+      todo: Selectable<Omit<Todo, 'createdAt'>>
     ): Promise<TodoPublic> {
       return db
         .updateTable('todo')

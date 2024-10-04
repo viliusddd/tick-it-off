@@ -6,6 +6,6 @@ import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure'
 export default authenticatedProcedure
   .use(provideRepos({ todoRepository }))
   .input(todoSchema.pick({ id: true, title: true }))
-  .mutation(async ({ input: { title, id }, ctx: { authUser, repos } }) =>
-    repos.todoRepository.update({ title, id, userId: authUser.id })
+  .mutation(async ({ input, ctx: { authUser, repos } }) =>
+    repos.todoRepository.update({ ...input, userId: authUser.id })
   )
