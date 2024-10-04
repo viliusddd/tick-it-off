@@ -49,6 +49,9 @@ export async function up(db: Kysely<any>) {
     .addColumn('user_id', 'integer', (c) =>
       c.references('user.id').notNull().onDelete('cascade')
     )
+    .addColumn('created_at', 'timestamptz', (c) =>
+      c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
+    )
     .addUniqueConstraint('todo_id_user_id_unique', ['todo_id', 'user_id'])
     .execute()
 }

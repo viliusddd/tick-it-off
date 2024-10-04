@@ -14,6 +14,7 @@ export interface Completion {
 }
 
 export interface SharedTodo {
+  createdAt: Generated<Timestamp>
   todoId: number
   userId: number
 }
