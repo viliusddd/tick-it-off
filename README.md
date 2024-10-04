@@ -130,10 +130,10 @@ curl -s http://localhost:3000/api/v1/trpc/todo.findAll | jq
 > [!IMPORTANT] Need to login with user.login endpoint first and ant then pass the accessToken below.
 
 ```sh
-curl -s http://localhost:3000/api/v1/trpc/todo.create?batch=1 \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer accessToken" \
-  -d '{"0": {"json": {"title": "bar"}}}' | jq
+curl -s http://localhost:3000/api/v1/trpc/todo.create \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyfSwiaWF0IjoxNzI4MDM2NzMzLCJleHAiOjE3Mjg2NDE1MzN9.NSZbB6qOu00hdphbyx6vAUoXId4DVOKlmhTHBP8rAYI' \
+  -d '{"json": {"title": "bar"}}' | jq
 ```
 
 </details>
@@ -157,7 +157,9 @@ curl -s http://localhost:3000/api/v1/trpc/todo.deleteById?batch=1 \
 <summary>completion.create</summary>
 
 ```sh
-curl -s http://localhost:3000/api/v1/trpc/completion.create
+curl -s http://localhost:3000/api/v1/trpc/completion.create \
+  -H 'Content-Type: application/json' \
+  -d '{"json": {"todoId": 7}}' | jq
 ```
 
 </details>
@@ -168,7 +170,7 @@ curl -s http://localhost:3000/api/v1/trpc/completion.create
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/completion.deleteById \
-  -H "Content-Type: application/json" \
+  -H 'Content-Type: application/json' \
   -d '{"json": {"todoId": 1}}' | jq
 ```
 
@@ -180,10 +182,7 @@ curl -s http://localhost:3000/api/v1/trpc/completion.deleteById \
 
 `date` is optional. By default it's current day.
 
-```sh
-curl -X GET http://localhost:3000/api/v1/trpc/completion.findByRange \
-  --data '{"0": {"json": {"firstId": 1,"secondId": 20, "date": "2024-10-2"}}}'
-```
+N/A
 
 </details>
 
@@ -192,7 +191,9 @@ curl -X GET http://localhost:3000/api/v1/trpc/completion.findByRange \
 <summary>completion.toggle</summary>
 
 ```sh
-curl -s http://localhost:3000/api/v1/trpc/completion.toggle
+curl -s http://localhost:3000/api/v1/trpc/completion.toggle?batch=1 \
+  -H 'Content-Type: application/json' \
+  -d '{"0": {"json": {"todoId": 1}}}' | jq
 ```
 
 </details>
