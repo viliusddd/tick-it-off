@@ -132,8 +132,23 @@ curl -s http://localhost:3000/api/v1/trpc/todo.findAll | jq
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/todo.create \
   -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyfSwiaWF0IjoxNzI4MDM2NzMzLCJleHAiOjE3Mjg2NDE1MzN9.NSZbB6qOu00hdphbyx6vAUoXId4DVOKlmhTHBP8rAYI' \
+  -H 'Authorization: Bearer access-token-from-user-login' \
   -d '{"json": {"title": "bar"}}' | jq
+```
+
+</details>
+
+<details>
+
+<summary>todo.create</summary>
+
+> Need to login with user.login endpoint first and ant then pass the accessToken below.
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/todo.update \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer access-token-from-user-login' \
+  -d '{"json": {"id": 19, "title": "Foo bar baz"}}' | jq
 ```
 
 </details>
