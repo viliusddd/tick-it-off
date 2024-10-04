@@ -33,7 +33,7 @@ export async function up(db: Kysely<any>) {
     .returningAll()
     .execute()
 
-  await db
+  const todos = await db
     .insertInto('todo')
     .values([
       { title: 'Drink water first thing', user_id: users[0].id },
@@ -57,23 +57,32 @@ export async function up(db: Kysely<any>) {
       { title: 'Reply to pending messages', user_id: users[2].id },
       { title: 'Try a new recipe', user_id: users[2].id },
     ])
+    .returningAll()
     .execute()
 
   await db
     .insertInto('completion')
     .values([
-      { todo_id: 1, date: todayDate },
-      { todo_id: 2, date: todayDate },
-      { todo_id: 3, date: todayDate },
-      { todo_id: 4, date: todayDate },
-      { todo_id: 17, date: todayDate },
-      { todo_id: 19, date: todayDate },
-      { todo_id: 20, date: todayDate },
-      { todo_id: 3, date: yesterdayDate },
-      { todo_id: 17, date: yesterdayDate },
-      { todo_id: 19, date: yesterdayDate },
-      { todo_id: 1, date: '2024-09-09' },
-      { todo_id: 2, date: '2024-09-24' },
+      { todo_id: todos[0].id, date: todayDate },
+      { todo_id: todos[2].id, date: todayDate },
+      { todo_id: todos[3].id, date: todayDate },
+      { todo_id: todos[4].id, date: todayDate },
+      { todo_id: todos[17].id, date: todayDate },
+      { todo_id: todos[19].id, date: todayDate },
+      { todo_id: todos[16].id, date: todayDate },
+      { todo_id: todos[3].id, date: yesterdayDate },
+      { todo_id: todos[17].id, date: yesterdayDate },
+      { todo_id: todos[19].id, date: yesterdayDate },
+      { todo_id: todos[1].id, date: '2024-09-09' },
+      { todo_id: todos[2].id, date: '2024-09-24' },
+    ])
+    .execute()
+
+  await db
+    .insertInto('shared_todo')
+    .values([
+      { todo_id: todos[0].id, user_id: users[1].id },
+      { todo_id: todos[0].id, user_id: users[2].id },
     ])
     .execute()
 }
