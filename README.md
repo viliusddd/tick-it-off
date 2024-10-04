@@ -123,7 +123,7 @@ curl -s http://localhost:3000/api/v1/trpc/todo.findAll | jq
 
 </details>
 
-<details>
+<details open>
 
 <summary>todo.create</summary>
 
