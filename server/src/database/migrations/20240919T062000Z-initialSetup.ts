@@ -20,7 +20,7 @@ export async function up(db: Kysely<any>) {
     .addColumn('id', 'integer', (c) =>
       c.primaryKey().generatedAlwaysAsIdentity()
     )
-    .addColumn('title', 'varchar', (c) => c.notNull())
+    .addColumn('title', 'text', (c) => c.notNull())
     .addColumn('user_id', 'integer', (c) =>
       c.references('user.id').notNull().onDelete('cascade')
     )
