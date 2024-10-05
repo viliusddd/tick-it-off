@@ -145,7 +145,7 @@
             <input
               type="checkbox"
               :checked="todo.isCompleted"
-              @change="toggleTodo(todo.id, currentDate)"
+              @change="toggleTodo(todo.id, currentDate.toLocaleDateString('lt'))"
               :class="[
                 'h-5 w-5 rounded focus:ring-2 focus:ring-offset-2',
                 isDarkMode
@@ -263,7 +263,7 @@ const fetchAllTodos = async () => {
 
 const fetchCompletionsByIdRange = async (firstId: number, secondId: number) =>
   trpc.completion.findByRange.query({
-    date: currentDate.value,
+    date: currentDate.value.toLocaleDateString('lt'),
     firstId,
     secondId,
   })
@@ -343,7 +343,7 @@ const deleteTodo = async (id: number) => {
   }
 }
 
-const toggleTodo = async (todoId: number, date: Date) => {
+const toggleTodo = async (todoId: number, date: string) => {
   try {
     await trpc.completion.toggle.mutate({ todoId, date })
     const todoIndex = todos.value.findIndex((todo) => todo.id === todoId)

@@ -1,13 +1,13 @@
 import { z } from 'zod'
 import type { Selectable } from 'kysely'
 import type { Todo } from '@server/database/types'
-import { dateSchema, idSchema } from './shared'
+import { createdAtSchema, idSchema } from './shared'
 
 export const todoSchema = z.object({
   id: idSchema,
   userId: idSchema,
   title: z.string().trim().min(1).max(255),
-  createdAt: dateSchema,
+  createdAt: createdAtSchema,
 })
 
 export const todoKeysAll = Object.keys(todoSchema.shape) as (keyof Todo)[]

@@ -1,18 +1,15 @@
 import type { Database, Completion } from '@server/database'
 import {
+  type CompletionItem,
+  type CompletionPagination,
   type CompletionPublic,
   completionKeysPublic,
 } from '@server/entities/completion'
 import type { Insertable } from 'kysely'
 
-type Pagination = {
-  offset: number
-  limit: number
-}
-
 export function completionRepository(db: Database) {
   return {
-    async findByRange(firstId: number, secondId: number, date: Date) {
+    async findByRange(firstId: number, secondId: number, date: string) {
       return db
         .selectFrom('completion')
         .select(completionKeysPublic)
@@ -22,27 +19,26 @@ export function completionRepository(db: Database) {
         .execute()
     },
 
-    async findById(todoId: number, date: Date) {
+    async findById(completion: CompletionItem) {
       return db
         .selectFrom('completion')
         .select(completionKeysPublic)
-        .where('completion.todoId', '=', todoId)
-        .where('completion.date', '=', date)
+        .where('completion.todoId', '=', completion.todoId)
+        .where('completion.date', '=', completion.date)
         .executeTakeFirst()
     },
 
     async findAll(
-      date: Date,
-      pagination: Pagination
+      completion: CompletionPagination
     ): Promise<CompletionPublic[]> {
       return db
         .selectFrom('completion')
         .innerJoin('todo', 'todo.id', 'completion.todoId')
-        .where('completion.date', '=', date)
+        .where('completion.date', '=', completion.date)
         .select(completionKeysPublic)
         .orderBy('completion.todoId', 'desc')
-        .offset(pagination.offset)
-        .limit(pagination.limit)
+        .offset(completion.offset)
+        .limit(completion.limit)
         .execute()
     },
 
@@ -56,18 +52,18 @@ export function completionRepository(db: Database) {
         .executeTakeFirstOrThrow()
     },
 
-    /** Create a new entry if it doesn't exist; otherwise, delete the existing one. */
-    async toggle(todoId: number, date: Date) {
-      const foo = await this.findById(todoId, date)
-      if (!foo) return this.create({ todoId, date })
-      return this.delete(todoId, date)
+    async delete(completion: CompletionItem) {
+      db.deleteFrom('completion')
+        .where('completion.todoId', '=', completion.todoId)
+        .where('completion.date', '=', completion.date)
+        .executeTakeFirstOrThrow()
     },
 
-    async delete(todoId: number, date: Date) {
-      db.deleteFrom('completion')
-        .where('completion.todoId', '=', todoId)
-        .where('completion.date', '=', date)
-        .executeTakeFirstOrThrow()
+    /** Create a new entry if it doesn't exist; otherwise, delete the existing one. */
+    async toggle(completion: CompletionItem) {
+      const foundItems = await this.findById(completion)
+      if (!foundItems) return this.create(completion)
+      return this.delete(completion)
     },
   }
 }

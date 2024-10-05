@@ -9,7 +9,7 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>
 
 export interface Completion {
   createdAt: Generated<Timestamp>
-  date: Timestamp
+  date: string
   todoId: number
 }
 

@@ -34,7 +34,8 @@ export async function up(db: Kysely<any>) {
     .addColumn('todo_id', 'integer', (c) =>
       c.references('todo.id').notNull().onDelete('cascade')
     )
-    .addColumn('date', 'date', (c) => c.notNull())
+    // .addColumn('date', 'date', (c) => c.notNull())
+    .addColumn('date', 'text', (c) => c.notNull())
     .addColumn('created_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )

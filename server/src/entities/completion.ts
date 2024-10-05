@@ -1,14 +1,14 @@
 import { z } from 'zod'
 import type { Selectable } from 'kysely'
 import type { Completion } from '@server/database/types'
-import { dateSchema, idSchema } from './shared'
+import { dateSchema, createdAtSchema, idSchema } from './shared'
 
 const POSTGRES_INT_MAX = 2147483647
 
 export const completionSchema = z.object({
   todoId: idSchema,
   date: dateSchema,
-  createdAt: dateSchema,
+  createdAt: createdAtSchema,
 })
 
 export const completionPaginationSchema = z.object({
@@ -33,3 +33,7 @@ export type CompletionPublic = Pick<
   Selectable<Completion>,
   (typeof completionKeysPublic)[number]
 >
+
+export type CompletionItem = Omit<Selectable<Completion>, 'createdAt'>
+
+export type CompletionPagination = z.infer<typeof completionPaginationSchema>
