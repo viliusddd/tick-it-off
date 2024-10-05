@@ -21,6 +21,7 @@ More organised than a queue at the post office, and just as satisfying to get th
   - [Features](#features)
   - [Tech Stack](#tech-stack)
   - [TL;DR Setup](#tldr-setup)
+  - [Database Diagram](#database-diagram)
   - [API Endpoints](#api-endpoints)
     - [todo](#todo)
     - [completion](#completion)
@@ -108,18 +109,32 @@ nvm use
   - Adjust `.env` variables.
   - Execute `npm run dev` in `server/` for backend and `client/` for frontend.
 
+## Database Diagram
+
+<div>
+  <a href="https://drawsql.app/teams/my-team-2119/diagrams/tick-it-off/embed">
+  <img
+    title="tick-it-off postgreSQL diagram."
+    src="./assets/tick-it-off-sql-diagram.png">
+  </a>
+</div>
+
+- __completion__ stores entries on when the todo item was completed.
+- __todo__ stores todo entries.
+- __user__ stores user information.
+- __shared_todo__ stores info on with which users the todo item was shared with.
+
 ## API Endpoints
 
 With the server running, go to http://localhost:3000/api/v1/trpc-panel to have access to all available routes.
 
 ### todo
 
-Todo endpoint deals with addition or removal of todo items from **todo** table.
-Todo entries are shown on all days.
-
 <details open>
 
 <summary>todo.findAll</summary>
+
+Find all the todos that exists in the databse for that user.
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/todo.findAll | jq
@@ -130,6 +145,8 @@ curl -s http://localhost:3000/api/v1/trpc/todo.findAll | jq
 <details open>
 
 <summary>todo.create</summary>
+
+Create a new todo item.
 
 > Need to login with user.login endpoint first and then replace $ACCESS_TOKEN with the accessToken.
 
@@ -146,6 +163,8 @@ curl -s http://localhost:3000/api/v1/trpc/todo.create \
 
 <summary>todo.update</summary>
 
+Update existing todo item.
+
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/todo.update \
   -H 'Authorization: Bearer $ACCESS_TOKEN' \
@@ -158,6 +177,8 @@ curl -s http://localhost:3000/api/v1/trpc/todo.update \
 <details>
 
 <summary>todo.share</summary>
+
+Share todo item that belongs to you with the other user.
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/todo.share \
@@ -172,6 +193,8 @@ curl -s http://localhost:3000/api/v1/trpc/todo.share \
 
 <summary>todo.deleteById</summary>
 
+Delete todo item.
+
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/todo.deleteById?batch=1 \
   -H "Content-Type: application/json" \
@@ -182,11 +205,11 @@ curl -s http://localhost:3000/api/v1/trpc/todo.deleteById?batch=1 \
 
 ### completion
 
-Completion endpoint deals with the mark/unmark of chosen todo for that particular day.
-
 <details>
 
 <summary>completion.create</summary>
+
+Create new entry in `completion` table. It will show as checked todo item in that particular day.
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/completion.create \
@@ -200,6 +223,8 @@ curl -s http://localhost:3000/api/v1/trpc/completion.create \
 
 <summary>completion.deleteById</summary>
 
+Remove entry from `completion` table. It will "uncheck" the todo item in that day.
+
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/completion.deleteById \
   -H 'Content-Type: application/json' \
@@ -212,7 +237,12 @@ curl -s http://localhost:3000/api/v1/trpc/completion.deleteById \
 
 <summary>completion.findByRange</summary>
 
-`date` is optional. By default it's current day.
+Get "checked" todo items from that day with the id in chosen range.
+It's used when pagination loading todo items in app.
+
+* `firstId` - first id of the range.
+* `secondId` - last id of the range
+* `date`* - date in ISO 8601 format, e.g. `2024-10-02`. By default it's current day date.
 
 ```sh
 N/A
@@ -223,6 +253,11 @@ N/A
 <details>
 
 <summary>completion.toggle</summary>
+
+"Check" or "uncheck" the todo item that day.
+
+* `todoId` - todo item id.
+* `date`* - date in ISO 8601 format, e.g. `2024-10-02`. By default it's current day date.
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/completion.toggle?batch=1 \
