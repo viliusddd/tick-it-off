@@ -32,7 +32,7 @@ More organised than a queue at the post office, and just as satisfying to get th
 - Signin/signup.
 - !WIP: Twilio Sendgrid integration
 - !TODO: Share todo's with others
-- !TODO: Ability to to the *TODO* item together, see each other's progress.
+- !TODO: Ability to do the **TODO** item together, see each other's progress.
 
 ## Tech Stack
 
