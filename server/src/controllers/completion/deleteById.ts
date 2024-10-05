@@ -6,6 +6,6 @@ import { publicProcedure } from '@server/trpc'
 export default publicProcedure
   .use(provideRepos({ completionRepository }))
   .input(completionSchema.pick({ todoId: true, date: true }))
-  .mutation(async ({ input: { todoId, date }, ctx }) =>
-    ctx.repos.completionRepository.delete(todoId, date)
+  .mutation(async ({ input, ctx }) =>
+    ctx.repos.completionRepository.delete(input)
   )
