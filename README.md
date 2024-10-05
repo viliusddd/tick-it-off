@@ -104,8 +104,8 @@ nvm use
 ```
 2. Run app:
   - Start PostgreSQL server.
-  - Adjust `.env` content.
-  - Execute `npm run dev`.
+  - Adjust `.env` variables.
+  - Execute `npm run dev` in `server/` for backend and `client/` for frontend.
 
 ## API Endpoints
 
