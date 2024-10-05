@@ -37,11 +37,11 @@ jobs:
 
       - name: Install server dependencies
         working-directory: server/src
-        run: npm install
+        run: npm ci
 
       - name: Install client dependencies
         working-directory: client/src
-        run: npm install
+        run: npm ci
 
       - name: Run server linter
         working-directory: server/src
