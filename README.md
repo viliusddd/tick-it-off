@@ -114,6 +114,9 @@ With the server running, go to http://localhost:3000/api/v1/trpc-panel to have a
 
 ### todo
 
+Todo endpoint deals with addition or removal of todo items from **todo** table.
+Todo entries are shown on all days.
+
 <details open>
 
 <summary>todo.findAll</summary>
@@ -141,15 +144,26 @@ curl -s http://localhost:3000/api/v1/trpc/todo.create \
 
 <details>
 
-<summary>todo.create</summary>
-
-> Need to login with user.login endpoint first and ant then pass the accessToken below.
+<summary>todo.update</summary>
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/todo.update \
+  -H 'Authorization: Bearer $ACCESS_TOKEN' \
   -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer access-token-from-user-login' \
   -d '{"json": {"id": 19, "title": "Foo bar baz"}}' | jq
+```
+
+</details>
+
+<details>
+
+<summary>todo.share</summary>
+
+```sh
+curl -s http://localhost:3000/api/v1/trpc/todo.share \
+  -H 'Authorization: Bearer $ACCESS_TOKEN' \
+  -H 'Content-Type: application/json' \
+  -d '{"json": {"userId": 2, "todoId": "3"}}' | jq
 ```
 
 </details>
@@ -167,6 +181,8 @@ curl -s http://localhost:3000/api/v1/trpc/todo.deleteById?batch=1 \
 </details>
 
 ### completion
+
+Completion endpoint deals with the mark/unmark of chosen todo for that particular day.
 
 <details>
 
