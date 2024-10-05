@@ -1,13 +1,17 @@
 // using Twilio SendGrid's v3 Node.js Library
 // https://github.com/sendgrid/sendgrid-nodejs
 
+import isEmail from 'validator/lib/isEmail'
 import sgMail from '@sendgrid/mail'
 
-export default async function sendReminder(
+export default async function sendMail(
   apiKey: string,
   todoTitle: string,
   recipientEmail: string
 ) {
+  if (!isEmail(recipientEmail))
+    throw new Error(`${recipientEmail} email is not vaild.`)
+
   sgMail.setApiKey(apiKey)
   const msg = {
     to: recipientEmail,
