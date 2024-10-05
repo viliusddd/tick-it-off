@@ -30,6 +30,7 @@ More organised than a queue at the post office, and just as satisfying to get th
 
 - Use pagination.
 - Signin/signup.
+- !WIP: Twilio Sendgrid integration
 - !TODO: Share todo's with others
 - !TODO: Ability to to the *TODO* item together, see each other's progress.
 
@@ -127,12 +128,12 @@ curl -s http://localhost:3000/api/v1/trpc/todo.findAll | jq
 
 <summary>todo.create</summary>
 
-> Need to login with user.login endpoint first and ant then pass the accessToken below.
+> Need to login with user.login endpoint first and then replace $ACCESS_TOKEN with the accessToken.
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/todo.create \
   -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer access-token-from-user-login' \
+  -H 'Authorization: Bearer $ACCESS_TOKEN' \
   -d '{"json": {"title": "bar"}}' | jq
 ```
 

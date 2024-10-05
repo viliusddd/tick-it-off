@@ -18,6 +18,7 @@ const schema = z
       .default('development'),
     isCi: z.preprocess(coerceBoolean, z.boolean().default(false)),
     port: z.coerce.number().default(3000),
+    sgKey: z.coerce.string(),
 
     auth: z.object({
       tokenKey: z.string().default(() => {
@@ -41,6 +42,7 @@ const config = schema.parse({
   env: env.NODE_ENV,
   port: env.PORT,
   isCi: env.CI,
+  sgKey: env.SENDGRID_API_KEY,
 
   auth: {
     tokenKey: env.TOKEN_KEY,
