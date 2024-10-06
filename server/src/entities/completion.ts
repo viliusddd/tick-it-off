@@ -13,13 +13,25 @@ export const completionSchema = z.object({
 
 export const completionPaginationSchema = z.object({
   date: dateSchema,
-  offset: z.number().int().min(0).max(POSTGRES_INT_MAX).default(0),
-  limit: z.number().int().min(1).max(100).default(20),
+  offset: z
+    .number()
+    .int()
+    .min(0)
+    .max(POSTGRES_INT_MAX)
+    .default(0)
+    .describe('Indicates the starting point. Default: 0'),
+  limit: z
+    .number()
+    .int()
+    .min(1)
+    .max(100)
+    .default(20)
+    .describe('Specifies the maximum number of items to retrieve. Default: 20'),
 })
 
 export const completionRangeSchema = z.object({
-  firstId: idSchema,
-  secondId: idSchema,
+  firstId: idSchema.describe('First id of the range.'),
+  secondId: idSchema.describe('Last id of the range.'),
   date: dateSchema,
 })
 

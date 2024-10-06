@@ -5,6 +5,7 @@ import { sharedTodoIdsSchema } from '@server/entities/sharedTodo'
 import { TRPCError } from '@trpc/server'
 
 export default authenticatedProcedure
+  .meta({ description: 'Share todo item with other user.' })
   .use(provideRepos({ sharedTodoRepository }))
   .input(sharedTodoIdsSchema)
   .mutation(async ({ input, ctx: { authUser, repos } }) => {

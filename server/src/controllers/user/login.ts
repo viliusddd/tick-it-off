@@ -11,6 +11,7 @@ import { prepareTokenPayload } from '@server/trpc/tokenPayload'
 const { expiresIn, tokenKey } = config.auth
 
 export default publicProcedure
+  .meta({ description: 'Log-in to user.' })
   .use(
     provideRepos({
       userRepository,

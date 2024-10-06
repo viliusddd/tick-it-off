@@ -8,6 +8,7 @@ import { assertError } from '@server/utils/errors'
 import { userSchema } from '@server/entities/user'
 
 export default publicProcedure
+  .meta({ description: 'Sign-up with user.' })
   .use(provideRepos({ userRepository }))
   .input(
     userSchema.pick({
