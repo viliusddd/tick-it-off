@@ -126,7 +126,7 @@ nvm use
 
 ## API Endpoints
 
-With the server running, go to http://localhost:3000/api/v1/trpc-panel to have access to all available routes.
+With the server running, go to http://localhost:3000/api/v1/trpc-panel to access available routes and their documentation.
 
 ### todo
 
