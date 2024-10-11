@@ -1,5 +1,5 @@
 {
-  "name": "@mono/client",
+  "name": "@tio/client",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -31,7 +31,7 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "@mono/server": "^1.0.0",
+    "@tio/server": "file:../server",
     "@playwright/test": "^1.42.1",
     "@rushstack/eslint-patch": "^1.10.1",
     "@tsconfig/node20": "^20.1.4",

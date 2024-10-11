@@ -1,16 +1,19 @@
-# docker build command:
-# docker build --build-arg NODE_VER=$(cat ../.nvmrc) -t tick-it-off-server . -t foo --platform linux/amd64
-# get images: docker image ls
-# run image detached: docker run -dp 3000:3000 <image_id>
-
-ARG NODE_VER=22
+ARG NODE_VER=lts
 
 FROM node:${NODE_VER}-alpine
 
 WORKDIR /app
 
-COPY . ./
+COPY ../package*.json .
+COPY client/package*.json client/
+COPY server/package*.json server/
+RUN npm ci
 
-RUN npm install
+COPY server/ server/
 
-CMD ["npm", "run", "dev"]
+WORKDIR /app/server
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["npm", "run", "prod"]

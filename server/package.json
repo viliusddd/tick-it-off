@@ -1,5 +1,5 @@
 {
-  "name": "@mono/server",
+  "name": "@tio/server",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
