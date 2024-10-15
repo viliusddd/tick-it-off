@@ -115,6 +115,9 @@ jobs:
           --image $CLIENT_IMAGE_TAG
           --output yaml
 
+      - name: test
+        run: aws lightsail get-container-images --service-name ${{ vars.AWS_LIGHTSAIL_SERVICE }}
+
       - name: Get Lightsail image tag
         run: |
           aws lightsail get-container-images --service-name ${{ vars.AWS_LIGHTSAIL_SERVICE }} | jq -r '.containerImages[] | select(.image | contains(".'$SERVER_IMAGE_TAG'")) | .image'
