@@ -1,6 +1,6 @@
 ARG NODE_VER=lts
 
-FROM node:${NODE_VER}-alpine as build
+FROM node:${NODE_VER}-alpine AS build
 
 WORKDIR /app
 
@@ -19,14 +19,14 @@ WORKDIR /app/client
 
 RUN npm run build
 
-FROM nginx:1.27-alpine as nginx
+FROM nginx:1.27-alpine AS nginx
 
 # Delete the default welcome page.
 RUN rm /usr/share/nginx/html/* -rf
 
 COPY --from=build /app/client/dist /usr/share/nginx/html
 
-ENV NGINX_ENVSUBST_OUTPUT_DIR '/etc/nginx/conf.d'
+ENV NGINX_ENVSUBST_OUTPUT_DIR='/etc/nginx/conf.d'
 
 COPY client/nginx/default.conf.template /etc/nginx/templates/default.conf.template
 
