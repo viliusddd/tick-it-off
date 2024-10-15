@@ -8,15 +8,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-24.04
+    env:
+      VITE_API_ORIGIN: http://localhost:3000
+      VITE_API_PATH: /api/v1/trpc
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
     services:
       postgres:
-        image: postgres
+        image: postgres:17.0-alpine
         env:
-          POSTGRES_DB: postgres
-          POSTGRES_PASSWORD: postgres
           POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
@@ -26,55 +30,21 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: 'npm'
 
-      - name: Install server dependencies
-        working-directory: server/src
-        run: npm ci
-
-      - name: Install client dependencies
-        working-directory: client/src
-        run: npm ci
-
-      - name: Run server linter
-        working-directory: server/src
-        run: npm run lint
-
-      - name: Build server
-        working-directory: server/src
-        run: npm run build
-
-      - name: Run client linter
-        working-directory: client/src
-        run: npm run lint
-
-      - name: Run database migration
-        working-directory: server/src
-        run: npm run migrate:latest
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          PORT: ${{ vars.PORT }}
-
-      - name: Run server unit tests with coverage
-        working-directory: server/src
-        run: npm run coverage
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          PORT: ${{ vars.PORT }}
-
-      # - name: Run client unit tests with coverage
-      #   working-directory: client/src
-      #   run: npm run coverage
-      #   env:
-      #     DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      #     PORT: ${{ vars.PORT }}
+      - run: npm ci
+      - run: npm run typecheck -w=server
+      - run: npm run typecheck -w=client
+      - run: npm run lint -w=server
+      - run: npm run lint -w=client
+      - run: npm run test:unit -w=client
+      - run: npm run migrate:latest -w=server
+      - run: npm run coverage -w=server
 
       - name: Upload server test coverage reports to Codecov
         uses: codecov/codecov-action@v4
@@ -85,11 +55,3 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           codecov_yml_path: ./codecov.yml
           verbose: true
-
-      # - name: Upload client test coverage reports to Codecov
-      #   uses: codecov/codecov-action@v4
-      #   with:
-      #     fail_ci_if_error: true
-      #     files: ./client/src/coverage/*.json
-      #     flags: unittests
-      #     token: ${{ secrets.CODECOV_TOKEN }}
