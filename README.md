@@ -30,7 +30,7 @@ More organised than a queue at the post office, and just as satisfying to get th
 ## Features
 
 - Use pagination.
-- Signin/signup.
+- Sign in/signup.
 - !WIP: Twilio Sendgrid integration
 - !TODO: Share todo's with others
 - !TODO: Ability to do the **TODO** item together, see each other's progress.
@@ -122,7 +122,7 @@ nvm use
 - __completion__ stores entries on when the todo item was completed.
 - __todo__ stores todo entries.
 - __user__ stores user information.
-- __shared_todo__ stores info on with which users the todo item was shared with.
+- __shared_todo__ stores info on which users the todo item was shared with.
 
 ## API Endpoints
 
@@ -134,7 +134,7 @@ With the server running, go to http://localhost:3000/api/v1/trpc-panel to access
 
 <summary>todo.findAll</summary>
 
-Find all the todos that exists in the databse for that user.
+Find all the todos that exist in the database for that user.
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/todo.findAll | jq
@@ -148,7 +148,7 @@ curl -s http://localhost:3000/api/v1/trpc/todo.findAll | jq
 
 Create a new todo item.
 
-> Need to login with user.login endpoint first and then replace $ACCESS_TOKEN with the accessToken.
+> Need to log in with user.login endpoint first and then replace $ACCESS_TOKEN with the accessToken.
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/todo.create \
@@ -163,7 +163,7 @@ curl -s http://localhost:3000/api/v1/trpc/todo.create \
 
 <summary>todo.update</summary>
 
-Update existing todo item.
+Update existing todo items.
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/todo.update \
@@ -209,7 +209,7 @@ curl -s http://localhost:3000/api/v1/trpc/todo.deleteById?batch=1 \
 
 <summary>completion.create</summary>
 
-Create new entry in `completion` table. It will show as checked todo item in that particular day.
+Create a new entry in the `completion` table. It will show as a checked todo item on that particular day.
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/completion.create \
@@ -223,7 +223,7 @@ curl -s http://localhost:3000/api/v1/trpc/completion.create \
 
 <summary>completion.deleteById</summary>
 
-Remove entry from `completion` table. It will "uncheck" the todo item in that day.
+Remove entry from the `completion` table. It will "uncheck" the todo item on that day.
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/completion.deleteById \
@@ -237,12 +237,12 @@ curl -s http://localhost:3000/api/v1/trpc/completion.deleteById \
 
 <summary>completion.findByRange</summary>
 
-Get "checked" todo items from that day with the id in chosen range.
-It's used when pagination loading todo items in app.
+Get "checked" todo items from that day with the ID in the chosen range.
+It's used when pagination loads to-do items in the app.
 
 * `firstId` - first id of the range.
 * `secondId` - last id of the range
-* `date`* - date in ISO 8601 format, e.g. `2024-10-02`. By default it's current day date.
+* `date`* - date in ISO 8601 format, e.g. `2024-10-02`. By default, it's current day date.
 
 ```sh
 N/A
@@ -254,10 +254,10 @@ N/A
 
 <summary>completion.toggle</summary>
 
-"Check" or "uncheck" the todo item that day.
+"Check" or "uncheck" the to-do item that day.
 
 * `todoId` - todo item id.
-* `date`* - date in ISO 8601 format, e.g. `2024-10-02`. By default it's current day date.
+* `date`* - date in ISO 8601 format, e.g. `2024-10-02`. By default, it's current day date.
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/completion.toggle?batch=1 \
