@@ -2,14 +2,15 @@ import './assets/style.css'
 import 'v-calendar/style.css'
 import { createApp } from 'vue'
 import PrimeVue from 'primevue/config'
-import Lara from '@primevue/themes/lara'
+import ToastService from 'primevue/toastservice'
+import 'primeicons/primeicons.css'
+import Material from '@primevue/themes/material'
 import { createPinia } from 'pinia'
 import { setupCalendar } from 'v-calendar'
 
 import Checkbox from 'primevue/checkbox'
 import Toast from 'primevue/toast'
 import Button from 'primevue/button'
-import ToastService from 'primevue/toastservice'
 
 import App from './App.vue'
 import router from './router'
@@ -21,7 +22,7 @@ app.use(router)
 app.use(setupCalendar, {})
 app.use(PrimeVue, {
   theme: {
-    preset: Lara,
+    preset: Material,
   },
 })
 app.use(ToastService)
