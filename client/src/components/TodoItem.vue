@@ -1,60 +1,61 @@
-<script setup>
-import { ref, watch } from 'vue'
-import { useToast } from 'primevue/usetoast'
-import Checkbox from 'primevue/checkbox'
-import Button from 'primevue/button'
-
-const props = defineProps({
-  todo: {
-    type: Object,
-    required: true,
-  },
-})
-
-const emit = defineEmits(['update:completed', 'delete'])
-
-const toast = useToast()
-
-const localCompleted = ref(props.todo.completed)
-
-watch(
-  () => props.todo.completed,
-  (newValue) => {
-    localCompleted.value = newValue
-  }
-)
-
-const updateStatus = () => {
-  emit('update:completed', localCompleted.value)
-  toast.add({
-    severity: localCompleted.value ? 'success' : 'info',
-    summary: localCompleted.value ? 'Task Completed' : 'Task Reopened',
-    detail: props.todo.text,
-    life: 3000,
-  })
-}
-
-const deleteTodo = () => {
-  emit('delete')
-  toast.add({
-    severity: 'warn',
-    summary: 'Task Deleted',
-    detail: props.todo.text,
-    life: 3000,
-  })
-}
-</script>
-
 <template>
-  <div class="align-items-center border-bottom-1 surface-border flex p-3">
-    <Checkbox v-model="localCompleted" :binary="true" @change="updateStatus" />
-    <span :class="{ 'ml-3 text-gray-400 line-through': localCompleted, 'ml-3': !localCompleted }">
-      {{ todo.text }}
-    </span>
-    <Button
-      icon="pi pi-trash"
-      class="p-button-rounded p-button-danger p-button-text ml-auto"
-      @click="deleteTodo"
+  <li
+    :class="[
+      'flex items-center space-x-3 rounded-md p-3 transition duration-300 ease-in-out',
+      isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-50 hover:bg-gray-100',
+    ]"
+  >
+    <input
+      type="checkbox"
+      :checked="todo.isCompleted"
+      @change="$emit('toggle', todo.id)"
+      :class="[
+        'h-5 w-5 rounded focus:ring-2 focus:ring-offset-2',
+        isDarkMode ? 'text-blue-500 focus:ring-blue-600' : 'text-blue-600 focus:ring-blue-500',
+      ]"
     />
-  </div>
+    <span
+      :class="[
+        'flex-grow',
+        {
+          'line-through': todo.isCompleted,
+          'text-gray-400': todo.isCompleted && isDarkMode,
+          'text-gray-500': todo.isCompleted && !isDarkMode,
+          'text-white': !todo.isCompleted && isDarkMode,
+          'text-gray-800': !todo.isCompleted && !isDarkMode,
+        },
+      ]"
+    >
+      {{ todo.title }}
+    </span>
+    <button
+      @click="$emit('delete', todo.id)"
+      :class="[
+        'focus:outline-none focus:ring-2 focus:ring-offset-2',
+        isDarkMode
+          ? 'text-red-400 hover:text-red-300 focus:ring-red-500'
+          : 'text-red-500 hover:text-red-600 focus:ring-red-500',
+      ]"
+    >
+      <TrashIcon class="h-5 w-5" />
+    </button>
+  </li>
 </template>
+
+<script setup lang="ts">
+import { TrashIcon } from '@heroicons/vue/24/solid'
+
+defineProps<{
+  todo: {
+    id: number
+    title: string
+    isCompleted?: boolean
+  }
+  isDarkMode: boolean
+}>()
+
+defineEmits<{
+  (e: 'toggle', id: number): void
+  (e: 'delete', id: number): void
+}>()
+</script>
