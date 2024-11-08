@@ -1,22 +1,23 @@
 <template>
   <div
     :class="[
-      'flex min-h-screen items-center justify-center p-4 transition-colors duration-300',
-      isDarkMode ? 'bg-gray-900' : 'bg-gray-100',
+      'flex justify-center border-2 border-red-500 ',
+      isDarkMode ? 'bg-gray-950' : 'bg-gray-50',
     ]"
   >
+    <div>foo</div>
     <div
       :class="[
-        'w-full max-w-md overflow-hidden rounded-lg shadow-xl',
+        'shadow-xl, w-full max-w-md overflow-hidden rounded-lg',
         isDarkMode ? 'bg-gray-800' : 'bg-white',
       ]"
     >
-      <div class="p-6">
-        <div class="mb-6">
+      <div class="p-5">
+        <div class="mb-3">
           <Title :is-dark-mode="isDarkMode" @toggle-dark-mode="toggleDarkMode" />
         </div>
 
-        <div class="mb-6">
+        <div class="mb-3">
           <CalendarItem
             :current-date="currentDate"
             :is-dark-mode="isDarkMode"
@@ -29,7 +30,7 @@
           />
         </div>
 
-        <div class="mb-6">
+        <div class="mb-3">
           <NewTask :is-dark-mode="isDarkMode" @add-todo="createTodo" />
         </div>
 
