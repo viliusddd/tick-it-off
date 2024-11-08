@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { FwbNavbar, FwbNavbarCollapse, FwbNavbarLink } from 'flowbite-vue'
@@ -21,28 +21,19 @@ const navigation = computed(() =>
 </script>
 
 <template>
-  <FwbNavbar>
-    <template #default="{ isShowMenu }">
-      <div class="px-4">
-        <FwbNavbar-collapse :isShowMenu="isShowMenu">
-          <FwbNavbarLink
-            v-for="link in navigation"
-            :key="`${link.name}-${String(route.name)}`"
-            :is-active="link.isActive"
-            :link="{ name: link.name } as any"
-            link-attr="to"
-            component="RouterLink"
-          >
-            {{ link.label }}
-          </FwbNavbarLink>
-          <slot name="menu" />
-        </FwbNavbar-collapse>
-      </div>
+  <Menubar :model="links">
+    <template #item="{ item, props }">
+      <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+        <a v-ripple :href="href" v-bind="props.action" @click="navigate">
+          <span :class="item.icon" />
+          <span>{{ item.label }}</span>
+        </a>
+      </router-link>
     </template>
-  </FwbNavbar>
+  </Menubar>
 
   <main>
-    <div class="container mx-auto px-6 py-6">
+    <div class="container mx-auto px-0 py-0">
       <RouterView />
     </div>
   </main>

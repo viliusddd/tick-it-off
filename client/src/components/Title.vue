@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-between">
-    <h1 :class="['text-3xl font-bold', isDarkMode ? 'text-white' : 'text-gray-900']">
+    <h1 :class="['text-xl font-bold sm:text-3xl', isDarkMode ? 'text-white' : 'text-gray-900']">
       Tick It Off
     </h1>
     <button

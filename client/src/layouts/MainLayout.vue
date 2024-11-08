@@ -8,10 +8,10 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const links = computed(() => [
-  { label: 'Home', name: 'Home' },
+  { label: 'Home', name: 'Home', icon: 'pi pi-home', route: '/' },
 
   ...(isLoggedIn.value
-    ? [{ label: 'Todo', name: 'TodoToday' }]
+    ? [{ label: 'Todo', name: 'TodoToday', icon: 'pi pi-pen-to-square', route: '/todo' }]
     : [
         { label: 'Login', name: 'Login' },
         { label: 'Signup', name: 'Signup' },

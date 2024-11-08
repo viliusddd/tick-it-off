@@ -1,18 +1,17 @@
 <template>
   <div
     :class="[
-      'flex justify-center border-2 border-red-500 ',
+      'flex justify-center border-2 border-red-500',
       isDarkMode ? 'bg-gray-950' : 'bg-gray-50',
     ]"
   >
-    <div>foo</div>
     <div
       :class="[
-        'shadow-xl, w-full max-w-md overflow-hidden rounded-lg',
+        'overflow-hidden rounded-lg shadow-xl max-sm:w-full',
         isDarkMode ? 'bg-gray-800' : 'bg-white',
       ]"
     >
-      <div class="p-5">
+      <div class="p-3 sm:p-5">
         <div class="mb-3">
           <Title :is-dark-mode="isDarkMode" @toggle-dark-mode="toggleDarkMode" />
         </div>

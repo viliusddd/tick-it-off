@@ -11,6 +11,7 @@ import { setupCalendar } from 'v-calendar'
 import Checkbox from 'primevue/checkbox'
 import Toast from 'primevue/toast'
 import Button from 'primevue/button'
+import Menubar from 'primevue/menubar'
 
 import App from './App.vue'
 import router from './router'
@@ -30,5 +31,6 @@ app.use(ToastService)
 app.component('Checkbox', Checkbox)
 app.component('Toast', Toast)
 app.component('VueButton', Button)
+app.component('Menubar', Menubar)
 
 app.mount('#app')
