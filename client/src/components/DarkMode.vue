@@ -1,8 +1,5 @@
 <template>
-  <div class="flex items-center justify-between">
-    <h1 :class="['text-xl font-bold sm:text-3xl', isDarkMode ? 'text-white' : 'text-gray-900']">
-      Tick It Off
-    </h1>
+  <div class="flex items-center justify-end">
     <button
       @click="toggleDarkMode"
       :class="[
@@ -31,17 +28,40 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, watch } from 'vue'
 import { SunIcon, MoonIcon } from '@heroicons/vue/24/solid'
 
-const props = defineProps<{
-  isDarkMode: boolean
-}>()
-
-const emit = defineEmits<{
-  (e: 'toggleDarkMode'): void
-}>()
+const isDarkMode = ref(false)
 
 const toggleDarkMode = () => {
-  emit('toggleDarkMode')
+  isDarkMode.value = !isDarkMode.value
+  localStorage.setItem('darkMode', isDarkMode.value.toString())
+  updateDarkMode()
 }
+
+const updateDarkMode = () => {
+  if (isDarkMode.value) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+}
+
+const initDarkMode = () => {
+  const savedDarkMode = localStorage.getItem('darkMode')
+  if (savedDarkMode !== null) {
+    isDarkMode.value = savedDarkMode === 'true'
+  } else {
+    isDarkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+  }
+  updateDarkMode()
+}
+
+onMounted(() => {
+  initDarkMode()
+})
+
+watch(isDarkMode, () => {
+  updateDarkMode()
+})
 </script>
