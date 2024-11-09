@@ -13,10 +13,6 @@
     >
       <div class="p-3 sm:p-5">
         <div class="mb-3">
-          <Title :is-dark-mode="isDarkMode" @toggle-dark-mode="toggleDarkMode" />
-        </div>
-
-        <div class="mb-3">
           <CalendarItem
             :current-date="currentDate"
             :is-dark-mode="isDarkMode"
@@ -79,7 +75,6 @@ import type { Ref } from 'vue'
 import TodoItem from '@/components/TodoItem.vue'
 import CalendarItem from '@/components/CalendarNavigation.vue'
 import NewTask from '@/components/NewTask.vue'
-import Title from '@/components/Title.vue'
 
 const props = defineProps<{ currentDate: Date }>()
 
@@ -259,20 +254,6 @@ const handleClickOutside = (event: MouseEvent) => {
   }
 }
 
-const toggleDarkMode = () => {
-  isDarkMode.value = !isDarkMode.value
-  localStorage.setItem('darkMode', isDarkMode.value.toString())
-}
-
-const initDarkMode = () => {
-  const savedDarkMode = localStorage.getItem('darkMode')
-  if (savedDarkMode !== null) {
-    isDarkMode.value = savedDarkMode === 'true'
-  } else {
-    isDarkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches
-  }
-}
-
 watch(currentDate, () => {
   todos.value = []
   completions.value = []
@@ -282,7 +263,6 @@ watch(currentDate, () => {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
-  initDarkMode()
 })
 
 onUnmounted(() => {
