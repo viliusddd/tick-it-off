@@ -16,6 +16,7 @@ const links = computed(() => [
         { label: 'Login', name: 'Login' },
         { label: 'Signup', name: 'Signup' },
       ]),
+  { label: 'User', name: 'User', icon: 'pi pi-user', route: '/todo' },
 ])
 
 function logoutUser() {

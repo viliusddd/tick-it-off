@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import DarkMode from '@/components/DarkMode.vue'
 
@@ -34,9 +34,9 @@ const navigation = computed(() =>
       </router-link>
     </template>
     <template #end>
-      <div class="pi pi-user"></div>
-      <div class="mb-3">
-        <DarkMode />
+      <div class="flex">
+        <DarkMode class="mb-3" />
+        <div class="pi pi-user" style="font-size: 1.5rem"></div>
       </div>
     </template>
   </Menubar>
