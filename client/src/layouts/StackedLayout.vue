@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { FwbNavbar, FwbNavbarCollapse, FwbNavbarLink } from 'flowbite-vue'
+import DarkMode from '@/components/DarkMode.vue'
 
 const { links } = defineProps<{
   links: {
@@ -22,6 +22,9 @@ const navigation = computed(() =>
 
 <template>
   <Menubar :model="links">
+    <template #start>
+      <div class="text-3xl">Tick It Off</div>
+    </template>
     <template #item="{ item, props }">
       <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
         <a v-ripple :href="href" v-bind="props.action" @click="navigate">
@@ -29,6 +32,12 @@ const navigation = computed(() =>
           <span>{{ item.label }}</span>
         </a>
       </router-link>
+    </template>
+    <template #end>
+      <div class="pi pi-user"></div>
+      <div class="mb-3">
+        <DarkMode />
+      </div>
     </template>
   </Menubar>
 
