@@ -22,9 +22,6 @@ const navigation = computed(() =>
 
 <template>
   <Menubar :model="links">
-    <template #start>
-      <div class="text-3xl">Tick It Off</div>
-    </template>
     <template #item="{ item, props }">
       <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
         <a v-ripple :href="href" v-bind="props.action" @click="navigate">
@@ -33,11 +30,11 @@ const navigation = computed(() =>
         </a>
       </router-link>
     </template>
+    <template #start>
+      <div class="text-xl">Tick It Off</div>
+    </template>
     <template #end>
-      <div class="flex">
-        <DarkMode class="mb-3" />
-        <div class="pi pi-user" style="font-size: 1.5rem"></div>
-      </div>
+      <div class="pi pi-user" style="font-size: 1.5rem"></div>
     </template>
   </Menubar>
 

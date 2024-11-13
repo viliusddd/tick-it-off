@@ -1,0 +1,7 @@
+<template>
+  <div>
+    <Listbox filter />
+  </div>
+</template>
+
+<script setup lang="ts"></script>

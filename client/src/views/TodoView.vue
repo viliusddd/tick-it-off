@@ -5,13 +5,8 @@
       isDarkMode ? 'bg-gray-950' : 'bg-gray-50',
     ]"
   >
-    <div
-      :class="[
-        'overflow-hidden rounded-lg shadow-xl max-sm:w-full',
-        isDarkMode ? 'bg-gray-800' : 'bg-white',
-      ]"
-    >
-      <div class="p-3 sm:p-5">
+    <div :class="'overflow-hidden rounded-lg shadow-xl max-sm:w-full'">
+      <div class="mb:p-5 p-3">
         <div class="mb-3">
           <CalendarItem
             :current-date="currentDate"

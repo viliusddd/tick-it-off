@@ -7,6 +7,8 @@ import {
 } from '@server/entities/user'
 import type { Insertable, Selectable } from 'kysely'
 
+type Pagination = { offset: number; limit: number }
+
 export function userRepository(db: Database) {
   return {
     async create(user: Insertable<User>): Promise<UserPublic> {
@@ -25,6 +27,15 @@ export function userRepository(db: Database) {
         .executeTakeFirst()
 
       return user
+    },
+    async findAll({ offset, limit }: Pagination): Promise<UserPublic[]> {
+      return db
+        .selectFrom('user')
+        .select(userKeysPublic)
+        .orderBy('id', 'desc')
+        .offset(offset)
+        .limit(limit)
+        .execute()
     },
   }
 }

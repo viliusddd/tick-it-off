@@ -8,15 +8,21 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const links = computed(() => [
-  { label: 'Home', name: 'Home', icon: 'pi pi-home', route: '/' },
-
   ...(isLoggedIn.value
-    ? [{ label: 'Todo', name: 'TodoToday', icon: 'pi pi-pen-to-square', route: '/todo' }]
+    ? [
+        { label: 'Todo', name: 'TodoToday', icon: 'pi pi-pen-to-square', route: '/todo' },
+        { label: 'Users', name: 'Users', icon: 'pi pi-users', route: '/users' },
+        {
+          label: 'Shared Goals',
+          name: 'SharedGoals',
+          icon: 'pi pi-share-alt',
+          route: '/shared-goals',
+        },
+      ]
     : [
         { label: 'Login', name: 'Login' },
         { label: 'Signup', name: 'Signup' },
       ]),
-  { label: 'User', name: 'User', icon: 'pi pi-user', route: '/todo' },
 ])
 
 function logoutUser() {

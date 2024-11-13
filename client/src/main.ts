@@ -12,6 +12,7 @@ import Checkbox from 'primevue/checkbox'
 import Toast from 'primevue/toast'
 import Button from 'primevue/button'
 import Menubar from 'primevue/menubar'
+import Listbox from 'primevue/listbox'
 
 import App from './App.vue'
 import router from './router'
@@ -32,5 +33,6 @@ app.component('Checkbox', Checkbox)
 app.component('Toast', Toast)
 app.component('VueButton', Button)
 app.component('Menubar', Menubar)
+app.component('Listbox', Listbox)
 
 app.mount('#app')
