@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { onMounted, type Ref, ref } from 'vue'
 import { trpc } from '@/trpc'
-import { type UserPublic } from '@server/shared/types'
+import type { UserPublic } from '@server/shared/types'
 const users: Ref<UserPublic[]> = ref([])
 const selectedUser: Ref<UserPublic | null> = ref(null)
 
