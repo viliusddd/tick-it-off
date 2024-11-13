@@ -17,16 +17,16 @@ export async function up(db: Kysely<any>) {
 
   await db.schema
     .createTable('friend')
-    .addColumn('user_a_id', 'integer', (c) =>
+    .addColumn('usera_id', 'integer', (c) =>
       c.references('user.id').notNull().onDelete('cascade')
     )
-    .addColumn('user_b_id', 'integer', (c) =>
+    .addColumn('userb_id', 'integer', (c) =>
       c.references('user.id').notNull().onDelete('cascade')
     )
     .addColumn('created_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
-    .addUniqueConstraint('friend_a_friend_b_unique', ['user_a_id', 'user_b_id'])
+    .addUniqueConstraint('frienda_friendb_unique', ['usera_id', 'userb_id'])
     .execute()
 
   await db.schema

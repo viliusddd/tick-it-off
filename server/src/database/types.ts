@@ -15,8 +15,8 @@ export interface Completion {
 
 export interface Friend {
   createdAt: Generated<Timestamp>
-  userAId: number
-  userBId: number
+  useraId: number
+  userbId: number
 }
 
 export interface SharedTodo {
