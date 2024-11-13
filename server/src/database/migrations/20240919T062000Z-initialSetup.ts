@@ -16,6 +16,20 @@ export async function up(db: Kysely<any>) {
     .execute()
 
   await db.schema
+    .createTable('friend')
+    .addColumn('user_a_id', 'integer', (c) =>
+      c.references('user.id').notNull().onDelete('cascade')
+    )
+    .addColumn('user_b_id', 'integer', (c) =>
+      c.references('user.id').notNull().onDelete('cascade')
+    )
+    .addColumn('created_at', 'timestamptz', (c) =>
+      c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
+    )
+    .addUniqueConstraint('friend_a_friend_b_unique', ['user_a_id', 'user_b_id'])
+    .execute()
+
+  await db.schema
     .createTable('todo')
     .addColumn('id', 'integer', (c) =>
       c.primaryKey().generatedAlwaysAsIdentity()
@@ -61,5 +75,6 @@ export async function down(db: Kysely<any>) {
   await db.schema.dropTable('todo').execute()
   await db.schema.dropTable('completion').execute()
   await db.schema.dropTable('user').execute()
+  await db.schema.dropTable('friend').execute()
   await db.schema.dropTable('shared_todo').execute()
 }

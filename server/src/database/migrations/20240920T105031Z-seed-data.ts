@@ -33,6 +33,11 @@ export async function up(db: Kysely<any>) {
     .returningAll()
     .execute()
 
+  await db
+    .insertInto('friend')
+    .values([{ user_a_id: users[0].id, user_b_id: users[1].id }])
+    .execute()
+
   const todos = await db
     .insertInto('todo')
     .values([

@@ -13,6 +13,12 @@ export interface Completion {
   todoId: number
 }
 
+export interface Friend {
+  createdAt: Generated<Timestamp>
+  userAId: number
+  userBId: number
+}
+
 export interface SharedTodo {
   createdAt: Generated<Timestamp>
   todoId: number
@@ -37,6 +43,7 @@ export interface User {
 
 export interface DB {
   completion: Completion
+  friend: Friend
   sharedTodo: SharedTodo
   todo: Todo
   user: User
