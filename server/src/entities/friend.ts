@@ -5,7 +5,7 @@ import { createdAtSchema, idSchema } from './shared'
 
 export const friendSchema = z.object({
   useraId: idSchema,
-  userBId: idSchema,
+  userbId: idSchema,
   createdAt: createdAtSchema,
 })
 
