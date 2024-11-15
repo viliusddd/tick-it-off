@@ -10,11 +10,14 @@ import { setupCalendar } from 'v-calendar'
 
 import Checkbox from 'primevue/checkbox'
 import Toast from 'primevue/toast'
-import Button from 'primevue/button'
 import Menubar from 'primevue/menubar'
 import VueMenu from 'primevue/menu'
 import Listbox from 'primevue/listbox'
 import VueButton from 'primevue/button'
+import Avatar from 'primevue/avatar'
+import Ripple from 'primevue/ripple'
+import Badge from 'primevue/badge'
+import OverlayBadge from 'primevue/overlaybadge'
 
 import App from './App.vue'
 import router from './router'
@@ -25,6 +28,7 @@ app.use(createPinia())
 app.use(router)
 app.use(setupCalendar, {})
 app.use(PrimeVue, {
+  ripple: true,
   theme: {
     preset: Aura,
     options: {
@@ -38,10 +42,14 @@ app.use(ToastService)
 
 app.component('Checkbox', Checkbox)
 app.component('Toast', Toast)
-app.component('VueButton', Button)
 app.component('VueMenu', VueMenu)
 app.component('Menubar', Menubar)
 app.component('Listbox', Listbox)
 app.component('VueButton', VueButton)
+app.component('Avatar', Avatar)
+app.component('Badge', Badge)
+app.component('OverlayBadge', OverlayBadge)
+
+app.directive('ripple', Ripple)
 
 app.mount('#app')
