@@ -4,7 +4,7 @@ import { createApp } from 'vue'
 import PrimeVue from 'primevue/config'
 import ToastService from 'primevue/toastservice'
 import 'primeicons/primeicons.css'
-import Material from '@primevue/themes/material'
+import Aura from '@primevue/themes/aura'
 import { createPinia } from 'pinia'
 import { setupCalendar } from 'v-calendar'
 
@@ -26,7 +26,12 @@ app.use(router)
 app.use(setupCalendar, {})
 app.use(PrimeVue, {
   theme: {
-    preset: Material,
+    preset: Aura,
+    options: {
+      prefix: 'p',
+      darkModeSelector: 'system',
+      cssLayer: false,
+    },
   },
 })
 app.use(ToastService)
