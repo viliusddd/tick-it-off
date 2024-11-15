@@ -29,7 +29,7 @@ export async function up(db: Kysely<any>) {
     .addColumn('created_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
-    .addUniqueConstraint('frienda_friendb_unique', ['usera_id', 'userb_id'])
+    .addUniqueConstraint('usera_userb_unique', ['usera_id', 'userb_id'])
     .execute()
 
   await db.schema
@@ -78,6 +78,6 @@ export async function down(db: Kysely<any>) {
   await db.schema.dropTable('todo').execute()
   await db.schema.dropTable('completion').execute()
   await db.schema.dropTable('user').execute()
-  await db.schema.dropTable('friend').execute()
+  await db.schema.dropTable('user_relationship').execute()
   await db.schema.dropTable('shared_todo').execute()
 }

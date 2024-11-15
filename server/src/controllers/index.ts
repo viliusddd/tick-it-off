@@ -1,12 +1,12 @@
 import { router } from '../trpc'
 import completion from './completion'
-import friend from './friend'
+import userRelationship from './userRelationship'
 import todo from './todo'
 import user from './user'
 
 export const appRouter = router({
   completion,
-  friend,
+  userRelationship,
   todo,
   user,
 })

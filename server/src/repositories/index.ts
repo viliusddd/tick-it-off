@@ -1,6 +1,6 @@
 import type { Database } from '@server/database'
 import { completionRepository } from './completionRepository'
-import { friendRepository } from './friendRepository'
+import { userRelationshipRepository } from './userRelationshipRepository'
 import { sharedTodoRepository } from './sharedTodoRepository'
 import { todoRepository } from './todoRepository'
 import { userRepository } from './userRepository'
@@ -10,7 +10,7 @@ export type RepositoryFactory = <T>(db: Database) => T
 // index of all repositories for provideRepos
 const repositories = {
   completionRepository,
-  friendRepository,
+  userRelationshipRepository,
   sharedTodoRepository,
   todoRepository,
   userRepository,
