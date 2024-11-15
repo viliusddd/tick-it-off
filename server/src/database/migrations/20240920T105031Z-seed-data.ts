@@ -38,7 +38,7 @@ export async function up(db: Kysely<any>) {
       {
         first_name: 'Christopher',
         last_name: 'Hitchens',
-        email: 'elon@x.com',
+        email: 'christopher@hitchens.com',
         password: await hash('foobar123', config.auth.passwordCost),
       },
     ])
