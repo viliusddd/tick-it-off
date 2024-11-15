@@ -29,13 +29,40 @@ export async function up(db: Kysely<any>) {
         email: 'foo@protonmail.com',
         password: await hash('foobar123', config.auth.passwordCost),
       },
+      {
+        first_name: 'Elon',
+        last_name: 'Musk',
+        email: 'elon@x.com',
+        password: await hash('foobar123', config.auth.passwordCost),
+      },
+      {
+        first_name: 'Christopher',
+        last_name: 'Hitchens',
+        email: 'elon@x.com',
+        password: await hash('foobar123', config.auth.passwordCost),
+      },
     ])
     .returningAll()
     .execute()
 
   await db
-    .insertInto('friend')
-    .values([{ usera_id: users[0].id, userb_id: users[1].id }])
+    .insertInto('user_relationship')
+    .values([
+      // 1st relationship: only initiator has pending status
+      { usera_id: users[0].id, userb_id: users[1].id, type: 'pending' },
+      { usera_id: users[1].id, userb_id: users[0].id, type: '' },
+
+      // 2nd relationship: only initiator has friends type
+      { usera_id: users[2].id, userb_id: users[1].id, type: '' },
+      { usera_id: users[1].id, userb_id: users[2].id, type: 'friends' },
+
+      // 3rd relationship: either initiator can block or they both can block
+      { usera_id: users[2].id, userb_id: users[0].id, type: 'block' },
+      { usera_id: users[0].id, userb_id: users[2].id, type: 'block' },
+      //
+      { usera_id: users[3].id, userb_id: users[2].id, type: '' },
+      { usera_id: users[2].id, userb_id: users[3].id, type: 'block' },
+    ])
     .execute()
 
   const todos = await db

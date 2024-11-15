@@ -16,12 +16,15 @@ export async function up(db: Kysely<any>) {
     .execute()
 
   await db.schema
-    .createTable('friend')
+    .createTable('user_relationship')
     .addColumn('usera_id', 'integer', (c) =>
       c.references('user.id').notNull().onDelete('cascade')
     )
     .addColumn('userb_id', 'integer', (c) =>
       c.references('user.id').notNull().onDelete('cascade')
+    )
+    .addColumn('type', 'text', (c) =>
+      c.check(sql`type IN ('block', 'friends', 'pending', '')`).defaultTo('')
     )
     .addColumn('created_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
