@@ -37,6 +37,13 @@ export function userRepository(db: Database) {
         .limit(limit)
         .execute()
     },
+    async findById(id: number) {
+      return db
+        .selectFrom('user')
+        .select(userKeysPublic)
+        .where('id', '=', id)
+        .execute()
+    },
   }
 }
 
