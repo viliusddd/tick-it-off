@@ -12,41 +12,8 @@
       <div class="text-xl">Tick It Off</div>
     </template>
     <template #end>
-      <VueButton
-        type="button"
-        icon="pi pi-user"
-        variant="text"
-        rounded
-        @click="toggle"
-        style="font-size: 1rem"
-        aria-controls="overlay_menu"
-        aria-haspopup="true"
-      />
-      <VueMenu :model="items" class="w-full md:w-60" ref="menu" id="overlay_menu" :popup="true">
-        <template #start>
-          <button
-            v-ripple
-            class="hover:bg-surface-100 dark:hover:bg-surface-800 relative flex w-full cursor-pointer items-start overflow-hidden rounded-none border-0 bg-transparent p-2 pl-4 transition-colors duration-200"
-          >
-            <Avatar
-              image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
-              class="mr-2"
-              shape="circle"
-            />
-            <span class="inline-flex flex-col items-start">
-              <span class="font-bold">Foo Bar</span>
-              <span class="text-sm">Admin</span>
-            </span>
-          </button>
-        </template>
-        <template #item="{ item, props }">
-          <a v-ripple class="flex items-center" v-bind="props.action">
-            <span :class="item.icon" />
-            <span>{{ item.label }}</span>
-            <Badge v-if="item.badge" class="ml-auto" :value="item.badge" />
-          </a>
-        </template>
-      </VueMenu>
+      <OptionsMenu />
+      <OptionsMenuBtn />
     </template>
   </Menubar>
 
@@ -74,11 +41,11 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { type Ref, ref } from 'vue'
-import { logout } from '@/stores/user'
-import { useColorMode, useCycleList, useDark, useToggle } from '@vueuse/core'
+import { useRoute } from 'vue-router'
+import { useColorMode, useCycleList } from '@vueuse/core'
 import { watchEffect } from 'vue-demi'
+import OptionsMenuBtn from '@/components/OptionsMenuBtn.vue'
+import OptionsMenu from '@/components/OptionsMenu.vue'
 
 const mode = useColorMode({
   emitAuto: true,
@@ -93,13 +60,6 @@ const { state, next } = useCycleList(['dark', 'light', 'cafe', 'contrast', 'auto
 })
 watchEffect(() => (mode.value = state.value))
 
-const isDark: Ref<boolean> = useDark({
-  attribute: 'class',
-  valueDark: 'dark',
-  valueLight: 'light',
-})
-const toggleDark: () => boolean = useToggle(isDark)
-
 const { links } = defineProps<{
   links: {
     label: string
@@ -108,40 +68,6 @@ const { links } = defineProps<{
 }>()
 
 const route = useRoute()
-const router = useRouter()
-
-const menu = ref()
-const items = ref([
-  {
-    separator: true,
-  },
-  {
-    items: [
-      {
-        label: 'Settings',
-        icon: 'pi pi-cog',
-        route: '/settings',
-      },
-      {
-        label: 'Dark Mode',
-        icon: 'pi pi-moon',
-        command: () => toggleDark(),
-      },
-      {
-        separator: true,
-      },
-      {
-        label: 'Log Out',
-        icon: 'pi pi-sign-out',
-        command: logoutUser,
-      },
-    ],
-  },
-])
-
-const toggle = (event) => {
-  menu.value.toggle(event)
-}
 
 const navigation = computed(() =>
   links.map((item) => ({
@@ -149,11 +75,6 @@ const navigation = computed(() =>
     isActive: route.name === item.name,
   }))
 )
-
-function logoutUser() {
-  logout()
-  router.push({ name: 'Login' })
-}
 </script>
 
 <style>
