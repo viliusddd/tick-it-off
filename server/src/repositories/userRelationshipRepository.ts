@@ -48,6 +48,19 @@ export function userRelationshipRepository(db: Database) {
         .returning(['useraId', 'userbId'])
         .execute()
     },
+    /** Get the type of the relationship */
+    async getType(
+      userRelationship: Selectable<
+        Pick<UserRelationship, 'useraId' | 'userbId'>
+      >
+    ) {
+      return db
+        .selectFrom('userRelationship')
+        .where('useraId', '=', userRelationship.useraId)
+        .where('userbId', '=', userRelationship.userbId)
+        .select(userRelationshipKeysPublic)
+        .execute()
+    },
   }
 }
 

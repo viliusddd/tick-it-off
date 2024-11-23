@@ -6,7 +6,7 @@
           <OptionsUser class="my-2" />
         </template>
         <template #fallback>
-          <div>Loading...</div>
+          <div>Loading user...</div>
         </template>
       </Suspense>
     </template>
@@ -14,7 +14,6 @@
       <a v-ripple class="flex items-center" v-bind="props.action">
         <span :class="item.icon" />
         <span>{{ item.label }}</span>
-        <Badge v-if="item.badge" class="ml-auto" :value="item.badge" />
       </a>
     </template>
   </VueMenu>
@@ -44,10 +43,10 @@ function logoutUser() {
 
 const items = ref([
   {
-    separator: true,
-  },
-  {
     items: [
+      {
+        separator: true,
+      },
       {
         label: 'Settings',
         icon: 'pi pi-cog',
