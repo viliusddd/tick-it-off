@@ -44,8 +44,8 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useColorMode, useCycleList } from '@vueuse/core'
 import { watchEffect } from 'vue-demi'
-import OptionsMenuBtn from '@/components/OptionsMenuBtn.vue'
-import OptionsMenu from '@/components/OptionsMenu.vue'
+import OptionsMenuBtn from '@/components/Options/OptionsMenuBtn.vue'
+import OptionsMenu from '@/components/Options/OptionsMenu.vue'
 
 const mode = useColorMode({
   emitAuto: true,

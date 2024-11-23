@@ -42,7 +42,7 @@ export function userRepository(db: Database) {
         .selectFrom('user')
         .select(userKeysPublic)
         .where('id', '=', id)
-        .execute()
+        .executeTakeFirstOrThrow()
     },
   }
 }
