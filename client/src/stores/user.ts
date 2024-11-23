@@ -49,3 +49,5 @@ export const signup = trpc.user.signup.mutate
 export const findUserById = trpc.user.findById.query
 
 export const menu = ref()
+
+export const getUserRelType = trpc.userRelationship.getType.query
