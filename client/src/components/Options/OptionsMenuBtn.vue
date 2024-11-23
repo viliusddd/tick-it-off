@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { menu } from '@/stores/user'
 
-const toggle = (event) => {
+const toggle = (event: Event) => {
   menu.value.toggle(event)
 }
 </script>
