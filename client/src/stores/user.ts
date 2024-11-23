@@ -45,3 +45,7 @@ export function logout() {
 }
 
 export const signup = trpc.user.signup.mutate
+
+export const findUserById = trpc.user.findById.query
+
+export const menu = ref()
