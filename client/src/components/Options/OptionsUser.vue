@@ -15,13 +15,15 @@ import { findUserById } from '@/stores/user'
 import type { UserPublic } from '@server/shared/types'
 import { onMounted, ref, type Ref } from 'vue'
 
-const data: Ref<UserPublic | undefined> = ref()
+const data: Ref<UserPublic | null> = ref(null)
 const isLoading = ref(true)
 const error = ref(null)
 
 onMounted(async () => {
   try {
     data.value = await findUserById({ id: 2 })
+  } catch (err) {
+    error.value = err.message
   } finally {
     isLoading.value = false
   }
