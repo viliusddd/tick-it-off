@@ -17,13 +17,17 @@ import { onMounted, ref, type Ref } from 'vue'
 
 const data: Ref<UserPublic | null> = ref(null)
 const isLoading = ref(true)
-const error = ref(null)
+const error = ref()
 
 onMounted(async () => {
   try {
-    data.value = await findUserById({ id: 2 })
+    data.value = await userStore.findUserById({ id: 2 })
   } catch (err) {
-    error.value = err.message
+    if (err instanceof Error) {
+      error.value = err.message
+    } else {
+      error.value = String(err)
+    }
   } finally {
     isLoading.value = false
   }
