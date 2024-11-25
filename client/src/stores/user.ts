@@ -13,12 +13,12 @@ import type { UserSignup } from '@server/shared/types'
 export const useUserStore = defineStore('user', () => {
   const authToken = ref<string | null>(getStoredAccessToken(localStorage))
 
-  const optionsDialog = ref(false)
-
-  const menu = ref()
-
   const authUserId = computed(() => (authToken.value ? getUserIdFromToken(authToken.value) : null))
   const isLoggedIn = computed(() => !!authToken.value)
+  const currentUser = computed(async () => {
+    if (!authUserId.value) return null
+    return findUserById({ id: authUserId.value })
+  })
 
   async function login(userLogin: { email: string; password: string }) {
     const { accessToken } = await trpc.user.login.mutate(userLogin)
@@ -45,10 +45,9 @@ export const useUserStore = defineStore('user', () => {
   }
 
   return {
-    menu,
-    optionsDialog,
     authUserId,
     isLoggedIn,
+    currentUser,
     login,
     logout,
     signup,

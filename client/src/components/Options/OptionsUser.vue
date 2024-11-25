@@ -4,8 +4,8 @@
   <div class="flex items-center" v-else>
     <Avatar icon="pi pi-user" class="mx-2 flex" shape="circle" />
     <span class="inline-flex flex-col items-start">
-      <span class="font-bold">{{ data?.firstName }} {{ data?.lastName }}</span>
-      <span class="text-sm">{{ data?.email }}</span>
+      <span class="font-bold">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
+      <span class="text-sm">{{ currentUser?.email }}</span>
     </span>
   </div>
 </template>
@@ -13,17 +13,17 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user'
 import type { UserPublic } from '@server/shared/types'
-import { onMounted, ref, type Ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const userStore = useUserStore()
 
-const data: Ref<UserPublic | null> = ref(null)
+const currentUser = ref<UserPublic | null>(null)
 const isLoading = ref(true)
 const error = ref()
 
 onMounted(async () => {
   try {
-    data.value = await userStore.findUserById({ id: 2 })
+    currentUser.value = await userStore.currentUser
   } catch (err) {
     if (err instanceof Error) {
       error.value = err.message
