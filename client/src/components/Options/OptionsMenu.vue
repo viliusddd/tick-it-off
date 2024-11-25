@@ -1,5 +1,15 @@
 <template>
-  <VueMenu :model="items" class="w-full md:w-60" ref="menu" id="overlay_menu" :popup="true">
+  <VueButton
+    type="button"
+    icon="pi pi-user"
+    variant="text"
+    rounded
+    @click="toggleMenu"
+    style="font-size: 1rem"
+    aria-controls="overlay_menu"
+    aria-haspopup="true"
+  />
+  <VueMenu :model="menuItems" ref="menu" class="w-full md:w-60" id="overlay_menu" :popup="true">
     <template #start>
       <Suspense>
         <template #default>
@@ -22,26 +32,14 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
 import { useDark, useToggle } from '@vueuse/core'
-import { logout } from '@/stores/user'
 import { useRouter } from 'vue-router'
-import { menu } from '@/stores/user'
+import { useUserStore } from '@/stores/user'
 import OptionsUser from './OptionsUser.vue'
 
 const router = useRouter()
+const userStore = useUserStore()
 
-const isDark: Ref<boolean> = useDark({
-  attribute: 'class',
-  valueDark: 'dark',
-  valueLight: 'light',
-})
-const toggleDark: () => boolean = useToggle(isDark)
-
-function logoutUser() {
-  logout()
-  router.push({ name: 'Login' })
-}
-
-const items = ref([
+const menuItems = ref([
   {
     items: [
       {
@@ -68,4 +66,22 @@ const items = ref([
     ],
   },
 ])
+
+function logoutUser() {
+  userStore.logout()
+  router.push({ name: 'Login' })
+}
+
+const isDark: Ref<boolean> = useDark({
+  attribute: 'class',
+  valueDark: 'dark',
+  valueLight: 'light',
+})
+const toggleDark: () => boolean = useToggle(isDark)
+
+const menu = ref()
+
+const toggleMenu = (event: Event) => {
+  menu.value.toggle(event)
+}
 </script>

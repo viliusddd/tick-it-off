@@ -11,9 +11,11 @@
 </template>
 
 <script setup lang="ts">
-import { findUserById } from '@/stores/user'
+import { useUserStore } from '@/stores/user'
 import type { UserPublic } from '@server/shared/types'
 import { onMounted, ref, type Ref } from 'vue'
+
+const userStore = useUserStore()
 
 const data: Ref<UserPublic | null> = ref(null)
 const isLoading = ref(true)
