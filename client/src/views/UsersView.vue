@@ -5,7 +5,12 @@
       :options="users"
       optionLabel="firstName"
       :filter="true"
-      :pt="{ option: { class: 'flex flex-row items-center justify-between' } }"
+      :pt="{
+        option: {
+          class: 'flex flex-row items-center justify-between',
+          style: 'cursor: default',
+        },
+      }"
     >
       <template #option="slotProps">
         <div class="flex items-center gap-2">
@@ -33,14 +38,21 @@
 import { onMounted, ref, type Ref } from 'vue'
 import { trpc } from '@/trpc'
 import type { UserPublic } from '@server/shared/types'
-import Listbox from 'primevue/listbox'
+import { useUserStore } from '@/stores/userStore'
 import { Tag, Listbox } from 'primevue'
 
 const selectedUser: Ref<UserPublic | null> = ref(null)
 const users = ref<UserPublic[]>([])
+const relData = ref()
+
+const userStore = useUserStore()
 
 onMounted(async () => (users.value = await trpc.user.findAll.query()))
 
+// const getRelationship = async (userbId: number) => {
+//   if (!userStore.authUserId) return null
+//   relData.value = trpc.userRelationship.getType.query({ useraId: userStore.authUserId, userbId })
+// }
 
 const changeStatus = async (user: UserPublic) => {
   console.log('Adding user:', user)
