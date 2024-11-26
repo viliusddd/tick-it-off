@@ -12,7 +12,6 @@ import Checkbox from 'primevue/checkbox'
 import Toast from 'primevue/toast'
 import Menubar from 'primevue/menubar'
 import VueMenu from 'primevue/menu'
-import Listbox from 'primevue/listbox'
 import VueButton from 'primevue/button'
 import Avatar from 'primevue/avatar'
 import Ripple from 'primevue/ripple'
@@ -44,7 +43,6 @@ app
   .component('Toast', Toast)
   .component('VueMenu', VueMenu)
   .component('Menubar', Menubar)
-  .component('Listbox', Listbox)
   .component('VueButton', VueButton)
   .component('Avatar', Avatar)
   .component('Badge', Badge)

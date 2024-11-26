@@ -1,14 +1,27 @@
 <template>
   <div>
-    <Listbox v-model="selectedUser" :options="users" optionLabel="firstName" :filter="true">
+    <Listbox
+      v-model="selectedUser"
+      :options="users"
+      optionLabel="firstName"
+      :filter="true"
+      :pt="{ option: { class: 'flex flex-row items-center justify-between' } }"
+    >
       <template #option="slotProps">
-        <div class="flex items-center justify-end gap-2">
+        <div class="flex items-center gap-2">
           <div>{{ slotProps.option.firstName }} {{ slotProps.option.lastName }}</div>
-          <div>[rel type badge]</div>
-          <Button
+          <Tag value="foo" />
+        </div>
+        <div>
+          <VueButton
             icon="pi pi-plus"
             class="p-button-rounded p-button-text"
             @click.stop="changeStatus(slotProps.option.id)"
+          />
+          <VueButton
+            icon="pi pi-ban"
+            class="p-button-rounded p-button-text"
+            @click.stop="banUser(slotProps.option.id)"
           />
         </div>
       </template>
@@ -21,16 +34,18 @@ import { onMounted, ref, type Ref } from 'vue'
 import { trpc } from '@/trpc'
 import type { UserPublic } from '@server/shared/types'
 import Listbox from 'primevue/listbox'
-import Button from 'primevue/button'
+import { Tag, Listbox } from 'primevue'
 
-const users: Ref<UserPublic[]> = ref([])
 const selectedUser: Ref<UserPublic | null> = ref(null)
+const users = ref<UserPublic[]>([])
 
-onMounted(async () => {
-  users.value = await trpc.user.findAll.query({ offset: 0, limit: 10 })
-})
+onMounted(async () => (users.value = await trpc.user.findAll.query()))
+
 
 const changeStatus = async (user: UserPublic) => {
   console.log('Adding user:', user)
+}
+const banUser = async (user: UserPublic) => {
+  console.log('Ban user:', user)
 }
 </script>
