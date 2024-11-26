@@ -1,7 +1,7 @@
 <template>
   <Listbox
     v-model="selectedUser"
-    :options="users"
+    :options="users.filter((usr) => usr.id != userStore.authUserId)"
     optionLabel="firstName"
     :filter="true"
     :pt="{
@@ -42,16 +42,12 @@ import { Tag, Listbox } from 'primevue'
 
 const selectedUser: Ref<UserPublic | null> = ref(null)
 const users = ref<UserPublic[]>([])
-const relData = ref()
 
 const userStore = useUserStore()
 
-onMounted(async () => (users.value = await trpc.user.findAll.query()))
-
-// const getRelationship = async (userbId: number) => {
-//   if (!userStore.authUserId) return null
-//   relData.value = trpc.userRelationship.getType.query({ useraId: userStore.authUserId, userbId })
-// }
+onMounted(async () => {
+  users.value = await trpc.user.findAll.query()
+})
 
 const changeStatus = async (user: UserPublic) => {
   console.log('Adding user:', user)
