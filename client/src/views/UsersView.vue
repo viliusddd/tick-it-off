@@ -1,37 +1,36 @@
 <template>
-  <div>
-    <Listbox
-      v-model="selectedUser"
-      :options="users"
-      optionLabel="firstName"
-      :filter="true"
-      :pt="{
-        option: {
-          class: 'flex flex-row items-center justify-between',
-          style: 'cursor: default',
-        },
-      }"
-    >
-      <template #option="slotProps">
-        <div class="flex items-center gap-2">
-          <div>{{ slotProps.option.firstName }} {{ slotProps.option.lastName }}</div>
-          <Tag value="foo" />
-        </div>
-        <div>
-          <VueButton
-            icon="pi pi-plus"
-            class="p-button-rounded p-button-text"
-            @click.stop="changeStatus(slotProps.option.id)"
-          />
-          <VueButton
-            icon="pi pi-ban"
-            class="p-button-rounded p-button-text"
-            @click.stop="banUser(slotProps.option.id)"
-          />
-        </div>
-      </template>
-    </Listbox>
-  </div>
+  <Listbox
+    v-model="selectedUser"
+    :options="users"
+    optionLabel="firstName"
+    :filter="true"
+    :pt="{
+      listContainer: { style: 'max-height: none' },
+      option: {
+        class: 'flex flex-row items-center justify-between',
+        style: 'cursor: default',
+      },
+    }"
+  >
+    <template #option="slotProps">
+      <div class="flex items-center gap-2">
+        <div>{{ slotProps.option.firstName }} {{ slotProps.option.lastName }}</div>
+        <Tag value="foo" />
+      </div>
+      <div>
+        <VueButton
+          icon="pi pi-plus"
+          class="p-button-rounded p-button-text"
+          @click.stop="changeStatus(slotProps.option.id)"
+        />
+        <VueButton
+          icon="pi pi-ban"
+          class="p-button-rounded p-button-text"
+          @click.stop="banUser(slotProps.option.id)"
+        />
+      </div>
+    </template>
+  </Listbox>
 </template>
 
 <script setup lang="ts">
