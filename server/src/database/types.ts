@@ -37,7 +37,6 @@ export interface User {
 
 export interface UserRelationship {
   createdAt: Generated<Timestamp>
-  type: Generated<string | null>
   useraId: number
   userbId: number
 }

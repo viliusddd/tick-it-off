@@ -23,9 +23,9 @@ export async function up(db: Kysely<any>) {
     .addColumn('userb_id', 'integer', (c) =>
       c.references('user.id').notNull().onDelete('cascade')
     )
-    .addColumn('type', 'text', (c) =>
-      c.check(sql`type IN ('block', 'friends', 'pending', '')`).defaultTo('')
-    )
+    // .addColumn('type', 'text', (c) =>
+    //   c.check(sql`type IN ('friends')`).defaultTo('friends')
+    // )
     .addColumn('created_at', 'timestamptz', (c) =>
       c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
