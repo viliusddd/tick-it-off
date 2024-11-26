@@ -23,33 +23,32 @@ import App from './App.vue'
 import router from './router'
 
 const app = createApp(App)
-
-app.use(createPinia())
-app.use(router)
-app.use(setupCalendar, {})
-app.use(PrimeVue, {
-  ripple: true,
-  theme: {
-    preset: Aura,
-    options: {
-      prefix: 'p',
-      darkModeSelector: 'system',
-      cssLayer: false,
+app
+  .use(createPinia())
+  .use(router)
+  .use(setupCalendar, {})
+  .use(PrimeVue, {
+    ripple: true,
+    theme: {
+      preset: Aura,
+      options: {
+        prefix: 'p',
+        darkModeSelector: 'system',
+        cssLayer: false,
+      },
     },
-  },
-})
-app.use(ToastService)
+  })
+  .use(ToastService)
 
-app.component('Checkbox', Checkbox)
-app.component('Toast', Toast)
-app.component('VueMenu', VueMenu)
-app.component('Menubar', Menubar)
-app.component('Listbox', Listbox)
-app.component('VueButton', VueButton)
-app.component('Avatar', Avatar)
-app.component('Badge', Badge)
-app.component('OverlayBadge', OverlayBadge)
+  .component('Checkbox', Checkbox)
+  .component('Toast', Toast)
+  .component('VueMenu', VueMenu)
+  .component('Menubar', Menubar)
+  .component('Listbox', Listbox)
+  .component('VueButton', VueButton)
+  .component('Avatar', Avatar)
+  .component('Badge', Badge)
+  .component('OverlayBadge', OverlayBadge)
 
-app.directive('ripple', Ripple)
-
-app.mount('#app')
+  .directive('ripple', Ripple)
+  .mount('#app')

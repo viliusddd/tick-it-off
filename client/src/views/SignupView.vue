@@ -4,7 +4,7 @@ import PageForm from '@/components/PageForm.vue'
 import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue'
 import { DEFAULT_SERVER_ERROR } from '@/consts'
 import AlertError from '@/components/AlertError.vue'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/userStore'
 // import useErrorMessage from '@/composables/useErrorMessage'
 
 const userStore = useUserStore()

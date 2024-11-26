@@ -3,7 +3,7 @@ import { FwbNavbarLink } from 'flowbite-vue'
 import StackedLayout from './StackedLayout.vue'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/userStore'
 
 const router = useRouter()
 const userStore = useUserStore()

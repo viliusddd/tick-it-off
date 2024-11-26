@@ -1,4 +1,4 @@
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/userStore'
 
 export const authenticate = () => {
   const userStore = useUserStore()

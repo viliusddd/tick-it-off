@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/userStore'
 import { ref } from 'vue'
 import PageForm from '@/components/PageForm.vue'
 import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue'

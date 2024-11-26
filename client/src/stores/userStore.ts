@@ -11,43 +11,58 @@ import { defineStore } from 'pinia'
 import type { UserSignup } from '@server/shared/types'
 
 export const useUserStore = defineStore('user', () => {
+  // state
   const authToken = ref<string | null>(getStoredAccessToken(localStorage))
+  const selectedUserId = ref<number | null>(null)
 
+  // getters
   const authUserId = computed(() => (authToken.value ? getUserIdFromToken(authToken.value) : null))
   const isLoggedIn = computed(() => !!authToken.value)
-  const currentUser = computed(async () => {
+
+  const currentUserId = computed(async () => {
     if (!authUserId.value) return null
     return findUserById({ id: authUserId.value })
   })
 
-  async function login(userLogin: { email: string; password: string }) {
+  const userRelStatus = computed(async () => {
+    if (!authUserId.value || !selectedUserId.value) return null
+    return getRelType({ useraId: authUserId.value, userbId: selectedUserId.value })
+  })
+
+  // actions
+  const login = async (userLogin: { email: string; password: string }) => {
     const { accessToken } = await trpc.user.login.mutate(userLogin)
 
     authToken.value = accessToken
     storeAccessToken(localStorage, accessToken)
   }
 
-  function logout() {
+  const logout = () => {
     authToken.value = null
     clearStoredAccessToken(localStorage)
   }
 
-  async function signup(userDetails: UserSignup) {
+  const signup = async (userDetails: UserSignup) => {
     trpc.user.signup.mutate(userDetails)
   }
 
-  async function findUserById(userId: { id: number }) {
+  const findUserById = (userId: { id: number }) => {
     return trpc.user.findById.query(userId)
   }
 
-  async function getUserRelType(usersId: { useraId: number; userbId: number }) {
+  const getUserRelType = (usersId: { useraId: number; userbId: number }) => {
     trpc.userRelationship.getType.query(usersId)
+  }
+
+  const getRelType = async (userRel: { useraId: number; userbId: number }) => {
+    return trpc.userRelationship.getType.query(userRel)
   }
 
   return {
     authUserId,
+    userRelStatus,
     isLoggedIn,
-    currentUser,
+    currentUserId,
     login,
     logout,
     signup,

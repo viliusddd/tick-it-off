@@ -33,7 +33,7 @@
 import { ref, type Ref } from 'vue'
 import { useDark, useToggle } from '@vueuse/core'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/userStore'
 import OptionsUser from './OptionsUser.vue'
 
 const router = useRouter()

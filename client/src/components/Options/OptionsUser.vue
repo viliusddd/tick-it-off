@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/userStore'
 import type { UserPublic } from '@server/shared/types'
 import { onMounted, ref } from 'vue'
 
@@ -23,7 +23,7 @@ const error = ref()
 
 onMounted(async () => {
   try {
-    currentUser.value = await userStore.currentUser
+    currentUser.value = await userStore.currentUserId
   } catch (err) {
     if (err instanceof Error) {
       error.value = err.message
