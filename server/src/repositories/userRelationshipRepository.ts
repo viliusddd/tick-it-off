@@ -21,6 +21,16 @@ export function userRelationshipRepository(db: Database) {
         .execute()
     },
 
+    async findAllWithUsers({ offset, limit }: Pagination) {
+      return db
+        .selectFrom('userRelationship')
+        .rightJoin('user', 'userRelationship.useraId', 'user.id')
+        .select(['user.id', 'userRelationship.userbId'])
+        .offset(offset)
+        .limit(limit)
+        .execute()
+    },
+
     /** Create two entries for a relationship */
     async create(
       userRelationships: Insertable<UserRelationship>
