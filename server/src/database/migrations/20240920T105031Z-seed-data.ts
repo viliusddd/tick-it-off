@@ -53,6 +53,9 @@ export async function up(db: Kysely<any>) {
 
       { usera_id: users[0].id, userb_id: users[1].id },
       { usera_id: users[1].id, userb_id: users[0].id },
+
+      { usera_id: users[0].id, userb_id: users[3].id },
+      { usera_id: users[3].id, userb_id: users[0].id },
     ])
     .execute()
 
