@@ -23,13 +23,13 @@
           v-if="!slotProps.option.isFriend"
           icon="pi pi-plus"
           class="p-button-rounded p-button-text"
-          @click.stop="addUser(slotProps.option.userbId)"
+          @click="addUser(slotProps.option.userbId)"
         />
         <VueButton
           v-else
           icon="pi pi-minus"
           class="p-button-rounded p-button-text"
-          @click.stop="removeUser(slotProps.option.userbId)"
+          @click="removeUser(slotProps.option.userbId)"
         />
       </div>
     </template>
@@ -41,8 +41,6 @@ import { computed, onMounted, ref } from 'vue'
 import { trpc } from '@/trpc'
 import { useUserStore } from '@/stores/userStore'
 import { Tag, Listbox } from 'primevue'
-
-const userStore = useUserStore()
 
 type UsersConnections = {
   useraId: number | null
@@ -60,7 +58,13 @@ type UserUpdated = {
   isFriend: boolean
 }
 
+const userStore = useUserStore()
+
 const users = ref<UsersConnections[]>([])
+
+onMounted(async () => {
+  users.value = await trpc.userRelationship.findAllWithUsers.query()
+})
 
 const usersUpdated = computed(() => {
   return users.value.reduce((usersAccum: UserUpdated[], usr) => {
@@ -81,14 +85,25 @@ const usersUpdated = computed(() => {
   }, [])
 })
 
-onMounted(async () => {
-  users.value = await trpc.userRelationship.findAllWithUsers.query()
-})
-
 const addUser = async (userbId: number) => {
-  await trpc.userRelationship.add.mutate({ useraId: userStore.authUserId, userbId })
+  for (const usr of usersUpdated.value) {
+    if (usr.userbId === userbId) {
+      usr.isFriend = !usr.isFriend
+    }
+  }
+
+  if (userStore.authUserId)
+    await trpc.userRelationship.add.mutate({ useraId: userStore.authUserId, userbId })
 }
+
 const removeUser = async (userbId: number) => {
-  await trpc.userRelationship.remove.mutate({ useraId: userStore.authUserId, userbId })
+  for (const usr of usersUpdated.value) {
+    if (usr.userbId === userbId) {
+      usr.isFriend = !usr.isFriend
+    }
+  }
+
+  if (userStore.authUserId)
+    await trpc.userRelationship.remove.mutate({ useraId: userStore.authUserId, userbId })
 }
 </script>
