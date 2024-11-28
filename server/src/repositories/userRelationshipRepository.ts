@@ -23,9 +23,17 @@ export function userRelationshipRepository(db: Database) {
 
     async findAllWithUsers({ offset, limit }: Pagination) {
       return db
-        .selectFrom('userRelationship')
-        .rightJoin('user', 'userRelationship.useraId', 'user.id')
-        .select(['user.id', 'userRelationship.userbId'])
+        .selectFrom('userRelationship as ur')
+        .rightJoin('user as usera', 'ur.useraId', 'usera.id')
+        .rightJoin('user as userb', 'ur.userbId', 'userb.id')
+        .select([
+          'usera.id as useraId',
+          'usera.firstName as useraFirstName',
+          'usera.lastName as useraLastName',
+          'userb.id as userbId',
+          'userb.firstName as userbFirstName',
+          'userb.lastName as userbLastName',
+        ])
         .offset(offset)
         .limit(limit)
         .execute()
