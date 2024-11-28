@@ -26,7 +26,7 @@ export const useUserStore = defineStore('user', () => {
 
   const userRelStatus = computed(async () => {
     if (!authUserId.value || !selectedUserId.value) return null
-    return getRelType({ useraId: authUserId.value, userbId: selectedUserId.value })
+    return getRelStatus({ useraId: authUserId.value, userbId: selectedUserId.value })
   })
 
   // actions
@@ -51,11 +51,11 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const getUserRelType = (usersId: { useraId: number; userbId: number }) => {
-    trpc.userRelationship.getType.query(usersId)
+    trpc.userRelationship.getStatus.query(usersId)
   }
 
-  const getRelType = async (userRel: { useraId: number; userbId: number }) => {
-    return trpc.userRelationship.getType.query(userRel)
+  const getRelStatus = async (userRel: { useraId: number; userbId: number }) => {
+    return trpc.userRelationship.getStatus.query(userRel)
   }
 
   return {

@@ -23,13 +23,13 @@
           v-if="!slotProps.option.isFriend"
           icon="pi pi-plus"
           class="p-button-rounded p-button-text"
-          @click.stop="changeStatus(slotProps.option.userbId)"
+          @click.stop="addUser(slotProps.option.userbId)"
         />
         <VueButton
           v-else
           icon="pi pi-minus"
           class="p-button-rounded p-button-text"
-          @click.stop="banUser(slotProps.option.userbId)"
+          @click.stop="removeUser(slotProps.option.userbId)"
         />
       </div>
     </template>
@@ -85,10 +85,10 @@ onMounted(async () => {
   users.value = await trpc.userRelationship.findAllWithUsers.query()
 })
 
-const changeStatus = async (userId: number) => {
-  console.log('Adding user:', userId)
+const addUser = async (userbId: number) => {
+  await trpc.userRelationship.add.mutate({ useraId: userStore.authUserId, userbId })
 }
-const banUser = async (userId: number) => {
-  console.log('Ban user:', userId)
+const removeUser = async (userbId: number) => {
+  await trpc.userRelationship.remove.mutate({ useraId: userStore.authUserId, userbId })
 }
 </script>

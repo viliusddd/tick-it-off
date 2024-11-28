@@ -6,7 +6,6 @@ import { createdAtSchema, idSchema } from './shared'
 export const userRelationshipSchema = z.object({
   useraId: idSchema,
   userbId: idSchema,
-  type: z.enum(['pending', 'friends', 'block', '']),
   createdAt: createdAtSchema,
 })
 

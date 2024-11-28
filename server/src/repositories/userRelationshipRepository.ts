@@ -3,7 +3,7 @@ import {
   type UserRelationshipPublic,
   userRelationshipKeysPublic,
 } from '@server/entities/userRelationship'
-import { type Insertable, type Selectable } from 'kysely'
+import { sql, type Insertable, type Selectable } from 'kysely'
 
 type Pagination = { offset: number; limit: number }
 
@@ -40,7 +40,7 @@ export function userRelationshipRepository(db: Database) {
     },
 
     /** Create two entries for a relationship */
-    async create(
+    async add(
       userRelationships: Insertable<UserRelationship>
     ): Promise<UserRelationshipPublic> {
       return db
@@ -56,26 +56,52 @@ export function userRelationshipRepository(db: Database) {
         .executeTakeFirstOrThrow()
     },
 
-    /** Delete two entries */
-    async delete(
-      userRelationship: Selectable<Omit<UserRelationship, 'createdAt'>>
-    ) {
-      db.deleteFrom('userRelationship')
-        .where('useraId', '=', userRelationship.useraId)
-        .where('useraId', '=', userRelationship.userbId)
-        .returning(['useraId', 'userbId'])
-        .execute()
+    /** Delete both entries */
+    async remove({
+      useraId,
+      userbId,
+    }: Selectable<Omit<UserRelationship, 'createdAt'>>) {
+      // db.deleteFrom('userRelationship')
+      //   .where('useraId', '=', useraId)
+      //   .where('userbId', '=', userbId)
+      // db.deleteFrom('userRelationship')
+      //   .where('userbId', '=', userbId)
+      //   .where('useraId', '=', useraId)
+      //   .execute()
+
+      // await db.transaction().execute(async (trx) => {
+      //   await trx
+      //     .deleteFrom('userRelationship')
+      //     .where('useraId', '=', useraId)
+      //     .where('userbId', '=', userbId)
+      //     // .returning(['useraId', 'userbId'])
+      //     .execute()
+
+      //   await trx
+      //     .deleteFrom('userRelationship')
+      //     .where('userbId', '=', userbId)
+      //     .where('useraId', '=', useraId)
+      //     .execute()
+      // })
+
+      await db
+        .transaction()
+        .execute(async (trx) =>
+          sql`DELETE FROM "user_relationship" WHERE ( "usera_id" = ${useraId} AND "userb_id" = ${userbId}) OR ( "usera_id" = ${userbId} AND "userb_id" = ${useraId})`.execute(
+            trx
+          )
+        )
     },
+
     /** Get the type of the relationship */
-    async getType(
-      userRelationship: Selectable<
-        Pick<UserRelationship, 'useraId' | 'userbId'>
-      >
-    ) {
+    async getStatus({
+      useraId,
+      userbId,
+    }: Selectable<Pick<UserRelationship, 'useraId' | 'userbId'>>) {
       return db
         .selectFrom('userRelationship')
-        .where('useraId', '=', userRelationship.useraId)
-        .where('userbId', '=', userRelationship.userbId)
+        .where('useraId', '=', useraId)
+        .where('userbId', '=', userbId)
         .select(userRelationshipKeysPublic)
         .execute()
     },
