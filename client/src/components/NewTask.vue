@@ -1,27 +1,18 @@
 <template>
   <div class="flex items-center">
-    <input
+    <InputText
       v-model="newTodo"
       @keyup.enter="addTodo"
-      type="text"
       placeholder="Add a new task..."
-      :class="[
-        'flex-grow rounded-l-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500',
-      ]"
+      class="flex-grow"
     />
-    <button
-      @click="addTodo"
-      :class="[
-        'rounded-r-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500',
-      ]"
-    >
-      Add
-    </button>
+    <Button @click="addTodo" label="Add" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Button, InputText } from 'primevue'
 
 const emit = defineEmits<{
   (e: 'addTodo', title: string): void
