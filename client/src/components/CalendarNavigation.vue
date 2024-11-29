@@ -2,10 +2,7 @@
   <div class="flex items-center justify-between">
     <button
       @click="$emit('changeDate', -1)"
-      :class="[
-        'text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500',
-        isDarkMode ? 'hover:text-blue-400' : 'hover:text-blue-600',
-      ]"
+      :class="['text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500']"
     >
       <ChevronLeftIcon class="h-6 w-6" />
     </button>
@@ -14,7 +11,6 @@
         @click="$emit('toggleCalendar')"
         :class="[
           'w-full rounded-l-md px-4 py-2 text-left focus:outline-none focus:ring-2 focus:ring-blue-500',
-          isDarkMode ? 'bg-gray-700 text-white' : 'border border-gray-300 bg-white text-gray-900',
         ]"
       >
         {{ formatDate(currentDate) }}
@@ -23,9 +19,6 @@
         @click="$emit('goToToday')"
         :class="[
           'absolute bottom-0 right-0 top-0 rounded-r-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50',
-          isDarkMode
-            ? 'bg-gray-600 text-white hover:bg-gray-500'
-            : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
         ]"
         :disabled="isToday"
       >
@@ -38,16 +31,12 @@
           mode="date"
           :max-date="new Date()"
           :attributes="calendarAttributes"
-          :is-dark="isDarkMode"
         />
       </div>
     </div>
     <button
       @click="$emit('changeDate', 1)"
-      :class="[
-        'text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500',
-        isDarkMode ? 'hover:text-blue-400' : 'hover:text-blue-600',
-      ]"
+      :class="['text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500']"
       :disabled="isToday"
     >
       <ChevronRightIcon class="h-6 w-6" :class="{ 'cursor-not-allowed opacity-50': isToday }" />
@@ -62,7 +51,6 @@ import { DatePicker } from 'v-calendar'
 
 const props = defineProps<{
   currentDate: Date
-  isDarkMode: boolean
   showCalendar: boolean
   calendarAttributes: any[]
 }>()

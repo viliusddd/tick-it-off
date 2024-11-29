@@ -67,12 +67,7 @@ const { links } = defineProps<{
 
 const route = useRoute()
 
-const navigation = computed(() =>
-  links.map((item) => ({
-    ...item,
-    isActive: route.name === item.name,
-  }))
-)
+computed(() => links.map((item) => ({ ...item, isActive: route.name === item.name })))
 </script>
 
 <style>

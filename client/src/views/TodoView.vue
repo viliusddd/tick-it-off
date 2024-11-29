@@ -1,16 +1,10 @@
 <template>
-  <div
-    :class="[
-      'flex justify-center border-2 border-red-500',
-      isDarkMode ? 'bg-gray-950' : 'bg-gray-50',
-    ]"
-  >
+  <div :class="['flex justify-center border-2']">
     <div :class="'overflow-hidden rounded-lg shadow-xl max-sm:w-full'">
       <div class="mb:p-5 p-3">
         <div class="mb-3">
-          <CalendarItem
+          <CalendarNavigation
             :current-date="currentDate"
-            :is-dark-mode="isDarkMode"
             :show-calendar="showCalendar"
             :calendar-attributes="calendarAttributes"
             @change-date="changeDate"
@@ -21,7 +15,7 @@
         </div>
 
         <div class="mb-3">
-          <NewTask :is-dark-mode="isDarkMode" @add-todo="createTodo" />
+          <NewTask @add-todo="createTodo" />
         </div>
 
         <TransitionGroup name="list" tag="ul" class="space-y-2">
@@ -29,7 +23,6 @@
             v-for="todo in todos"
             :key="todo.id"
             :todo="todo"
-            :isDarkMode="isDarkMode"
             @toggle="toggleTodo($event, currentDate.toLocaleDateString('lt'))"
             @delete="deleteTodo"
           />
@@ -37,24 +30,13 @@
 
         <div v-if="isFetching" class="py-4 text-center">
           <div
-            :class="[
-              'inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-t-2',
-              isDarkMode ? 'border-blue-400' : 'border-blue-500',
-            ]"
+            :class="['inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-t-2']"
           ></div>
         </div>
-        <div
-          v-if="!isFetching && todos.length === 0"
-          :class="['py-4 text-center', isDarkMode ? 'text-gray-400' : 'text-gray-500']"
-        >
+        <div v-if="!isFetching && todos.length === 0">
           No tasks for this day. Add one above to start your magical journey!
         </div>
-        <div
-          v-if="!isFetching && hasMore"
-          :class="['py-4 text-center', isDarkMode ? 'text-gray-400' : 'text-gray-500']"
-        >
-          Scroll down to reveal more enchanted tasks...
-        </div>
+        <div v-if="!isFetching && hasMore">Scroll down to reveal more enchanted tasks...</div>
         <div ref="loadMoreTrigger" class="h-1"></div>
       </div>
     </div>
@@ -62,14 +44,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { type Ref, ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { trpc } from '@/trpc'
 import { useRouter } from 'vue-router'
 import { useInfiniteScroll } from '@vueuse/core'
-import { trpc } from '@/trpc'
-import type { Ref } from 'vue'
-import TodoItem from '@/components/TodoItem.vue'
-import CalendarItem from '@/components/CalendarNavigation.vue'
 import NewTask from '@/components/NewTask.vue'
+import TodoItem from '@/components/TodoItem.vue'
+import CalendarNavigation from '@/components/CalendarNavigation.vue'
 
 const props = defineProps<{ currentDate: Date }>()
 
@@ -82,15 +63,9 @@ const pageSize = 10
 const isFetching = ref(false)
 const hasMore = ref(true)
 const loadMoreTrigger = ref(null)
-const isDarkMode = ref(false)
 
 const calendarAttributes = computed(() => [
-  {
-    dates: todos.value.map((todo) => new Date(todo.createdAt)),
-    highlight: isDarkMode.value
-      ? { color: 'blue', fillMode: 'light' }
-      : { color: 'blue', fillMode: 'solid' },
-  },
+  { dates: todos.value.map((todo) => new Date(todo.createdAt)) },
 ])
 
 const fetchAllTodos = async () => {
