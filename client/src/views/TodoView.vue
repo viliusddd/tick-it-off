@@ -18,15 +18,13 @@
           <NewTask @add-todo="createTodo" />
         </div>
 
-        <TransitionGroup name="list" tag="ul" class="space-y-2">
-          <TodoItem
-            v-for="todo in todos"
-            :key="todo.id"
-            :todo="todo"
-            @toggle="toggleTodo($event, currentDate.toLocaleDateString('lt'))"
-            @delete="deleteTodo"
-          />
-        </TransitionGroup>
+        <TodoItem
+          v-for="todo in todos"
+          :key="todo.id"
+          :todo="todo"
+          @toggle="toggleTodo($event, currentDate.toLocaleDateString('lt'))"
+          @delete="deleteTodo"
+        />
 
         <div v-if="isFetching" class="py-4 text-center">
           <div
