@@ -19,7 +19,7 @@ export const useUserStore = defineStore('user', () => {
   const authUserId = computed(() => (authToken.value ? getUserIdFromToken(authToken.value) : null))
   const isLoggedIn = computed(() => !!authToken.value)
 
-  const currentUserId = computed(async () => {
+  const currentUser = computed(async () => {
     if (!authUserId.value) return null
     return findUserById({ id: authUserId.value })
   })
@@ -62,7 +62,7 @@ export const useUserStore = defineStore('user', () => {
     authUserId,
     userRelStatus,
     isLoggedIn,
-    currentUserId,
+    currentUser,
     login,
     logout,
     signup,

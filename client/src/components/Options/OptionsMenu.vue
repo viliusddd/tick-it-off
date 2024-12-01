@@ -11,14 +11,7 @@
   />
   <VueMenu :model="menuItems" ref="menu" class="w-full md:w-60" id="overlay_menu" :popup="true">
     <template #start>
-      <Suspense>
-        <template #default>
-          <OptionsUser class="my-2" />
-        </template>
-        <template #fallback>
-          <div>Loading user...</div>
-        </template>
-      </Suspense>
+      <OptionsUser :user="currentUser" class="my-2" />
     </template>
     <template #item="{ item, props }">
       <a v-ripple class="flex items-center" v-bind="props.action">
@@ -30,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 import { useDark, useToggle } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
@@ -84,4 +77,7 @@ const menu = ref()
 const toggleMenu = (event: Event) => {
   menu.value.toggle(event)
 }
+
+const currentUser = ref()
+watch(menu, async () => (currentUser.value = await userStore.currentUser))
 </script>
