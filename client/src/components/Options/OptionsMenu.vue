@@ -32,6 +32,11 @@ import OptionsUser from './OptionsUser.vue'
 const router = useRouter()
 const userStore = useUserStore()
 
+const menu = ref()
+const currentUser = ref()
+
+watch(menu, async () => (currentUser.value = await userStore.currentUser))
+
 const menuItems = ref([
   {
     items: [
@@ -41,7 +46,7 @@ const menuItems = ref([
       {
         label: 'Settings',
         icon: 'pi pi-cog',
-        route: '/settings'
+        command: () => router.push({name: 'Settings'})
       },
       {
         label: 'Dark Mode',
@@ -72,12 +77,5 @@ const isDark: Ref<boolean> = useDark({
 })
 const toggleDark: () => boolean = useToggle(isDark)
 
-const menu = ref()
-
-const toggleMenu = (event: Event) => {
-  menu.value.toggle(event)
-}
-
-const currentUser = ref()
-watch(menu, async () => (currentUser.value = await userStore.currentUser))
+const toggleMenu = (event: Event) => menu.value.toggle(event)
 </script>
