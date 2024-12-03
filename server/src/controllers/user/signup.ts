@@ -1,30 +1,30 @@
-import { hash } from 'bcrypt'
-import { publicProcedure } from '@server/trpc'
+import {hash} from 'bcrypt'
+import {publicProcedure} from '@server/trpc'
 import config from '@server/config'
-import { TRPCError } from '@trpc/server'
+import {TRPCError} from '@trpc/server'
 import provideRepos from '@server/trpc/provideRepos'
-import { userRepository } from '@server/repositories/userRepository'
-import { assertError } from '@server/utils/errors'
-import { userSchema } from '@server/entities/user'
+import {userRepository} from '@server/repositories/userRepository'
+import {assertError} from '@server/utils/errors'
+import {userSchema} from '@server/entities/user'
 
 export default publicProcedure
-  .meta({ description: 'Sign-up with user.' })
-  .use(provideRepos({ userRepository }))
+  .meta({description: 'Sign-up with user.'})
+  .use(provideRepos({userRepository}))
   .input(
     userSchema.pick({
       email: true,
       password: true,
       firstName: true,
-      lastName: true,
+      lastName: true
     })
   )
-  .mutation(async ({ input: user, ctx: { repos } }) => {
+  .mutation(async ({input: user, ctx: {repos}}) => {
     const passwordHash = await hash(user.password, config.auth.passwordCost)
 
     const userCreated = await repos.userRepository
       .create({
         ...user,
-        password: passwordHash,
+        password: passwordHash
       })
       // handling errors using the Promise.catch method
       .catch((error: unknown) => {
@@ -35,7 +35,7 @@ export default publicProcedure
           throw new TRPCError({
             code: 'BAD_REQUEST',
             message: 'User with this email already exists',
-            cause: error,
+            cause: error
           })
         }
 
@@ -43,6 +43,6 @@ export default publicProcedure
       })
 
     return {
-      id: userCreated.id,
+      id: userCreated.id
     }
   })

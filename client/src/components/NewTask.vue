@@ -11,8 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Button, InputText } from 'primevue'
+import {ref} from 'vue'
+import {Button, InputText} from 'primevue'
 
 const emit = defineEmits<{
   (e: 'addTodo', title: string): void

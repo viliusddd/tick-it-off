@@ -1,8 +1,8 @@
-import { fakeTodo, fakeUser } from '@server/entities/tests/fakes'
-import { createTestDatabase } from '@tests/utils/database'
-import { createCallerFactory } from '@server/trpc'
-import { wrapInRollbacks } from '@tests/utils/transactions'
-import { clearTables, insertAll } from '@tests/utils/records'
+import {fakeTodo, fakeUser} from '@server/entities/tests/fakes'
+import {createTestDatabase} from '@tests/utils/database'
+import {createCallerFactory} from '@server/trpc'
+import {wrapInRollbacks} from '@tests/utils/transactions'
+import {clearTables, insertAll} from '@tests/utils/records'
 import todoRouter from '..'
 
 const createCaller = createCallerFactory(todoRouter)
@@ -13,7 +13,7 @@ await clearTables(db, ['todo'])
 const [user] = await insertAll(db, 'user', fakeUser())
 
 // as a non-logged in user
-const { findAll } = createCaller({ db })
+const {findAll} = createCaller({db})
 
 it('should return an empty list, if there are no todos', async () => {
   // Given (ARRANGE)
@@ -22,7 +22,7 @@ it('should return an empty list, if there are no todos', async () => {
 
 it('should return a list of todos', async () => {
   // Given (ARRANGE)
-  await insertAll(db, 'todo', [fakeTodo({ userId: user.id })])
+  await insertAll(db, 'todo', [fakeTodo({userId: user.id})])
 
   // When (ACT)
   const todos = await findAll()
@@ -33,7 +33,7 @@ it('should return a list of todos', async () => {
 
 it('should return a list of todos', async () => {
   // Given (ARRANGE)
-  await insertAll(db, 'todo', [fakeTodo({ userId: user.id })])
+  await insertAll(db, 'todo', [fakeTodo({userId: user.id})])
 
   // When (ACT)
   const todos = await findAll()
@@ -44,8 +44,8 @@ it('should return a list of todos', async () => {
 
 it('should return the latest todo first', async () => {
   // Given (ARRANGE)
-  const [todoOld] = await insertAll(db, 'todo', [fakeTodo({ userId: user.id })])
-  const [todoNew] = await insertAll(db, 'todo', [fakeTodo({ userId: user.id })])
+  const [todoOld] = await insertAll(db, 'todo', [fakeTodo({userId: user.id})])
+  const [todoNew] = await insertAll(db, 'todo', [fakeTodo({userId: user.id})])
 
   // When (ACT)
   const todos = await findAll()

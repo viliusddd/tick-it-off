@@ -1,6 +1,6 @@
-import { DEFAULT_SERVER_ERROR } from '@/consts'
-import { TRPCClientError } from '@trpc/client'
-import type { Ref } from 'vue'
+import {DEFAULT_SERVER_ERROR} from '@/consts'
+import {TRPCClientError} from '@trpc/client'
+import type {Ref} from 'vue'
 
 /**
  * Calls the provided function and handles any errors that may occur.

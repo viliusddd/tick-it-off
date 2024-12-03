@@ -1,22 +1,14 @@
-import type { Database } from '@server/database'
-import type { User } from '@server/database/types'
-import {
-  type UserPublic,
-  userKeysAll,
-  userKeysPublic,
-} from '@server/entities/user'
-import type { Insertable, Selectable } from 'kysely'
+import type {Database} from '@server/database'
+import type {User} from '@server/database/types'
+import {type UserPublic, userKeysAll, userKeysPublic} from '@server/entities/user'
+import type {Insertable, Selectable} from 'kysely'
 
-type Pagination = { offset: number; limit: number }
+type Pagination = {offset: number; limit: number}
 
 export function userRepository(db: Database) {
   return {
     async create(user: Insertable<User>): Promise<UserPublic> {
-      return db
-        .insertInto('user')
-        .values(user)
-        .returning(userKeysPublic)
-        .executeTakeFirstOrThrow()
+      return db.insertInto('user').values(user).returning(userKeysPublic).executeTakeFirstOrThrow()
     },
 
     async findByEmail(email: string): Promise<Selectable<User> | undefined> {
@@ -28,7 +20,7 @@ export function userRepository(db: Database) {
 
       return user
     },
-    async findAll({ offset, limit }: Pagination): Promise<UserPublic[]> {
+    async findAll({offset, limit}: Pagination): Promise<UserPublic[]> {
       return db
         .selectFrom('user')
         .select(userKeysPublic)
@@ -43,7 +35,7 @@ export function userRepository(db: Database) {
         .select(userKeysPublic)
         .where('id', '=', id)
         .executeTakeFirstOrThrow()
-    },
+    }
   }
 }
 

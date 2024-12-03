@@ -14,8 +14,8 @@
         {
           'line-through': todo.isCompleted,
           'text-gray-400': todo.isCompleted,
-          'text-gray-800': !todo.isCompleted,
-        },
+          'text-gray-800': !todo.isCompleted
+        }
       ]"
     >
       {{ todo.title }}
@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { TrashIcon } from '@heroicons/vue/24/solid'
+import {TrashIcon} from '@heroicons/vue/24/solid'
 
 defineProps<{
   todo: {

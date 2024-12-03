@@ -1,35 +1,31 @@
-import type { Todo, User } from '@server/database/types'
-import type { Insertable } from 'kysely'
-import { random } from '@tests/utils/random'
-import type { AuthUser } from '../user'
+import type {Todo, User} from '@server/database/types'
+import type {Insertable} from 'kysely'
+import {random} from '@tests/utils/random'
+import type {AuthUser} from '../user'
 
 const randomId = () =>
   random.integer({
     min: 1,
-    max: 1000000,
+    max: 1000000
   })
 
 /**
  * Generates a fake user with some default test data.
  * @param overrides Any properties that should be different from default fake data.
  */
-export const fakeUser = <T extends Partial<Insertable<User>>>(
-  overrides: T = {} as T
-) =>
+export const fakeUser = <T extends Partial<Insertable<User>>>(overrides: T = {} as T) =>
   ({
     email: random.email(),
     firstName: random.first(),
     lastName: random.last(),
     password: 'Password.123!',
-    ...overrides,
+    ...overrides
   }) satisfies Insertable<User>
 
-export const fakeAuthUser = <T extends Partial<AuthUser>>(
-  overrides: T = {} as T
-): AuthUser => ({
+export const fakeAuthUser = <T extends Partial<AuthUser>>(overrides: T = {} as T): AuthUser => ({
   id: randomId(),
   email: random.email(),
-  ...overrides,
+  ...overrides
 })
 
 /**
@@ -40,5 +36,5 @@ export const fakeTodo = <T extends Partial<Insertable<Todo>>>(overrides: T) =>
   ({
     title: random.string(),
     userId: randomId(),
-    ...overrides,
+    ...overrides
   }) satisfies Insertable<Todo>

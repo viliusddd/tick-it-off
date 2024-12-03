@@ -1,13 +1,13 @@
 import express from 'express'
 import {
   createExpressMiddleware,
-  type CreateExpressContextOptions,
+  type CreateExpressContextOptions
 } from '@trpc/server/adapters/express'
 import cors from 'cors'
-import { renderTrpcPanel } from 'trpc-panel'
-import type { Database } from './database'
-import { appRouter } from './controllers'
-import type { Context } from './trpc'
+import {renderTrpcPanel} from 'trpc-panel'
+import type {Database} from './database'
+import {appRouter} from './controllers'
+import type {Context} from './trpc'
 import config from './config'
 
 export default function createApp(db: Database) {
@@ -29,15 +29,15 @@ export default function createApp(db: Database) {
     createExpressMiddleware({
       // Created context for each request, which we will be able to
       // access in our procedures.
-      createContext: ({ req, res }: CreateExpressContextOptions): Context => ({
+      createContext: ({req, res}: CreateExpressContextOptions): Context => ({
         // What we provide to our procedures under `ctx` key.
         db,
         req,
-        res,
+        res
       }),
 
       // all routes
-      router: appRouter,
+      router: appRouter
     })
   )
 
@@ -46,7 +46,7 @@ export default function createApp(db: Database) {
       res.send(
         renderTrpcPanel(appRouter, {
           url: `http://localhost:${config.port}/api/v1/trpc`,
-          transformer: 'superjson',
+          transformer: 'superjson'
         })
       )
     )

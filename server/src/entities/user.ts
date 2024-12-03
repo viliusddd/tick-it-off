@@ -1,7 +1,7 @@
-import { z } from 'zod'
-import type { Selectable } from 'kysely'
-import type { User } from '@server/database/types'
-import { idSchema } from './shared'
+import {z} from 'zod'
+import type {Selectable} from 'kysely'
+import type {User} from '@server/database/types'
+import {idSchema} from './shared'
 
 export const userSchema = z.object({
   id: idSchema,
@@ -15,7 +15,7 @@ export const userSchema = z.object({
     .describe('8-64 characters long password'),
 
   firstName: z.string().min(1).max(500).describe('First name'),
-  lastName: z.string().min(1).max(500).describe('Last name'),
+  lastName: z.string().min(1).max(500).describe('Last name')
 })
 
 // list keys that we will return to the client
@@ -27,5 +27,5 @@ export type UserPublic = Pick<Selectable<User>, (typeof userKeysPublic)[number]>
 export type UserSignup = Omit<User, 'id' | 'createdAt'>
 
 // a specific schema for authenticated user that is used in JWT
-export const authUserSchema = userSchema.pick({ id: true })
+export const authUserSchema = userSchema.pick({id: true})
 export type AuthUser = z.infer<typeof authUserSchema>

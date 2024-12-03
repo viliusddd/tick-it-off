@@ -1,4 +1,4 @@
-import { getUserFromToken } from './auth'
+import {getUserFromToken} from './auth'
 
 describe('getUserFromToken', () => {
   it('should return the user object from a valid JWT token', () => {
@@ -7,7 +7,7 @@ describe('getUserFromToken', () => {
 
     const user = getUserFromToken(token)
     expect(user).toEqual({
-      id: '1234567890',
+      id: '1234567890'
     })
   })
 

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import {ref} from 'vue'
 import PageForm from '@/components/PageForm.vue'
-import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue'
-import { DEFAULT_SERVER_ERROR } from '@/consts'
+import {FwbAlert, FwbButton, FwbInput} from 'flowbite-vue'
+import {DEFAULT_SERVER_ERROR} from '@/consts'
 import AlertError from '@/components/AlertError.vue'
-import { useUserStore } from '@/stores/userStore'
+import {useUserStore} from '@/stores/userStore'
 // import useErrorMessage from '@/composables/useErrorMessage'
 
 const userStore = useUserStore()
@@ -13,7 +13,7 @@ const userForm = ref({
   email: '',
   password: '',
   firstName: '',
-  lastName: '',
+  lastName: ''
 })
 
 const hasSucceeded = ref(false)

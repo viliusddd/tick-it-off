@@ -2,15 +2,10 @@
 import 'dotenv/config'
 import * as path from 'node:path'
 import * as fs from 'node:fs/promises'
-import { fileURLToPath } from 'node:url'
-import {
-  FileMigrationProvider,
-  Migrator,
-  type Kysely,
-  type MigrationProvider,
-} from 'kysely'
+import {fileURLToPath} from 'node:url'
+import {FileMigrationProvider, Migrator, type Kysely, type MigrationProvider} from 'kysely'
 import config from '@server/config'
-import { createDatabase } from '..'
+import {createDatabase} from '..'
 
 const MIGRATIONS_PATH = '../migrations'
 
@@ -20,16 +15,16 @@ async function migrateLatest(db: Kysely<any>) {
   const nodeProvider = new FileMigrationProvider({
     fs,
     path,
-    migrationFolder: path.join(dirname, MIGRATIONS_PATH),
+    migrationFolder: path.join(dirname, MIGRATIONS_PATH)
   })
 
-  const { results, error } = await migrateToLatest(nodeProvider, db)
+  const {results, error} = await migrateToLatest(nodeProvider, db)
 
   if (!results?.length && !error) {
     console.log('No migrations to run.')
   }
 
-  results?.forEach((it) => {
+  results?.forEach(it => {
     if (it.status === 'Success') {
       console.info(`Migration "${it.migrationName}" was executed successfully.`)
     } else if (it.status === 'Error') {
@@ -46,13 +41,10 @@ async function migrateLatest(db: Kysely<any>) {
   await db.destroy()
 }
 
-export async function migrateToLatest(
-  provider: MigrationProvider,
-  db: Kysely<any>
-) {
+export async function migrateToLatest(provider: MigrationProvider, db: Kysely<any>) {
   const migrator = new Migrator({
     db,
-    provider,
+    provider
   })
 
   return migrator.migrateToLatest()

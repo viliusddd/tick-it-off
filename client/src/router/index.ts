@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import {createRouter, createWebHistory, type RouteRecordRaw} from 'vue-router'
 import TodoView from '@/views/TodoView.vue'
 import MainLayout from '@/layouts/MainLayout.vue'
-import { authenticate } from './guards'
+import {authenticate} from './guards'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -13,47 +13,52 @@ const routes: RouteRecordRaw[] = [
         path: '/todo',
         name: 'TodoToday',
         component: TodoView,
-        props: () => ({ currentDate: new Date() }),
+        props: () => ({currentDate: new Date()})
       },
       {
         path: '/today',
         name: 'TodayAlias',
         component: TodoView,
-        props: () => ({ currentDate: new Date() }),
+        props: () => ({currentDate: new Date()})
       },
       {
         path: '/:date(\\d{4}-\\d{2}-\\d{2})',
         name: 'SpecificDate',
         component: TodoView,
-        props: (route) => ({ currentDate: new Date(route.params.date as string) }),
+        props: route => ({currentDate: new Date(route.params.date as string)})
       },
       {
         path: '/shared-goals',
         name: 'SharedGoals',
-        component: () => import('@/views/SharedGoalsView.vue'),
+        component: () => import('@/views/SharedGoalsView.vue')
       },
       {
         path: '/users',
         name: 'Users',
-        component: () => import('@/views/UsersView.vue'),
-      },
-    ],
+        component: () => import('@/views/UsersView.vue')
+      }
+    ]
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/LoginView.vue'),
+    component: () => import('@/views/LoginView.vue')
   },
   {
     path: '/signup',
     name: 'Signup',
-    component: () => import('@/views/SignupView.vue'),
+    component: () => import('@/views/SignupView.vue')
   },
+  {
+    path: '/test',
+    name: 'Test',
+    component: () => import('@/views/TestView.vue')
+  }
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes
 })
 
 router.beforeEach((to, from, next) => {
@@ -62,7 +67,7 @@ router.beforeEach((to, from, next) => {
 
   if (to.name === 'Today' || to.name === 'TodayAlias') {
     const todayString = today.toLocaleDateString('lt')
-    next({ name: 'SpecificDate', params: { date: todayString }, replace: true })
+    next({name: 'SpecificDate', params: {date: todayString}, replace: true})
   } else if (to.name === 'SpecificDate') {
     const routeDate = new Date(to.params.date as string)
     routeDate.setHours(0, 0, 0, 0)
@@ -70,8 +75,8 @@ router.beforeEach((to, from, next) => {
     if (routeDate > today) {
       next({
         name: 'SpecificDate',
-        params: { date: today.toLocaleDateString('lt') },
-        replace: true,
+        params: {date: today.toLocaleDateString('lt')},
+        replace: true
       })
     } else {
       next()

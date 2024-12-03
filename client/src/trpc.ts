@@ -1,8 +1,8 @@
-import { createTRPCProxyClient, httpBatchLink } from '@trpc/client'
+import {createTRPCProxyClient, httpBatchLink} from '@trpc/client'
 // @ts-ignore - importing through a direct path propagates types faster
-import type { AppRouter } from '@server/shared/trpc'
-import { apiBase } from '@/config'
-import { getStoredAccessToken } from '@/utils/auth'
+import type {AppRouter} from '@server/shared/trpc'
+import {apiBase} from '@/config'
+import {getStoredAccessToken} from '@/utils/auth'
 import SuperJSON from 'superjson'
 
 export const trpc = createTRPCProxyClient<AppRouter>({
@@ -19,9 +19,9 @@ export const trpc = createTRPCProxyClient<AppRouter>({
         if (!token) return {}
 
         return {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         }
-      },
-    }),
-  ],
+      }
+    })
+  ]
 })

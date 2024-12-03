@@ -1,5 +1,5 @@
 import createApp from './app'
-import { createDatabase } from './database'
+import {createDatabase} from './database'
 import config from './config'
 
 const database = createDatabase(config.database)

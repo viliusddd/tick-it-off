@@ -4,7 +4,9 @@
   "tabWidth": 2,
   "singleQuote": true,
   "printWidth": 100,
-  "trailingComma": "es5",
+  "trailingComma": "none",
+  "arrowParens": "avoid",
+  "bracketSpacing": false,
   "plugins": [
     "prettier-plugin-tailwindcss"
   ]

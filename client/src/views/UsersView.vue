@@ -4,11 +4,11 @@
     optionLabel="firstName"
     :filter="true"
     :pt="{
-      listContainer: { style: 'max-height: none' },
+      listContainer: {style: 'max-height: none'},
       option: {
         class: 'flex flex-row items-center justify-between',
-        style: 'cursor: default',
-      },
+        style: 'cursor: default'
+      }
     }"
   >
     <template #option="slotProps">
@@ -37,10 +37,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import { trpc } from '@/trpc'
-import { useUserStore } from '@/stores/userStore'
-import { Tag, Listbox } from 'primevue'
+import {computed, onMounted, ref} from 'vue'
+import {trpc} from '@/trpc'
+import {useUserStore} from '@/stores/userStore'
+import {Tag, Listbox} from 'primevue'
 
 type UsersConnections = {
   useraId: number | null
@@ -68,7 +68,7 @@ onMounted(async () => {
 
 const usersUpdated = computed(() => {
   return users.value.reduce((usersAccum: UserUpdated[], usr) => {
-    const { userbId, userbFirstName, userbLastName } = usr
+    const {userbId, userbFirstName, userbLastName} = usr
 
     // remove self from list
     if (usr.userbId === userStore.authUserId) return usersAccum
@@ -77,9 +77,9 @@ const usersUpdated = computed(() => {
     if (usr.useraId === userStore.authUserId) isFriend = true
 
     // get index of entry in arr, to eliminate duplicates
-    const index = usersAccum.findIndex((accUsr) => accUsr.userbId === userbId)
+    const index = usersAccum.findIndex(accUsr => accUsr.userbId === userbId)
 
-    if (index === -1) usersAccum.push({ userbId, userbFirstName, userbLastName, isFriend })
+    if (index === -1) usersAccum.push({userbId, userbFirstName, userbLastName, isFriend})
 
     return usersAccum
   }, [])
@@ -93,7 +93,7 @@ const addUser = async (userbId: number) => {
   }
 
   if (userStore.authUserId)
-    await trpc.userRelationship.add.mutate({ useraId: userStore.authUserId, userbId })
+    await trpc.userRelationship.add.mutate({useraId: userStore.authUserId, userbId})
 }
 
 const removeUser = async (userbId: number) => {
@@ -104,6 +104,6 @@ const removeUser = async (userbId: number) => {
   }
 
   if (userStore.authUserId)
-    await trpc.userRelationship.remove.mutate({ useraId: userStore.authUserId, userbId })
+    await trpc.userRelationship.remove.mutate({useraId: userStore.authUserId, userbId})
 }
 </script>

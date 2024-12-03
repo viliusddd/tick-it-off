@@ -1,12 +1,12 @@
 import './assets/style.css'
 import 'v-calendar/style.css'
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import PrimeVue from 'primevue/config'
 import ToastService from 'primevue/toastservice'
 import 'primeicons/primeicons.css'
 import Aura from '@primevue/themes/aura'
-import { createPinia } from 'pinia'
-import { setupCalendar } from 'v-calendar'
+import {createPinia} from 'pinia'
+import {setupCalendar} from 'v-calendar'
 
 import Checkbox from 'primevue/checkbox'
 import Toast from 'primevue/toast'
@@ -33,9 +33,9 @@ app
       options: {
         prefix: 'p',
         darkModeSelector: 'system',
-        cssLayer: false,
-      },
-    },
+        cssLayer: false
+      }
+    }
   })
   .use(ToastService)
 

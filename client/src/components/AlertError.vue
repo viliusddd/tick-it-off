@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { FwbAlert } from 'flowbite-vue'
+import {FwbAlert} from 'flowbite-vue'
 
 defineProps<{
   message: string

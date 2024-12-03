@@ -1,7 +1,7 @@
 <template>
   <Menubar :model="links">
-    <template #item="{ item, props }">
-      <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+    <template #item="{item, props}">
+      <router-link v-if="item.route" v-slot="{href, navigate}" :to="item.route" custom>
         <a v-ripple :href="href" v-bind="props.action" @click="navigate">
           <span :class="item.icon" />
           <span>{{ item.label }}</span>
@@ -39,26 +39,26 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { useColorMode, useCycleList } from '@vueuse/core'
-import { watchEffect } from 'vue-demi'
+import {computed} from 'vue'
+import {useRoute} from 'vue-router'
+import {useColorMode, useCycleList} from '@vueuse/core'
+import {watchEffect} from 'vue-demi'
 import OptionsMenu from '@/components/Options/OptionsMenu.vue'
 
 const mode = useColorMode({
   emitAuto: true,
   modes: {
     contrast: 'dark contrast',
-    cafe: 'cafe',
-  },
+    cafe: 'cafe'
+  }
 })
 
-const { state, next } = useCycleList(['dark', 'light', 'cafe', 'contrast', 'auto'] as const, {
-  initialValue: mode,
+const {state, next} = useCycleList(['dark', 'light', 'cafe', 'contrast', 'auto'] as const, {
+  initialValue: mode
 })
 watchEffect(() => (mode.value = state.value))
 
-const { links } = defineProps<{
+const {links} = defineProps<{
   links: {
     label: string
     name: string
@@ -67,7 +67,7 @@ const { links } = defineProps<{
 
 const route = useRoute()
 
-computed(() => links.map((item) => ({ ...item, isActive: route.name === item.name })))
+computed(() => links.map(item => ({...item, isActive: route.name === item.name})))
 </script>
 
 <style>

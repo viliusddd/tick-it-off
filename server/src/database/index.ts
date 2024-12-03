@@ -1,18 +1,13 @@
-import {
-  CamelCasePlugin,
-  Kysely,
-  ParseJSONResultsPlugin,
-  PostgresDialect,
-} from 'kysely'
+import {CamelCasePlugin, Kysely, ParseJSONResultsPlugin, PostgresDialect} from 'kysely'
 import pg from 'pg'
-import type { DB } from './types'
+import type {DB} from './types'
 
 export function createDatabase(options: pg.PoolConfig): Kysely<DB> {
   return new Kysely<DB>({
     dialect: new PostgresDialect({
-      pool: new pg.Pool(options),
+      pool: new pg.Pool(options)
     }),
-    plugins: [new CamelCasePlugin(), new ParseJSONResultsPlugin()],
+    plugins: [new CamelCasePlugin(), new ParseJSONResultsPlugin()]
   })
 }
 

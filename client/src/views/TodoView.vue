@@ -42,20 +42,20 @@
 </template>
 
 <script setup lang="ts">
-import { type Ref, ref, computed, watch, onMounted, onUnmounted } from 'vue'
-import { trpc } from '@/trpc'
-import { useRouter } from 'vue-router'
-import { useInfiniteScroll } from '@vueuse/core'
+import {type Ref, ref, computed, watch, onMounted, onUnmounted} from 'vue'
+import {trpc} from '@/trpc'
+import {useRouter} from 'vue-router'
+import {useInfiniteScroll} from '@vueuse/core'
 import NewTask from '@/components/NewTask.vue'
 import TodoItem from '@/components/TodoItem.vue'
 import CalendarNavigation from '@/components/CalendarNavigation.vue'
 
-const props = defineProps<{ currentDate: Date }>()
+const props = defineProps<{currentDate: Date}>()
 
 const router = useRouter()
 const showCalendar = ref(false)
-const todos: Ref<{ id: number; title: string; createdAt: Date; isCompleted?: boolean }[]> = ref([])
-const completions: Ref<{ todoId: number }[]> = ref([])
+const todos: Ref<{id: number; title: string; createdAt: Date; isCompleted?: boolean}[]> = ref([])
+const completions: Ref<{todoId: number}[]> = ref([])
 const currentDate = ref(props.currentDate)
 const pageSize = 10
 const isFetching = ref(false)
@@ -63,13 +63,13 @@ const hasMore = ref(true)
 const loadMoreTrigger = ref(null)
 
 const calendarAttributes = computed(() => [
-  { dates: todos.value.map((todo) => new Date(todo.createdAt)) },
+  {dates: todos.value.map(todo => new Date(todo.createdAt))}
 ])
 
 const fetchAllTodos = async () => {
   const queryResult = await trpc.todo.findAll.query({
     offset: todos.value.length,
-    limit: pageSize,
+    limit: pageSize
   })
 
   hasMore.value = queryResult.length === pageSize
@@ -81,7 +81,7 @@ const fetchCompletionsByIdRange = async (firstId: number, secondId: number) =>
   trpc.completion.findByRange.query({
     date: currentDate.value.toLocaleDateString('lt'),
     firstId,
-    secondId,
+    secondId
   })
 
 const fetch = async <T,>(queryRef: Ref<T[]>, queryCallback: () => Promise<T[]>) => {
@@ -107,16 +107,16 @@ const fetchAll = async () => {
 
     await fetch(completions, () => fetchCompletionsByIdRange(lowestId, highestId))
 
-    todos.value = todos.value.map((todo) => ({
+    todos.value = todos.value.map(todo => ({
       id: todo.id,
       title: todo.title,
       createdAt: todo.createdAt,
-      isCompleted: completions.value.some((compl) => compl.todoId === todo.id),
+      isCompleted: completions.value.some(compl => compl.todoId === todo.id)
     }))
   }
 }
 
-type Item = { id: number }
+type Item = {id: number}
 
 const getMinMaxId = (items: Item[], bar: 'min' | 'max') => {
   return items.reduce((acc, item) => {
@@ -133,13 +133,13 @@ useInfiniteScroll(
       fetchAll()
     }
   },
-  { distance: 10 }
+  {distance: 10}
 )
 
 const createTodo = async (title: string) => {
   try {
     const createdTodo = await trpc.todo.create.mutate({
-      title,
+      title
     })
     todos.value.unshift(createdTodo)
   } catch (error) {
@@ -149,8 +149,8 @@ const createTodo = async (title: string) => {
 
 const deleteTodo = async (id: number) => {
   try {
-    await trpc.todo.deleteById.mutate({ id })
-    todos.value = todos.value.filter((todo) => todo.id !== id)
+    await trpc.todo.deleteById.mutate({id})
+    todos.value = todos.value.filter(todo => todo.id !== id)
   } catch (error) {
     console.error('Error deleting todo:', error)
   }
@@ -158,12 +158,12 @@ const deleteTodo = async (id: number) => {
 
 const toggleTodo = async (todoId: number, date: string) => {
   try {
-    await trpc.completion.toggle.mutate({ todoId, date })
-    const todoIndex = todos.value.findIndex((todo) => todo.id === todoId)
+    await trpc.completion.toggle.mutate({todoId, date})
+    const todoIndex = todos.value.findIndex(todo => todo.id === todoId)
     if (todoIndex !== -1) {
       todos.value[todoIndex] = {
         ...todos.value[todoIndex],
-        isCompleted: !todos.value[todoIndex].isCompleted,
+        isCompleted: !todos.value[todoIndex].isCompleted
       }
     }
   } catch (error) {
@@ -178,7 +178,7 @@ const changeDate = (days: number) => {
   if (newDate <= today) {
     currentDate.value = newDate
     const dateString = newDate.toISOString().split('T')[0]
-    router.push({ name: 'SpecificDate', params: { date: dateString } })
+    router.push({name: 'SpecificDate', params: {date: dateString}})
   }
 }
 
@@ -188,11 +188,11 @@ const onDateSelect = (date: Date) => {
   if (date <= today) {
     currentDate.value = date
     const dateString = date.toISOString().split('T')[0]
-    router.push({ name: 'SpecificDate', params: { date: dateString } })
+    router.push({name: 'SpecificDate', params: {date: dateString}})
   } else {
     currentDate.value = today
     const dateString = today.toISOString().split('T')[0]
-    router.push({ name: 'SpecificDate', params: { date: dateString } })
+    router.push({name: 'SpecificDate', params: {date: dateString}})
   }
   showCalendar.value = false
 }
@@ -201,7 +201,7 @@ const goToToday = () => {
   const today = new Date()
   currentDate.value = today
   const dateString = today.toISOString().split('T')[0]
-  router.push({ name: 'SpecificDate', params: { date: dateString } })
+  router.push({name: 'SpecificDate', params: {date: dateString}})
 }
 
 const toggleCalendar = () => {

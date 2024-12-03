@@ -1,5 +1,5 @@
-import { withError } from './error'
-import { ref, type Ref } from 'vue'
+import {withError} from './error'
+import {ref, type Ref} from 'vue'
 
 /**
  * A composable function that wraps a function with error handling logic.
@@ -11,7 +11,7 @@ import { ref, type Ref } from 'vue'
 export default function useErrorMessage<
   Args extends unknown[],
   Return,
-  T extends (...args: Args) => Return,
+  T extends (...args: Args) => Return
 >(fn: T): [T, Ref<string>] {
   const errorMessage = ref('')
 

@@ -1,4 +1,4 @@
-import { router } from '@server/trpc'
+import {router} from '@server/trpc'
 import create from './create'
 import deleteById from './deleteById'
 import findAll from './findAll'
@@ -10,5 +10,5 @@ export default router({
   deleteById,
   findAll,
   share,
-  update,
+  update
 })

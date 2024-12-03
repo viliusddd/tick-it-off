@@ -1,13 +1,9 @@
-import { z } from 'zod'
+import {z} from 'zod'
 
 const POSTGRES_INT_MAX = 2147483647
 
 export const idSchema = z.number().int().positive().describe('ID number.')
-export const userIdSchema = z
-  .number()
-  .int()
-  .positive()
-  .describe('User id number.')
+export const userIdSchema = z.number().int().positive().describe('User id number.')
 // export const dateSchema = z.date().default(() => new Date())
 export const createdAtSchema = z.date().default(() => new Date())
 export const dateSchema = z

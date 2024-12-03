@@ -1,75 +1,49 @@
-import { type Kysely, sql } from 'kysely'
+import {type Kysely, sql} from 'kysely'
 
 export async function up(db: Kysely<any>) {
   await db.schema
     .createTable('user')
-    .addColumn('id', 'integer', (c) =>
-      c.primaryKey().generatedAlwaysAsIdentity()
-    )
-    .addColumn('first_name', 'text', (c) => c.notNull())
-    .addColumn('last_name', 'text', (c) => c.notNull())
-    .addColumn('email', 'text', (c) => c.notNull().unique())
-    .addColumn('password', 'text', (c) => c.notNull())
-    .addColumn('created_at', 'timestamptz', (c) =>
-      c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
-    )
+    .addColumn('id', 'integer', c => c.primaryKey().generatedAlwaysAsIdentity())
+    .addColumn('first_name', 'text', c => c.notNull())
+    .addColumn('last_name', 'text', c => c.notNull())
+    .addColumn('email', 'text', c => c.notNull().unique())
+    .addColumn('password', 'text', c => c.notNull())
+    .addColumn('created_at', 'timestamptz', c => c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
     .execute()
 
   await db.schema
     .createTable('user_relationship')
-    .addColumn('usera_id', 'integer', (c) =>
-      c.references('user.id').notNull().onDelete('cascade')
-    )
-    .addColumn('userb_id', 'integer', (c) =>
-      c.references('user.id').notNull().onDelete('cascade')
-    )
+    .addColumn('usera_id', 'integer', c => c.references('user.id').notNull().onDelete('cascade'))
+    .addColumn('userb_id', 'integer', c => c.references('user.id').notNull().onDelete('cascade'))
     // .addColumn('type', 'text', (c) =>
     //   c.check(sql`type IN ('friends')`).defaultTo('friends')
     // )
-    .addColumn('created_at', 'timestamptz', (c) =>
-      c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
-    )
+    .addColumn('created_at', 'timestamptz', c => c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
     .addUniqueConstraint('usera_userb_unique', ['usera_id', 'userb_id'])
     .execute()
 
   await db.schema
     .createTable('todo')
-    .addColumn('id', 'integer', (c) =>
-      c.primaryKey().generatedAlwaysAsIdentity()
-    )
-    .addColumn('title', 'text', (c) => c.notNull())
-    .addColumn('user_id', 'integer', (c) =>
-      c.references('user.id').notNull().onDelete('cascade')
-    )
-    .addColumn('created_at', 'timestamptz', (c) =>
-      c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
-    )
+    .addColumn('id', 'integer', c => c.primaryKey().generatedAlwaysAsIdentity())
+    .addColumn('title', 'text', c => c.notNull())
+    .addColumn('user_id', 'integer', c => c.references('user.id').notNull().onDelete('cascade'))
+    .addColumn('created_at', 'timestamptz', c => c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
     .execute()
 
   await db.schema
     .createTable('completion')
-    .addColumn('todo_id', 'integer', (c) =>
-      c.references('todo.id').notNull().onDelete('cascade')
-    )
+    .addColumn('todo_id', 'integer', c => c.references('todo.id').notNull().onDelete('cascade'))
     // .addColumn('date', 'date', (c) => c.notNull())
-    .addColumn('date', 'text', (c) => c.notNull())
-    .addColumn('created_at', 'timestamptz', (c) =>
-      c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
-    )
+    .addColumn('date', 'text', c => c.notNull())
+    .addColumn('created_at', 'timestamptz', c => c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
     .addUniqueConstraint('todo_id_date_unique', ['todo_id', 'date'])
     .execute()
 
   await db.schema
     .createTable('shared_todo')
-    .addColumn('todo_id', 'integer', (c) =>
-      c.references('todo.id').notNull().onDelete('cascade')
-    )
-    .addColumn('user_id', 'integer', (c) =>
-      c.references('user.id').notNull().onDelete('cascade')
-    )
-    .addColumn('created_at', 'timestamptz', (c) =>
-      c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
-    )
+    .addColumn('todo_id', 'integer', c => c.references('todo.id').notNull().onDelete('cascade'))
+    .addColumn('user_id', 'integer', c => c.references('user.id').notNull().onDelete('cascade'))
+    .addColumn('created_at', 'timestamptz', c => c.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
     .addUniqueConstraint('todo_id_user_id_unique', ['todo_id', 'user_id'])
     .execute()
 }

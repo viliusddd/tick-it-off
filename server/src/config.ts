@@ -1,7 +1,7 @@
 import 'dotenv/config'
-import { z } from 'zod'
+import {z} from 'zod'
 
-const { env } = process
+const {env} = process
 
 if (!env.NODE_ENV) env.NODE_ENV = 'development'
 
@@ -13,9 +13,7 @@ const isDevTest = env.NODE_ENV === 'development' || isTest
 
 const schema = z
   .object({
-    env: z
-      .enum(['development', 'production', 'staging', 'test'])
-      .default('development'),
+    env: z.enum(['development', 'production', 'staging', 'test']).default('development'),
     isCi: z.preprocess(coerceBoolean, z.boolean().default(false)),
     port: z.coerce.number().default(3000),
     sgKey: z.coerce.string(),
@@ -29,12 +27,12 @@ const schema = z
         throw new Error('You must provide a TOKEN_KEY in a production env!')
       }),
       expiresIn: z.string().default('7d'),
-      passwordCost: z.coerce.number().default(isDevTest ? 6 : 12),
+      passwordCost: z.coerce.number().default(isDevTest ? 6 : 12)
     }),
 
     database: z.object({
-      connectionString: z.string().url(),
-    }),
+      connectionString: z.string().url()
+    })
   })
   .readonly()
 
@@ -47,12 +45,12 @@ const config = schema.parse({
   auth: {
     tokenKey: env.TOKEN_KEY,
     expiresIn: env.TOKEN_EXPIRES_IN,
-    passwordCost: env.PASSWORD_COST,
+    passwordCost: env.PASSWORD_COST
   },
 
   database: {
-    connectionString: env.DATABASE_URL,
-  },
+    connectionString: env.DATABASE_URL
+  }
 })
 
 export default config

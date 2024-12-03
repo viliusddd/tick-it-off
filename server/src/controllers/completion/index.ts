@@ -1,4 +1,4 @@
-import { router } from '@server/trpc'
+import {router} from '@server/trpc'
 import create from './create'
 import findByRange from './findByRange'
 import deleteById from './deleteById'
@@ -8,5 +8,5 @@ export default router({
   create,
   findByRange,
   deleteById,
-  toggle,
+  toggle
 })

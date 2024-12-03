@@ -1,9 +1,5 @@
-import type {
-  Repositories,
-  RepositoriesFactories,
-  RepositoriesKeys,
-} from '@server/repositories'
-import { middleware } from '..'
+import type {Repositories, RepositoriesFactories, RepositoriesKeys} from '@server/repositories'
+import {middleware} from '..'
 
 type Entries<T> = {
   [K in keyof T]: [K, T[K]]
@@ -19,7 +15,7 @@ const none: Partial<Repositories> = {}
 export default function provideRepos<TKeys extends RepositoriesKeys>(
   reposFactoriesWanted: Pick<RepositoriesFactories, TKeys>
 ) {
-  return middleware(({ ctx, next }) => {
+  return middleware(({ctx, next}) => {
     const reposAlreadyProvided = ctx.repos || none
 
     const reposWantedTuples = Object.entries(reposFactoriesWanted) as Entries<
@@ -32,7 +28,7 @@ export default function provideRepos<TKeys extends RepositoriesKeys>(
         // Accept a repo injected through tests or create a new instance.
         // This is not optimized for performance to create new instances,
         // but it's fine for demonstration purposes.
-        reposAlreadyProvided[key] || repoFactory(ctx.db),
+        reposAlreadyProvided[key] || repoFactory(ctx.db)
       ])
     ) as Pick<Repositories, TKeys>
 
@@ -40,9 +36,9 @@ export default function provideRepos<TKeys extends RepositoriesKeys>(
       ctx: {
         repos: {
           ...reposAlreadyProvided,
-          ...reposWanted,
-        },
-      },
+          ...reposWanted
+        }
+      }
     })
   })
 }

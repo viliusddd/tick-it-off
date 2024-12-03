@@ -13,7 +13,5 @@ export function prefixTable<T extends object, P extends string>(
   tableName: P,
   keys: readonly (keyof T)[]
 ) {
-  return keys.map(
-    (key) => `${tableName}.${String(key)}`
-  ) as Array<`${P}.${Extract<keyof T, string>}`>
+  return keys.map(key => `${tableName}.${String(key)}`) as Array<`${P}.${Extract<keyof T, string>}`>
 }

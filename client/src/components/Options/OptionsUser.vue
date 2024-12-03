@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import type { UserPublic } from '@server/shared/types'
+import type {UserPublic} from '@server/shared/types'
 
-defineProps<{ user: UserPublic | null }>()
+defineProps<{user: UserPublic | null}>()
 </script>

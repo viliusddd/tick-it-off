@@ -1,11 +1,11 @@
-import type { Database, Completion } from '@server/database'
+import type {Database, Completion} from '@server/database'
 import {
   type CompletionItem,
   type CompletionPagination,
   type CompletionPublic,
-  completionKeysPublic,
+  completionKeysPublic
 } from '@server/entities/completion'
-import type { Insertable } from 'kysely'
+import type {Insertable} from 'kysely'
 
 export function completionRepository(db: Database) {
   return {
@@ -28,9 +28,7 @@ export function completionRepository(db: Database) {
         .executeTakeFirst()
     },
 
-    async findAll(
-      completion: CompletionPagination
-    ): Promise<CompletionPublic[]> {
+    async findAll(completion: CompletionPagination): Promise<CompletionPublic[]> {
       return db
         .selectFrom('completion')
         .innerJoin('todo', 'todo.id', 'completion.todoId')
@@ -42,9 +40,7 @@ export function completionRepository(db: Database) {
         .execute()
     },
 
-    async create(
-      completion: Insertable<Completion>
-    ): Promise<CompletionPublic> {
+    async create(completion: Insertable<Completion>): Promise<CompletionPublic> {
       return db
         .insertInto('completion')
         .values(completion)
@@ -64,7 +60,7 @@ export function completionRepository(db: Database) {
       const foundItems = await this.findById(completion)
       if (!foundItems) return this.create(completion)
       return this.delete(completion)
-    },
+    }
   }
 }
 

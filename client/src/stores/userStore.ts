@@ -2,13 +2,13 @@ import {
   clearStoredAccessToken,
   getStoredAccessToken,
   getUserIdFromToken,
-  storeAccessToken,
+  storeAccessToken
 } from '@/utils/auth'
-import { trpc } from '@/trpc'
-import { computed, ref } from 'vue'
+import {trpc} from '@/trpc'
+import {computed, ref} from 'vue'
 
-import { defineStore } from 'pinia'
-import type { UserSignup } from '@server/shared/types'
+import {defineStore} from 'pinia'
+import type {UserSignup} from '@server/shared/types'
 
 export const useUserStore = defineStore('user', () => {
   // state
@@ -21,17 +21,17 @@ export const useUserStore = defineStore('user', () => {
 
   const currentUser = computed(async () => {
     if (!authUserId.value) return null
-    return findUserById({ id: authUserId.value })
+    return findUserById({id: authUserId.value})
   })
 
   const userRelStatus = computed(async () => {
     if (!authUserId.value || !selectedUserId.value) return null
-    return getRelStatus({ useraId: authUserId.value, userbId: selectedUserId.value })
+    return getRelStatus({useraId: authUserId.value, userbId: selectedUserId.value})
   })
 
   // actions
-  const login = async (userLogin: { email: string; password: string }) => {
-    const { accessToken } = await trpc.user.login.mutate(userLogin)
+  const login = async (userLogin: {email: string; password: string}) => {
+    const {accessToken} = await trpc.user.login.mutate(userLogin)
 
     authToken.value = accessToken
     storeAccessToken(localStorage, accessToken)
@@ -46,15 +46,15 @@ export const useUserStore = defineStore('user', () => {
     trpc.user.signup.mutate(userDetails)
   }
 
-  const findUserById = (userId: { id: number }) => {
+  const findUserById = (userId: {id: number}) => {
     return trpc.user.findById.query(userId)
   }
 
-  const getUserRelType = (usersId: { useraId: number; userbId: number }) => {
+  const getUserRelType = (usersId: {useraId: number; userbId: number}) => {
     trpc.userRelationship.getStatus.query(usersId)
   }
 
-  const getRelStatus = async (userRel: { useraId: number; userbId: number }) => {
+  const getRelStatus = async (userRel: {useraId: number; userbId: number}) => {
     return trpc.userRelationship.getStatus.query(userRel)
   }
 
@@ -67,6 +67,6 @@ export const useUserStore = defineStore('user', () => {
     logout,
     signup,
     findUserById,
-    getUserRelType,
+    getUserRelType
   }
 })

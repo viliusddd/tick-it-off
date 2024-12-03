@@ -1,4 +1,4 @@
-import { prefixTable } from '../strings'
+import {prefixTable} from '../strings'
 
 it('should prefix table name to keys', () => {
   const tableName = 'users'

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { FwbHeading } from 'flowbite-vue'
+import {FwbHeading} from 'flowbite-vue'
 
 defineProps<{
   heading: string

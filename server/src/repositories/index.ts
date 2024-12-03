@@ -1,9 +1,9 @@
-import type { Database } from '@server/database'
-import { completionRepository } from './completionRepository'
-import { userRelationshipRepository } from './userRelationshipRepository'
-import { sharedTodoRepository } from './sharedTodoRepository'
-import { todoRepository } from './todoRepository'
-import { userRepository } from './userRepository'
+import type {Database} from '@server/database'
+import {completionRepository} from './completionRepository'
+import {userRelationshipRepository} from './userRelationshipRepository'
+import {sharedTodoRepository} from './sharedTodoRepository'
+import {todoRepository} from './todoRepository'
+import {userRepository} from './userRepository'
 
 export type RepositoryFactory = <T>(db: Database) => T
 
@@ -13,7 +13,7 @@ const repositories = {
   userRelationshipRepository,
   sharedTodoRepository,
   todoRepository,
-  userRepository,
+  userRepository
 }
 
 export type RepositoriesFactories = typeof repositories
@@ -22,4 +22,4 @@ export type Repositories = {
 }
 export type RepositoriesKeys = keyof Repositories
 
-export { repositories }
+export {repositories}

@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-import { withError } from './error'
+import {ref} from 'vue'
+import {withError} from './error'
 
 describe('withError', () => {
   it('should call the provided function and return its result if no error occurs', async () => {

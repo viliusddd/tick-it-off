@@ -1,10 +1,10 @@
 import config from '@server/config'
 import jsonwebtoken from 'jsonwebtoken'
-import { TRPCError } from '@trpc/server'
-import { parseTokenPayload } from '@server/trpc/tokenPayload'
-import { publicProcedure } from '..'
+import {TRPCError} from '@trpc/server'
+import {parseTokenPayload} from '@server/trpc/tokenPayload'
+import {publicProcedure} from '..'
 
-const { tokenKey } = config.auth
+const {tokenKey} = config.auth
 
 function verify(token: string) {
   return jsonwebtoken.verify(token, tokenKey)
@@ -21,7 +21,7 @@ function getUserFromToken(token: string) {
   }
 }
 
-export const authenticatedProcedure = publicProcedure.use(({ ctx, next }) => {
+export const authenticatedProcedure = publicProcedure.use(({ctx, next}) => {
   if (ctx.authUser) {
     // If we have an authenticated user, we can proceed.
     return next({
@@ -31,8 +31,8 @@ export const authenticatedProcedure = publicProcedure.use(({ ctx, next }) => {
         // If we make sure that this middleware always returns
         // ctx with authUser not undefined, then all routes using this
         // middleware will also know that authUser is defined.
-        authUser: ctx.authUser,
-      },
+        authUser: ctx.authUser
+      }
     })
   }
 
@@ -45,7 +45,7 @@ export const authenticatedProcedure = publicProcedure.use(({ ctx, next }) => {
 
     throw new TRPCError({
       code: 'INTERNAL_SERVER_ERROR',
-      message,
+      message
     })
   }
 
@@ -56,7 +56,7 @@ export const authenticatedProcedure = publicProcedure.use(({ ctx, next }) => {
   if (!token) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
-      message: 'Unauthenticated. Please log in.',
+      message: 'Unauthenticated. Please log in.'
     })
   }
 
@@ -65,13 +65,13 @@ export const authenticatedProcedure = publicProcedure.use(({ ctx, next }) => {
   if (!authUser) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
-      message: 'Invalid token.',
+      message: 'Invalid token.'
     })
   }
 
   return next({
     ctx: {
-      authUser,
-    },
+      authUser
+    }
   })
 })

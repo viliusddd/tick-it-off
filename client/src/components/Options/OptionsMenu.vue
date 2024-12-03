@@ -13,7 +13,7 @@
     <template #start>
       <OptionsUser :user="currentUser" class="my-2" />
     </template>
-    <template #item="{ item, props }">
+    <template #item="{item, props}">
       <a v-ripple class="flex items-center" v-bind="props.action">
         <span :class="item.icon" />
         <span>{{ item.label }}</span>
@@ -23,10 +23,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, type Ref } from 'vue'
-import { useDark, useToggle } from '@vueuse/core'
-import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/userStore'
+import {ref, watch, type Ref} from 'vue'
+import {useDark, useToggle} from '@vueuse/core'
+import {useRouter} from 'vue-router'
+import {useUserStore} from '@/stores/userStore'
 import OptionsUser from './OptionsUser.vue'
 
 const router = useRouter()
@@ -36,39 +36,39 @@ const menuItems = ref([
   {
     items: [
       {
-        separator: true,
+        separator: true
       },
       {
         label: 'Settings',
         icon: 'pi pi-cog',
-        route: '/settings',
+        route: '/settings'
       },
       {
         label: 'Dark Mode',
         icon: 'pi pi-moon',
-        command: () => toggleDark(),
+        command: () => toggleDark()
       },
       {
-        separator: true,
+        separator: true
       },
       {
         label: 'Log Out',
         icon: 'pi pi-sign-out',
-        command: logoutUser,
-      },
-    ],
-  },
+        command: logoutUser
+      }
+    ]
+  }
 ])
 
 function logoutUser() {
   userStore.logout()
-  router.push({ name: 'Login' })
+  router.push({name: 'Login'})
 }
 
 const isDark: Ref<boolean> = useDark({
   attribute: 'class',
   valueDark: 'dark',
-  valueLight: 'light',
+  valueLight: 'light'
 })
 const toggleDark: () => boolean = useToggle(isDark)
 

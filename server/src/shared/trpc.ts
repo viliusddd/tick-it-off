@@ -1,2 +1,2 @@
 // Sharing our API interface type
-export type { AppRouter } from '../controllers'
+export type {AppRouter} from '../controllers'

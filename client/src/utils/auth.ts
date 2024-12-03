@@ -1,4 +1,4 @@
-import type { AuthUser } from '@server/shared/types'
+import type {AuthUser} from '@server/shared/types'
 
 // This is a simplified version of auth functions without error handling.
 

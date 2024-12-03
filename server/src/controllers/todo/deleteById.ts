@@ -1,12 +1,10 @@
-import { todoSchema } from '@server/entities/todo'
+import {todoSchema} from '@server/entities/todo'
 import provideRepos from '@server/trpc/provideRepos'
-import { todoRepository } from '@server/repositories/todoRepository'
-import { publicProcedure } from '@server/trpc'
+import {todoRepository} from '@server/repositories/todoRepository'
+import {publicProcedure} from '@server/trpc'
 
 export default publicProcedure
-  .meta({ description: 'Delete todo item by id.' })
-  .use(provideRepos({ todoRepository }))
-  .input(todoSchema.pick({ id: true }))
-  .mutation(async ({ input: { id }, ctx }) =>
-    ctx.repos.todoRepository.delete(id)
-  )
+  .meta({description: 'Delete todo item by id.'})
+  .use(provideRepos({todoRepository}))
+  .input(todoSchema.pick({id: true}))
+  .mutation(async ({input: {id}, ctx}) => ctx.repos.todoRepository.delete(id))

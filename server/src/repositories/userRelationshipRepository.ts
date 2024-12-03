@@ -1,18 +1,15 @@
-import type { Database, UserRelationship } from '@server/database'
+import type {Database, UserRelationship} from '@server/database'
 import {
   type UserRelationshipPublic,
-  userRelationshipKeysPublic,
+  userRelationshipKeysPublic
 } from '@server/entities/userRelationship'
-import { sql, type Insertable, type Selectable } from 'kysely'
+import {sql, type Insertable, type Selectable} from 'kysely'
 
-type Pagination = { offset: number; limit: number }
+type Pagination = {offset: number; limit: number}
 
 export function userRelationshipRepository(db: Database) {
   return {
-    async findAll({
-      offset,
-      limit,
-    }: Pagination): Promise<UserRelationshipPublic[]> {
+    async findAll({offset, limit}: Pagination): Promise<UserRelationshipPublic[]> {
       return db
         .selectFrom('userRelationship')
         .select(userRelationshipKeysPublic)
@@ -21,7 +18,7 @@ export function userRelationshipRepository(db: Database) {
         .execute()
     },
 
-    async findAllWithUsers({ offset, limit }: Pagination) {
+    async findAllWithUsers({offset, limit}: Pagination) {
       return db
         .selectFrom('userRelationship as ur')
         .rightJoin('user as usera', 'ur.useraId', 'usera.id')
@@ -32,7 +29,7 @@ export function userRelationshipRepository(db: Database) {
           'usera.lastName as useraLastName',
           'userb.id as userbId',
           'userb.firstName as userbFirstName',
-          'userb.lastName as userbLastName',
+          'userb.lastName as userbLastName'
         ])
         .offset(offset)
         .limit(limit)
@@ -40,27 +37,22 @@ export function userRelationshipRepository(db: Database) {
     },
 
     /** Create two entries for a relationship */
-    async add(
-      userRelationships: Insertable<UserRelationship>
-    ): Promise<UserRelationshipPublic> {
+    async add(userRelationships: Insertable<UserRelationship>): Promise<UserRelationshipPublic> {
       return db
         .insertInto('userRelationship')
         .values([
           userRelationships,
           {
             useraId: userRelationships.userbId,
-            userbId: userRelationships.useraId,
-          },
+            userbId: userRelationships.useraId
+          }
         ])
         .returning(userRelationshipKeysPublic)
         .executeTakeFirstOrThrow()
     },
 
     /** Delete both entries */
-    async remove({
-      useraId,
-      userbId,
-    }: Selectable<Omit<UserRelationship, 'createdAt'>>) {
+    async remove({useraId, userbId}: Selectable<Omit<UserRelationship, 'createdAt'>>) {
       // db.deleteFrom('userRelationship')
       //   .where('useraId', '=', useraId)
       //   .where('userbId', '=', userbId)
@@ -86,7 +78,7 @@ export function userRelationshipRepository(db: Database) {
 
       await db
         .transaction()
-        .execute(async (trx) =>
+        .execute(async trx =>
           sql`DELETE FROM "user_relationship" WHERE ( "usera_id" = ${useraId} AND "userb_id" = ${userbId}) OR ( "usera_id" = ${userbId} AND "userb_id" = ${useraId})`.execute(
             trx
           )
@@ -94,20 +86,15 @@ export function userRelationshipRepository(db: Database) {
     },
 
     /** Get the type of the relationship */
-    async getStatus({
-      useraId,
-      userbId,
-    }: Selectable<Pick<UserRelationship, 'useraId' | 'userbId'>>) {
+    async getStatus({useraId, userbId}: Selectable<Pick<UserRelationship, 'useraId' | 'userbId'>>) {
       return db
         .selectFrom('userRelationship')
         .where('useraId', '=', useraId)
         .where('userbId', '=', userbId)
         .select(userRelationshipKeysPublic)
         .execute()
-    },
+    }
   }
 }
 
-export type UserRelationshipRepository = ReturnType<
-  typeof userRelationshipRepository
->
+export type UserRelationshipRepository = ReturnType<typeof userRelationshipRepository>

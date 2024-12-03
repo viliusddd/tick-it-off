@@ -1,4 +1,4 @@
-import { router } from '@server/trpc'
+import {router} from '@server/trpc'
 import add from './add'
 import remove from './remove'
 import findAll from './findAll'
@@ -10,5 +10,5 @@ export default router({
   remove,
   findAll,
   findAllWithUsers,
-  getStatus,
+  getStatus
 })

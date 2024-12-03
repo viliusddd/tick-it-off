@@ -1,15 +1,12 @@
-import type { Database, SharedTodo } from '@server/database'
-import {
-  type SharedTodoPublic,
-  sharedTodoKeysPublic,
-} from '@server/entities/sharedTodo'
-import { type Insertable, type Selectable } from 'kysely'
+import type {Database, SharedTodo} from '@server/database'
+import {type SharedTodoPublic, sharedTodoKeysPublic} from '@server/entities/sharedTodo'
+import {type Insertable, type Selectable} from 'kysely'
 
-type Pagination = { offset: number; limit: number }
+type Pagination = {offset: number; limit: number}
 
 export function sharedTodoRepository(db: Database) {
   return {
-    async findAll({ offset, limit }: Pagination): Promise<SharedTodoPublic[]> {
+    async findAll({offset, limit}: Pagination): Promise<SharedTodoPublic[]> {
       return db
         .selectFrom('sharedTodo')
         .innerJoin('todo', 'todo.id', 'sharedTodo.todoId')
@@ -21,9 +18,7 @@ export function sharedTodoRepository(db: Database) {
         .execute()
     },
 
-    async create(
-      sharedTodo: Insertable<SharedTodo>
-    ): Promise<SharedTodoPublic> {
+    async create(sharedTodo: Insertable<SharedTodo>): Promise<SharedTodoPublic> {
       return db
         .insertInto('sharedTodo')
         .values(sharedTodo)
@@ -37,7 +32,7 @@ export function sharedTodoRepository(db: Database) {
         .where('userId', '=', sharedTodo.userId)
         .returning(['todoId', 'userId'])
         .execute()
-    },
+    }
   }
 }
 
