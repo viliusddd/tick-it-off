@@ -4,24 +4,24 @@
   >
     <input
       type="checkbox"
-      :checked="todo.isCompleted"
-      @change="$emit('toggle', todo.id)"
+      v-model="props.todo.isCompleted"
+      @change="toggleTodo()"
       class="h-5 w-5 rounded text-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
     />
     <span
       :class="[
         'flex-grow',
         {
-          'line-through': todo.isCompleted,
-          'text-gray-400': todo.isCompleted,
-          'text-gray-800': !todo.isCompleted
+          'line-through': props.todo.isCompleted,
+          'text-gray-400': props.todo.isCompleted,
+          'text-gray-800': !props.todo.isCompleted
         }
       ]"
     >
       {{ todo.title }}
     </span>
     <button
-      @click="$emit('delete', todo.id)"
+      @click="deleteTodo()"
       class="text-red-500 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
     >
       <TrashIcon class="h-5 w-5" />
@@ -31,8 +31,12 @@
 
 <script setup lang="ts">
 import {TrashIcon} from '@heroicons/vue/24/solid'
+import {useUserStore} from '@/stores/userStore'
+import {trpc} from '@/trpc'
 
-defineProps<{
+const userStore = useUserStore()
+
+const props = defineProps<{
   todo: {
     id: number
     title: string
@@ -40,8 +44,18 @@ defineProps<{
   }
 }>()
 
-defineEmits<{
-  (e: 'toggle', id: number): void
-  (e: 'delete', id: number): void
-}>()
+const deleteTodo = async () => {
+  try {
+    await trpc.todo.deleteById.mutate({id: props.todo.id})
+  } catch (error) {
+    console.error('Error deleting todo:', error)
+  }
+}
+
+const toggleTodo = async () => {
+  await trpc.completion.toggle.mutate({
+    todoId: props.todo.id,
+    date: userStore.currentDate.toLocaleDateString('lt')
+  })
+}
 </script>

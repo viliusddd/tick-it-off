@@ -1,6 +1,5 @@
 <template>
-  <VueButton
-    type="button"
+  <Button
     icon="pi pi-user"
     variant="text"
     rounded
@@ -9,7 +8,7 @@
     aria-controls="overlay_menu"
     aria-haspopup="true"
   />
-  <VueMenu :model="menuItems" ref="menu" class="w-full md:w-60" id="overlay_menu" :popup="true">
+  <Menu :model="menuItems" ref="menu" class="w-full md:w-60" id="overlay_menu" :popup="true">
     <template #start>
       <OptionsUser :user="currentUser" class="my-2" />
     </template>
@@ -19,7 +18,7 @@
         <span>{{ item.label }}</span>
       </a>
     </template>
-  </VueMenu>
+  </Menu>
 </template>
 
 <script setup lang="ts">
@@ -27,6 +26,7 @@ import {ref, watch, type Ref} from 'vue'
 import {useDark, useToggle} from '@vueuse/core'
 import {useRouter} from 'vue-router'
 import {useUserStore} from '@/stores/userStore'
+import {Button, Menu} from 'primevue'
 import OptionsUser from './OptionsUser.vue'
 
 const router = useRouter()

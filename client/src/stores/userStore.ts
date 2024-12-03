@@ -5,7 +5,7 @@ import {
   storeAccessToken
 } from '@/utils/auth'
 import {trpc} from '@/trpc'
-import {computed, ref} from 'vue'
+import {computed, ref, type Ref} from 'vue'
 
 import {defineStore} from 'pinia'
 import type {UserSignup} from '@server/shared/types'
@@ -14,6 +14,7 @@ export const useUserStore = defineStore('user', () => {
   // state
   const authToken = ref<string | null>(getStoredAccessToken(localStorage))
   const selectedUserId = ref<number | null>(null)
+  const currentDate: Ref<Date> = ref(new Date())
 
   // getters
   const authUserId = computed(() => (authToken.value ? getUserIdFromToken(authToken.value) : null))
@@ -63,6 +64,7 @@ export const useUserStore = defineStore('user', () => {
     userRelStatus,
     isLoggedIn,
     currentUser,
+    currentDate,
     login,
     logout,
     signup,

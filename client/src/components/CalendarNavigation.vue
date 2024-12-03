@@ -1,83 +1,64 @@
 <template>
   <div class="flex items-center justify-between">
-    <button
-      @click="$emit('changeDate', -1)"
-      :class="['text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500']"
+    <Button @click="changeDate(-1)" variant="text">
+      <i style="font-size: 1.5rem" class="pi pi-angle-left" />
+    </Button>
+    <DatePicker
+      class="flex-grow"
+      v-model="userStore.currentDate"
+      mode="date"
+      dateFormat="yy-mm-dd"
+      :max-date="new Date()"
+      showIcon
+      fluid
+      iconDisplay="input"
+      :showOnFocus="false"
+      size="large"
+      placeholder="Large"
+      :pt="{pcInputText: {style: 'background-color: red'}}"
+    />
+    <Button @click="goToToday" :disabled="isToday"
+      ><p :class="{'cursor-not-allowed': isToday}">Today</p></Button
     >
-      <ChevronLeftIcon class="h-6 w-6" />
-    </button>
-    <div class="relative mx-2 flex-grow">
-      <button
-        @click="$emit('toggleCalendar')"
-        :class="[
-          'w-full rounded-l-md px-4 py-2 text-left focus:outline-none focus:ring-2 focus:ring-blue-500'
-        ]"
-      >
-        {{ formatDate(currentDate) }}
-      </button>
-      <button
-        @click="$emit('goToToday')"
-        :class="[
-          'absolute bottom-0 right-0 top-0 rounded-r-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50'
-        ]"
-        :disabled="isToday"
-      >
-        Today
-      </button>
-      <div v-if="showCalendar" class="absolute left-0 top-full z-10 mt-2 w-full">
-        <DatePicker
-          v-model="currentDateModel"
-          @update:modelValue="$emit('dateSelect', $event)"
-          mode="date"
-          :max-date="new Date()"
-          :attributes="calendarAttributes"
-        />
-      </div>
-    </div>
-    <button
-      @click="$emit('changeDate', 1)"
-      :class="['text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500']"
-      :disabled="isToday"
-    >
-      <ChevronRightIcon class="h-6 w-6" :class="{'cursor-not-allowed opacity-50': isToday}" />
-    </button>
+    <Button @click="changeDate(1)" :disabled="isToday" variant="text">
+      <i
+        style="font-size: 1.5rem"
+        class="pi pi-angle-right"
+        :class="{'cursor-not-allowed': isToday}"
+      />
+    </Button>
   </div>
 </template>
 
 <script setup lang="ts">
 import {computed} from 'vue'
-import {ChevronLeftIcon, ChevronRightIcon} from '@heroicons/vue/24/solid'
-import {DatePicker} from 'v-calendar'
+import {Button, DatePicker} from 'primevue'
+import {useRouter} from 'vue-router'
+import {useUserStore} from '@/stores/userStore'
 
-const props = defineProps<{
-  currentDate: Date
-  showCalendar: boolean
-  calendarAttributes: any[]
-}>()
+const router = useRouter()
 
-const emit = defineEmits<{
-  (e: 'changeDate', days: number): void
-  (e: 'toggleCalendar'): void
-  (e: 'goToToday'): void
-  (e: 'dateSelect', date: Date): void
-}>()
+const userStore = useUserStore()
 
 const isToday = computed(() => {
+  return userStore.currentDate.toDateString() === new Date().toDateString()
+})
+
+const changeDate = (days: number) => {
+  const newDate = new Date(userStore.currentDate.getTime() + days * 24 * 60 * 60 * 1000)
   const today = new Date()
-  return props.currentDate.toDateString() === today.toDateString()
-})
+  today.setHours(0, 0, 0, 0)
+  if (newDate <= today) {
+    userStore.currentDate = newDate
+    const dateString = newDate.toISOString().split('T')[0]
+    router.push({name: 'SpecificDate', params: {date: dateString}})
+  }
+}
 
-const currentDateModel = computed({
-  get: () => props.currentDate,
-  set: value => emit('dateSelect', value)
-})
-
-const formatDate = (date: Date) => {
-  return date.toLocaleDateString('en-US', {
-    weekday: 'short',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
+const goToToday = () => {
+  const today = new Date()
+  userStore.currentDate = today
+  const dateString = today.toISOString().split('T')[0]
+  router.push({name: 'SpecificDate', params: {date: dateString}})
 }
 </script>
