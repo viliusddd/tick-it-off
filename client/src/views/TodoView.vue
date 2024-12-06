@@ -26,9 +26,9 @@
 import {type Ref, ref, watch, computed} from 'vue'
 import {trpc} from '@/trpc'
 import {useInfiniteScroll} from '@vueuse/core'
-import NewTask from '@/components/NewTask.vue'
+import NewTask from '@/components/Todo/NewTask.vue'
 import TodoItem from '@/components/Todo/TodoItem.vue'
-import CalendarNavigation from '@/components/CalendarNavigation.vue'
+import CalendarNavigation from '@/components/Todo/CalendarNavigation.vue'
 import {useUserStore} from '@/stores/userStore'
 
 const userStore = useUserStore()

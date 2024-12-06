@@ -37,7 +37,6 @@ import {useRouter} from 'vue-router'
 import {useUserStore} from '@/stores/userStore'
 
 const router = useRouter()
-
 const userStore = useUserStore()
 
 const isToday = computed(() => {
@@ -45,20 +44,18 @@ const isToday = computed(() => {
 })
 
 const changeDate = (days: number) => {
-  const newDate = new Date(userStore.currentDate.getTime() + days * 24 * 60 * 60 * 1000)
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  if (newDate <= today) {
-    userStore.currentDate = newDate
-    const dateString = newDate.toISOString().split('T')[0]
-    router.push({name: 'SpecificDate', params: {date: dateString}})
-  }
+  const newDate = new Date(new Date().setDate(userStore.currentDate.getDate() + days))
+
+  if (newDate <= new Date())
+    router.push({name: 'SpecificDate', params: {date: newDate.toLocaleDateString('lt')}})
+
+  userStore.currentDate = newDate
 }
 
 const goToToday = () => {
   const today = new Date()
   userStore.currentDate = today
-  const dateString = today.toISOString().split('T')[0]
-  router.push({name: 'SpecificDate', params: {date: dateString}})
+
+  router.push({name: 'SpecificDate', params: {date: today.toLocaleDateString('lt')}})
 }
 </script>
