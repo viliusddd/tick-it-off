@@ -28,9 +28,9 @@ const routes: RouteRecordRaw[] = [
         props: route => ({currentDate: new Date(route.params.date as string)})
       },
       {
-        path: '/shared-goals',
-        name: 'SharedGoals',
-        component: () => import('@/views/SharedGoalsView.vue')
+        path: '/friends',
+        name: 'Friends',
+        component: () => import('@/views/FriendsView.vue')
       },
       {
         path: '/users',
