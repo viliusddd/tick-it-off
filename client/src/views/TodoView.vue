@@ -1,9 +1,9 @@
 <template>
-  <div :class="['flex justify-center border-2']">
+  <div :class="['flex justify-center']">
     <div :class="'overflow-hidden rounded-lg shadow-xl max-sm:w-full'">
       <div class="mb:p-5 p-3">
         <CalendarNavigation class="mb-3" />
-        <NewTask class="mb-3" @add-todo="createTodo" />
+        <NewTask class="my-3" @add-todo="createTodo" />
         <div v-for="todo in todos" :key="todo.id">
           <TodoItem :todo="todo" />
         </div>
