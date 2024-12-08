@@ -1,10 +1,9 @@
 import './assets/style.css'
-import {createApp} from 'vue'
-import PrimeVue from 'primevue/config'
 import 'primeicons/primeicons.css'
+import PrimeVue from 'primevue/config'
+import {createApp} from 'vue'
 import {createPinia} from 'pinia'
-
-import Ripple from 'primevue/ripple'
+import {ToastService, Ripple} from 'primevue'
 import Material from '@primevue/themes/material'
 
 import App from './App.vue'
@@ -18,6 +17,6 @@ app
     ripple: true,
     theme: {preset: Material}
   })
-
+  .use(ToastService)
   .directive('ripple', Ripple)
   .mount('#app')

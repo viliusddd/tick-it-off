@@ -1,34 +1,3 @@
-<script lang="ts" setup>
-import {useUserStore} from '@/stores/userStore'
-import {ref} from 'vue'
-import PageForm from '@/components/PageForm.vue'
-import {FwbAlert, FwbButton, FwbInput} from 'flowbite-vue'
-import {useRouter} from 'vue-router'
-import useErrorMessage from '@/composables/useErrorMessage'
-
-const router = useRouter()
-
-const userForm = ref({
-  email: '',
-  password: ''
-})
-
-const userStore = useUserStore()
-
-const [submitLogin, errorMessage] = useErrorMessage(async () => {
-  await userStore.login(userForm.value)
-
-  // Support redirects back to the page the user was on before logging in
-  // if it is provided in the query string:
-  // :to="/login?redirect=/some-page-to-go/after-login"
-  const redirectTo = (router.currentRoute.value.query.redirect as string) ?? {
-    name: 'TodoToday'
-  }
-
-  router.push(redirectTo)
-})
-</script>
-
 <template>
   <PageForm heading="Log in to your account" formLabel="Login" @submit="submitLogin">
     <template #default>
@@ -77,3 +46,34 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
     </template>
   </PageForm>
 </template>
+
+<script lang="ts" setup>
+import {useUserStore} from '@/stores/userStore'
+import {ref} from 'vue'
+import PageForm from '@/components/PageForm.vue'
+import {FwbAlert, FwbButton, FwbInput} from 'flowbite-vue'
+import {useRouter} from 'vue-router'
+import useErrorMessage from '@/composables/useErrorMessage'
+
+const router = useRouter()
+
+const userForm = ref({
+  email: '',
+  password: ''
+})
+
+const userStore = useUserStore()
+
+const [submitLogin, errorMessage] = useErrorMessage(async () => {
+  await userStore.login(userForm.value)
+
+  // Support redirects back to the page the user was on before logging in
+  // if it is provided in the query string:
+  // :to="/login?redirect=/some-page-to-go/after-login"
+  const redirectTo = (router.currentRoute.value.query.redirect as string) ?? {
+    name: 'TodoToday'
+  }
+
+  router.push(redirectTo)
+})
+</script>
