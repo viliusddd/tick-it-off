@@ -14,10 +14,10 @@ const links = computed(() => [
         {label: 'Todo', name: 'TodoToday', icon: 'pi pi-pen-to-square', route: '/todo'},
         {label: 'Users', name: 'Users', icon: 'pi pi-users', route: '/users'},
         {
-          label: 'Friends',
-          name: 'Friends',
+          label: 'Friends Statistics',
+          name: 'FriendsStats',
           icon: 'pi pi-share-alt',
-          route: '/friends'
+          route: '/friends-stats'
         }
       ]
     : [
