@@ -9,6 +9,9 @@
         <label for="lastName">Last Name</label>
         <InputText name="lastName" type="text" :placeholder="initialValues?.lastName" fluid />
 
+        <label for="email">Email Address</label>
+        <InputText name="email" type="email" :placeholder="initialValues?.email" fluid />
+
         <label for="passowrd">Password</label>
         <InputText name="oldPassword" type="password" placeholder="Old password" fluid toggleMask />
         <InputText name="newPassword" type="password" placeholder="New password" fluid toggleMask />
