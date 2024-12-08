@@ -3,23 +3,25 @@
     <Button @click="changeDate(-1)" variant="text">
       <i style="font-size: 1.5rem" class="pi pi-angle-left" />
     </Button>
-    <DatePicker
-      class="flex-grow"
-      v-model="userStore.currentDate"
-      mode="date"
-      dateFormat="yy-mm-dd"
-      :max-date="new Date()"
-      showIcon
-      fluid
-      iconDisplay="input"
-      :showOnFocus="false"
-      size="large"
-      placeholder="Large"
-      :pt="{pcInputText: {style: 'background-color: red'}}"
-    />
-    <Button @click="goToToday" :disabled="isToday"
-      ><p :class="{'cursor-not-allowed': isToday}">Today</p></Button
-    >
+    <InputGroup>
+      <DatePicker
+        class="flex-grow"
+        v-model="userStore.currentDate"
+        mode="date"
+        dateFormat="yy-mm-dd"
+        :max-date="new Date()"
+        showIcon
+        fluid
+        iconDisplay="input"
+        :showOnFocus="false"
+        size="large"
+        placeholder="Large"
+        :pt="{pcInputText: {style: 'background-color: red'}}"
+      />
+      <Button @click="goToToday" :disabled="isToday"
+        ><p :class="{'cursor-not-allowed': isToday}">Today</p></Button
+      >
+    </InputGroup>
     <Button @click="changeDate(1)" :disabled="isToday" variant="text">
       <i
         style="font-size: 1.5rem"
@@ -32,7 +34,7 @@
 
 <script setup lang="ts">
 import {computed} from 'vue'
-import {Button, DatePicker} from 'primevue'
+import {Button, DatePicker, InputGroup} from 'primevue'
 import {useRouter} from 'vue-router'
 import {useUserStore} from '@/stores/userStore'
 

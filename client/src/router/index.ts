@@ -30,7 +30,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/friends',
         name: 'Friends',
-        component: () => import('@/views/FriendsView.vue')
+        component: () => import('@/views/FriendsStatsView.vue')
       },
       {
         path: '/users',
