@@ -1,23 +1,19 @@
 <template>
   <Menubar :model="links">
-    <template #item="{item, props}">
+    <template #start><div class="text-xl">Tick It Off</div></template>
+    <template #item="{item, props, label}">
       <router-link v-if="item.route" v-slot="{href, navigate}" :to="item.route" custom>
         <a v-ripple :href="href" v-bind="props.action" @click="navigate">
           <span :class="item.icon" />
-          <span>{{ item.label }}</span>
+          <span>{{ label }}</span>
         </a>
       </router-link>
     </template>
-    <template #start>
-      <div class="text-xl">Tick It Off</div>
-    </template>
-    <template #end>
-      <OptionsMenu />
-    </template>
+    <template #end><OptionsMenu /></template>
   </Menubar>
 
   <main>
-    <button @click="next()">
+    <!-- <button @click="next()">
       <i v-if="state === 'dark'" i-carbon-moon inline-block align-middle class="align-middle" />
       <i v-if="state === 'light'" i-carbon-sun inline-block align-middle class="align-middle" />
       <i v-if="state === 'cafe'" i-carbon-cafe inline-block align-middle class="align-middle" />
@@ -31,7 +27,7 @@
       <i v-if="state === 'auto'" i-carbon-laptop inline-block align-middle class="align-middle" />
 
       <span class="ml-2 capitalize">{{ state }}</span>
-    </button>
+    </button> -->
     <div class="container mx-auto px-0 py-0">
       <RouterView />
     </div>
@@ -43,8 +39,9 @@ import {computed} from 'vue'
 import {useRoute} from 'vue-router'
 import {useColorMode, useCycleList} from '@vueuse/core'
 import {watchEffect} from 'vue-demi'
-import OptionsMenu from '@/components/Options/OptionsMenu.vue'
 import {Menubar} from 'primevue'
+import OptionsMenu from '@/components/Options/OptionsMenu.vue'
+import {useUserStore} from '@/stores/userStore'
 
 const mode = useColorMode({
   emitAuto: true,
@@ -59,16 +56,29 @@ const {state, next} = useCycleList(['dark', 'light', 'cafe', 'contrast', 'auto']
 })
 watchEffect(() => (mode.value = state.value))
 
-const {links} = defineProps<{
-  links: {
-    label: string
-    name: string
-  }[]
-}>()
-
 const route = useRoute()
 
-computed(() => links.map(item => ({...item, isActive: route.name === item.name})))
+computed(() => links.value.map(item => ({...item, isActive: route.name === item.name})))
+
+const userStore = useUserStore()
+
+const links = computed(() => [
+  ...(userStore.isLoggedIn
+    ? [
+        {label: 'Todo', name: 'TodoToday', icon: 'pi pi-pen-to-square', route: '/todo'},
+        {label: 'Users', name: 'Users', icon: 'pi pi-users', route: '/users'},
+        {
+          label: 'Friends Statistics',
+          name: 'FriendsStats',
+          icon: 'pi pi-share-alt',
+          route: '/friends-stats'
+        }
+      ]
+    : [
+        {label: 'Login', name: 'Login'},
+        {label: 'Signup', name: 'Signup'}
+      ])
+])
 </script>
 
 <style>

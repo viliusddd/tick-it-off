@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory, type RouteRecordRaw} from 'vue-router'
 import TodoView from '@/views/TodoView.vue'
-import MainLayout from '@/layouts/MainLayout.vue'
+import MainLayout from '@/components/MainLayout.vue'
 import {authenticate} from './guards'
 
 const routes: RouteRecordRaw[] = [
