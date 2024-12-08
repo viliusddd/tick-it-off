@@ -44,6 +44,7 @@ import {useRoute} from 'vue-router'
 import {useColorMode, useCycleList} from '@vueuse/core'
 import {watchEffect} from 'vue-demi'
 import OptionsMenu from '@/components/Options/OptionsMenu.vue'
+import {Menubar} from 'primevue'
 
 const mode = useColorMode({
   emitAuto: true,

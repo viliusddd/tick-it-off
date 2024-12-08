@@ -19,13 +19,13 @@
         </div>
       </div>
       <div>
-        <VueButton
+        <Button
           v-if="!slotProps.option.isFriend"
           icon="pi pi-plus"
           class="p-button-rounded p-button-text"
           @click="addUser(slotProps.option.userbId)"
         />
-        <VueButton
+        <Button
           v-else
           icon="pi pi-minus"
           class="p-button-rounded p-button-text"
@@ -40,7 +40,7 @@
 import {computed, onMounted, ref} from 'vue'
 import {trpc} from '@/trpc'
 import {useUserStore} from '@/stores/userStore'
-import {Tag, Listbox} from 'primevue'
+import {Tag, Listbox, Button} from 'primevue'
 
 type UsersConnections = {
   useraId: number | null

@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+import {Avatar} from 'primevue'
 import type {UserPublic} from '@server/shared/types'
 
 defineProps<{user: UserPublic | null}>()
