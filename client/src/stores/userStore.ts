@@ -6,9 +6,8 @@ import {
 } from '@/utils/auth'
 import {trpc} from '@/trpc'
 import {computed, ref, type Ref} from 'vue'
-
 import {defineStore} from 'pinia'
-import type {UserSignup} from '@server/shared/types'
+import type {UserPublic, UserSignup} from '@server/shared/types'
 
 export const useUserStore = defineStore('user', () => {
   // state
@@ -20,7 +19,7 @@ export const useUserStore = defineStore('user', () => {
   const authUserId = computed(() => (authToken.value ? getUserIdFromToken(authToken.value) : null))
   const isLoggedIn = computed(() => !!authToken.value)
 
-  const currentUser = computed(async () => {
+  const currentUser = computed(async (): Promise<UserPublic | null> => {
     if (!authUserId.value) return null
     return findUserById({id: authUserId.value})
   })

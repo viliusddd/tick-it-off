@@ -19,41 +19,76 @@
         </div>
         <div>
           <label for="email">Email Address</label>
-          <InputText
-            name="email"
-            type="email"
-            :placeholder="initialValues?.email"
-            fluid
-            :formControl="{validateOnValueUpdate: true}"
-          />
+          <InputText name="email" type="email" :placeholder="initialValues?.email" fluid />
           <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{
             $form.email.error.message
           }}</Message>
         </div>
         <div>
-          <label for="passowrd">Password</label>
-          <InputText
-            name="oldPassword"
-            type="password"
-            placeholder="Old password"
-            fluid
-            toggleMask
-          />
-          <InputText
-            class="my-1"
-            name="newPassword"
-            type="password"
-            placeholder="New password"
-            fluid
-            toggleMask
-          />
-          <InputText
-            name="newPasswordConfirm"
-            type="password"
-            placeholder="Repeat new password"
-            fluid
-            toggleMask
-          />
+          <div>
+            <label for="oldPassowrd">Password</label>
+            <Password
+              name="oldPassword"
+              type="password"
+              placeholder="Old password"
+              :feedback="false"
+              fluid
+              toggleMask
+            />
+            <Message
+              v-if="$form.oldPassword?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              >{{ $form.oldPassword.error.message }}</Message
+            >
+          </div>
+          <div>
+            <div>
+              <Password
+                class="my-1"
+                name="newPassword"
+                type="password"
+                placeholder="New password"
+                fluid
+                toggleMask
+              />
+              <Message
+                v-if="$form.newPassword?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.newPassword.error.message }}</Message
+              >
+            </div>
+            <div>
+              <Password
+                name="newPasswordConfirm"
+                type="password"
+                placeholder="Repeat new password"
+                fluid
+                toggleMask
+              />
+              <Message
+                v-if="$form.newPasswordConfirm?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.newPasswordConfirm.error.message }}</Message
+              >
+            </div>
+            <Message
+              v-if="
+                $form.newPasswordConfirm?.value &&
+                $form.newPasswordConfirm?.value.length > 0 &&
+                $form.newPassword?.value !== $form.newPasswordConfirm?.value
+              "
+              severity="error"
+              size="small"
+              variant="simple"
+              >Passwords don't match.</Message
+            >
+          </div>
         </div>
       </div>
       <div class="my-3 flex justify-end gap-2">
@@ -67,43 +102,49 @@
 <script setup lang="ts">
 import {ref, onBeforeMount} from 'vue'
 import {useUserStore} from '@/stores/userStore'
-import {InputText, Button, useToast, Toast, Message} from 'primevue'
+import {InputText, Button, useToast, Toast, Message, Password} from 'primevue'
 import {Form} from '@primevue/forms'
-import type {User} from '@server/shared/types'
+import {zodResolver} from '@primevue/forms/resolvers/zod'
+import {type UserPublic} from '@server/shared/types'
+import {z} from 'zod'
 
-const userStore = useUserStore()
-const initialValues = ref()
 const toast = useToast()
+const userStore = useUserStore()
+const initialValues = ref<UserPublic | null>(null)
 
 onBeforeMount(async () => (initialValues.value = await userStore.currentUser))
 
-type Errors = {
-  firstName: [{message: string}]
-  lastName: [{message: string}]
-  email: [{message: string}]
-}
+const nameSchema = z
+  .string()
+  .min(2, {message: 'Minimum 2 characters.'})
+  .max(33, {message: 'Maximum 33 characters.'})
 
-const resolver = ({values}: {values: User}) => {
-  const errors: Errors = {
-    firstName: [{message: ''}],
-    lastName: [{message: ''}],
-    email: [{message: ''}]
-  }
+const passwordSchema = z
+  .string()
+  .min(8, {message: 'Minimum 8 characters.'})
+  .max(22, {message: 'Maximum 22 characters.'})
+  .refine(value => /[a-z]/.test(value), {
+    message: 'Must have a lowercase letter.'
+  })
+  .refine(value => /[A-Z]/.test(value), {
+    message: 'Must have an uppercase letter.'
+  })
+  .refine(value => /[1-9]/.test(value), {
+    message: 'Must have a number.'
+  })
 
-  if (!values.firstName) {
-    errors.firstName = [{message: 'First Name is required.'}]
-  }
-
-  if (!values.lastName) {
-    errors.lastName = [{message: 'Last Name is required.'}]
-  }
-
-  if (!values.email) {
-    errors.email = [{message: 'Email required.'}]
-  }
-
-  return {errors}
-}
+const resolver = ref(
+  zodResolver(
+    z.object({
+      firstName: nameSchema,
+      lastName: nameSchema,
+      oldPassword: passwordSchema,
+      newPassword: passwordSchema,
+      newPasswordConfirm: passwordSchema,
+      email: z.string().email()
+    })
+  )
+)
 
 const onFormSubmit = ({valid}: {valid: boolean}) => {
   if (valid) {
