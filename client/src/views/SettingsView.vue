@@ -1,15 +1,16 @@
 <template>
-  <div class="card m-3 flex justify-center">
-    <Toast />
-    <Form
-      v-slot="$form"
-      :resolver
-      :initialValues="userValues"
-      @submit="onFormSubmit"
-      :validateOnBlur="true"
-    >
-      <div class="flex flex-col gap-2">
-        <div>
+  <Toast />
+  <div class="card m-1 flex flex-col gap-5 sm:m-3">
+    <div class="flex flex-row flex-wrap">
+      <Form
+        v-slot="$form"
+        :resolver
+        :initialValues="userValues"
+        @submit="onFormSubmit"
+        :validateOnBlur="true"
+        class="basis-sm flex w-1/2 min-w-52 flex-grow flex-col gap-2 p-1 lg:p-2"
+      >
+        <div class="mt-5">
           <label for="firstName">First Name</label>
           <InputText name="firstName" type="text" :placeholder="userValues?.firstName" fluid />
           <Message v-if="$form.firstName?.invalid" severity="error" size="small" variant="simple">{{
@@ -30,74 +31,58 @@
             $form.email.error.message
           }}</Message>
         </div>
-      </div>
-    </Form>
-    <Form
-      v-slot="$form"
-      :resolver
-      :initialValues="passwordValues"
-      @submit="onFormSubmit"
-      :validateOnBlur="true"
-    >
-      <div class="flex flex-col gap-2">
+      </Form>
+      <Form
+        v-slot="$form"
+        :resolver
+        :initialValues="passwordValues"
+        @submit="onFormSubmit"
+        :validateOnBlur="true"
+        class="basis-sm flex w-1/2 min-w-52 flex-grow flex-col gap-2 p-1 lg:p-2"
+      >
         <div>
-          <div>
-            <label for="oldPassowrd">Password</label>
-            <Password
-              name="oldPassword"
-              type="password"
-              placeholder="Old password"
-              :feedback="false"
-              fluid
-              toggleMask
-            />
+          <div class="mt-5">
+            <label for="originalPassword">
+              Old Password
+              <span class="text-red-500"> *</span>
+            </label>
+            <Password name="originalPassword" type="password" :feedback="false" fluid toggleMask />
             <Message
-              v-if="$form.oldPassword?.invalid"
+              v-if="$form.originalPassword?.invalid"
               severity="error"
               size="small"
               variant="simple"
-              >{{ $form.oldPassword.error.message }}</Message
+              >{{ $form.originalPassword.error.message }}</Message
             >
           </div>
           <div>
             <div>
-              <Password
-                class="my-1"
-                name="newPassword"
-                type="password"
-                placeholder="New password"
-                fluid
-                toggleMask
-              />
+              <label for="changePassword">Change Password</label>
+              <Password class="my-1" name="changePassword" type="password" fluid toggleMask />
               <Message
-                v-if="$form.newPassword?.invalid"
+                v-if="$form.changePassword?.invalid"
                 severity="error"
                 size="small"
                 variant="simple"
-                >{{ $form.newPassword.error.message }}</Message
+                >{{ $form.changePassword.error.message }}</Message
               >
             </div>
             <div>
-              <Password
-                name="newPasswordConfirm"
-                type="password"
-                placeholder="Repeat new password"
-                fluid
-                toggleMask
-              />
+              <label for="repeatPassword">Repeat Password</label>
+              <Password name="repeatPassword" type="password" fluid toggleMask />
               <Message
-                v-if="$form.newPasswordConfirm?.invalid"
+                v-if="$form.repeatPassword?.invalid"
                 severity="error"
                 size="small"
                 variant="simple"
-                >{{ $form.newPasswordConfirm.error.message }}</Message
+                >{{ $form.repeatPassword.error.message }}</Message
               >
             </div>
             <Message
               v-if="
-                $form.newPasswordConfirm?.value &&
-                $form.newPasswordConfirm?.value.length > 0 &&
-                $form.newPassword?.value !== $form.newPasswordConfirm?.value
+                $form.repeatPassword?.value &&
+                $form.repeatPassword?.value.length > 0 &&
+                $form.changePassword?.value !== $form.repeatPassword?.value
               "
               severity="error"
               size="small"
@@ -106,12 +91,13 @@
             >
           </div>
         </div>
-      </div>
-      <div class="my-3 flex justify-end gap-2">
-        <Button type="reset" severity="secondary" label="Cancel" />
-        <Button type="submit" severity="danger" label="Submit" />
-      </div>
-    </Form>
+      </Form>
+    </div>
+
+    <div class="flex justify-between p-1 lg:p-2">
+      <Button type="reset" severity="secondary" label="Cancel" />
+      <Button type="submit" severity="danger" label="Submit" />
+    </div>
   </div>
 </template>
 
@@ -128,9 +114,9 @@ const userStore = useUserStore()
 const userValues = ref()
 
 const passwordValues = reactive({
-  oldPassword: '',
-  newPassword: '',
-  newPasswordConfirm: ''
+  originalPassword: '',
+  changePassword: '',
+  repeatPassword: ''
 })
 
 onBeforeMount(async () => (userValues.value = await userStore.currentUser))
@@ -159,9 +145,9 @@ const resolver = ref(
     z.object({
       firstName: nameSchema,
       lastName: nameSchema,
-      oldPassword: z.string(),
-      newPassword: passwordSchema,
-      newPasswordConfirm: passwordSchema,
+      originalPassword: z.string(),
+      changePassword: passwordSchema,
+      repeatPassword: passwordSchema,
       email: z.string().email()
     })
   )

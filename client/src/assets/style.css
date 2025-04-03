@@ -44,3 +44,9 @@ body {
   border-radius: 10px;
   margin-bottom: 1rem;
 }
+
+@layer base {
+  form label {
+    @apply font-bold;
+  }
+}
