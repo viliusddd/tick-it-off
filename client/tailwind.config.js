@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
+
+import PrimeUI from 'tailwindcss-primeui'
+
 export default {
-  darkMode: 'class',
+  darkMode: ['selector', '[class="p-dark"]'],
+  plugins: [PrimeUI],
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     fontFamily: {

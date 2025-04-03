@@ -4,7 +4,7 @@ import PrimeVue from 'primevue/config'
 import {createApp} from 'vue'
 import {createPinia} from 'pinia'
 import {ToastService, Ripple} from 'primevue'
-import Material from '@primevue/themes/material'
+import Noir from './presets/Noir'
 
 import App from './App.vue'
 import router from './router'
@@ -14,8 +14,14 @@ app
   .use(createPinia())
   .use(router)
   .use(PrimeVue, {
-    ripple: true,
-    theme: {preset: Material}
+    theme: {
+      preset: Noir,
+      options: {
+        prefix: 'p',
+        darkModeSelector: '.p-dark',
+        cssLayer: false
+      }
+    }
   })
   .use(ToastService)
   .directive('ripple', Ripple)

@@ -20,6 +20,10 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.19",
     "@heroicons/vue": "^2.1.5",
+    "@primeuix/styles": "^1.0.1",
+    "@primeuix/themes": "^1.0.1",
+    "@primevue/auto-import-resolver": "4.3.3",
+    "@primevue/forms": "4.3.3",
     "@primevue/themes": "^4.2.1",
     "@trpc/client": "^10.45.2",
     "@vueuse/core": "^11.3.0",
@@ -28,6 +32,8 @@
     "primeicons": "^7.0.0",
     "primevue": "^4.2.1",
     "superjson": "^2.2.1",
+    "tailwindcss-primeui": "^0.6.1",
+    "unplugin-vue-components": "^28.4.1",
     "vue": "^3.5",
     "vue-router": "^4.3.0"
   },
@@ -60,5 +66,6 @@
     "vite": "^5.2.7",
     "vitest": "^1.4.0",
     "vue-tsc": "^2.0.7"
-  }
+  },
+  "main": "src/App.vue"
 }
