@@ -13,21 +13,6 @@
   </Menubar>
 
   <main>
-    <!-- <button @click="next()">
-      <i v-if="state === 'dark'" i-carbon-moon inline-block align-middle class="align-middle" />
-      <i v-if="state === 'light'" i-carbon-sun inline-block align-middle class="align-middle" />
-      <i v-if="state === 'cafe'" i-carbon-cafe inline-block align-middle class="align-middle" />
-      <i
-        v-if="state === 'contrast'"
-        i-carbon-contrast
-        inline-block
-        align-middle
-        class="align-middle"
-      />
-      <i v-if="state === 'auto'" i-carbon-laptop inline-block align-middle class="align-middle" />
-
-      <span class="ml-2 capitalize">{{ state }}</span>
-    </button> -->
     <div class="container mx-auto px-0 py-0">
       <RouterView />
     </div>
@@ -37,24 +22,9 @@
 <script setup lang="ts">
 import {computed} from 'vue'
 import {useRoute} from 'vue-router'
-import {useColorMode, useCycleList} from '@vueuse/core'
-import {watchEffect} from 'vue-demi'
-import {Menubar} from 'primevue'
+import {Menubar, Button} from 'primevue'
 import OptionsMenu from '@/components/Options/OptionsMenu.vue'
 import {useUserStore} from '@/stores/userStore'
-
-const mode = useColorMode({
-  emitAuto: true,
-  modes: {
-    contrast: 'dark contrast',
-    cafe: 'cafe'
-  }
-})
-
-const {state} = useCycleList(['dark', 'light', 'cafe', 'contrast', 'auto'] as const, {
-  initialValue: mode
-})
-watchEffect(() => (mode.value = state.value))
 
 const route = useRoute()
 

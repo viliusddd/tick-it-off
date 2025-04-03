@@ -48,11 +48,11 @@ const menuItems = ref([
         icon: 'pi pi-cog',
         command: () => router.push({name: 'Settings'})
       },
-      {
-        label: 'Dark Mode',
-        icon: 'pi pi-moon',
-        command: () => toggleDark()
-      },
+      // {
+      //   label: 'Dark Mode',
+      //   icon: 'pi pi-moon',
+      //   command: () => toggleDark()
+      // },
       {
         separator: true
       },
@@ -69,13 +69,6 @@ function logoutUser() {
   userStore.logout()
   router.push({name: 'Login'})
 }
-
-const isDark: Ref<boolean> = useDark({
-  attribute: 'class',
-  valueDark: 'dark',
-  valueLight: 'light'
-})
-const toggleDark: () => boolean = useToggle(isDark)
 
 const toggleMenu = (event: Event) => menu.value.toggle(event)
 </script>
