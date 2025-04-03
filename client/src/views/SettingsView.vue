@@ -1,29 +1,45 @@
 <template>
   <div class="card m-3 flex justify-center">
     <Toast />
-    <Form v-slot="$form" :resolver :initialValues @submit="onFormSubmit" :validateOnBlur="true">
+    <Form
+      v-slot="$form"
+      :resolver
+      :initialValues="userValues"
+      @submit="onFormSubmit"
+      :validateOnBlur="true"
+    >
       <div class="flex flex-col gap-2">
         <div>
           <label for="firstName">First Name</label>
-          <InputText name="firstName" type="text" :placeholder="initialValues?.firstName" fluid />
+          <InputText name="firstName" type="text" :placeholder="userValues?.firstName" fluid />
           <Message v-if="$form.firstName?.invalid" severity="error" size="small" variant="simple">{{
             $form.firstName.error.message
           }}</Message>
         </div>
         <div>
           <label for="lastName">Last Name</label>
-          <InputText name="lastName" type="text" :placeholder="initialValues?.lastName" fluid />
+          <InputText name="lastName" type="text" :placeholder="userValues?.lastName" fluid />
           <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple">{{
             $form.lastName.error.message
           }}</Message>
         </div>
         <div>
           <label for="email">Email Address</label>
-          <InputText name="email" type="email" :placeholder="initialValues?.email" fluid />
+          <InputText name="email" type="email" :placeholder="userValues?.email" fluid />
           <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{
             $form.email.error.message
           }}</Message>
         </div>
+      </div>
+    </Form>
+    <Form
+      v-slot="$form"
+      :resolver
+      :initialValues="passwordValues"
+      @submit="onFormSubmit"
+      :validateOnBlur="true"
+    >
+      <div class="flex flex-col gap-2">
         <div>
           <div>
             <label for="oldPassowrd">Password</label>
@@ -100,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onBeforeMount} from 'vue'
+import {ref, onBeforeMount, reactive} from 'vue'
 import {useUserStore} from '@/stores/userStore'
 import {InputText, Button, useToast, Toast, Message, Password} from 'primevue'
 import {Form} from '@primevue/forms'
@@ -110,9 +126,15 @@ import {z} from 'zod'
 
 const toast = useToast()
 const userStore = useUserStore()
-const initialValues = ref<UserPublic | null>(null)
+const userValues = ref<UserPublic | null>(null)
 
-onBeforeMount(async () => (initialValues.value = await userStore.currentUser))
+const passwordValues = reactive({
+  oldPassword: '',
+  newPassword: '',
+  newPasswordConfirm: ''
+})
+
+onBeforeMount(async () => (userValues.value = await userStore.currentUser))
 
 const nameSchema = z
   .string()
@@ -138,7 +160,7 @@ const resolver = ref(
     z.object({
       firstName: nameSchema,
       lastName: nameSchema,
-      oldPassword: passwordSchema,
+      oldPassword: z.string(),
       newPassword: passwordSchema,
       newPasswordConfirm: passwordSchema,
       email: z.string().email()
