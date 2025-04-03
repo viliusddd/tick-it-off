@@ -121,12 +121,11 @@ import {useUserStore} from '@/stores/userStore'
 import {InputText, Button, useToast, Toast, Message, Password} from 'primevue'
 import {Form} from '@primevue/forms'
 import {zodResolver} from '@primevue/forms/resolvers/zod'
-import {type UserPublic} from '@server/shared/types'
 import {z} from 'zod'
 
 const toast = useToast()
 const userStore = useUserStore()
-const userValues = ref<UserPublic | null>(null)
+const userValues = ref()
 
 const passwordValues = reactive({
   oldPassword: '',
