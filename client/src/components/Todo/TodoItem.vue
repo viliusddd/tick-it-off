@@ -4,7 +4,7 @@
   >
     <input
       type="checkbox"
-      v-model="props.todo.isCompleted"
+      :checked="props.todo.isCompleted"
       @change="toggleTodo()"
       class="h-5 w-5 rounded text-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
     />
