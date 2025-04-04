@@ -13,25 +13,26 @@
         <div class="mt-5">
           <label for="firstName">First Name</label>
           <InputText name="firstName" type="text" :placeholder="userValues?.firstName" fluid />
-          <Message v-if="$form.firstName?.invalid" severity="error" size="small" variant="simple">{{
-            $form.firstName.error.message
-          }}</Message>
+          <Message v-if="$form.firstName?.invalid" severity="error" size="small" variant="simple"
+            >{{ $form.firstName.error.message }}
+          </Message>
         </div>
         <div>
           <label for="lastName">Last Name</label>
           <InputText name="lastName" type="text" :placeholder="userValues?.lastName" fluid />
-          <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple">{{
-            $form.lastName.error.message
-          }}</Message>
+          <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple"
+            >{{ $form.lastName.error.message }}
+          </Message>
         </div>
         <div>
           <label for="email">Email Address</label>
           <InputText name="email" type="email" :placeholder="userValues?.email" fluid />
-          <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{
-            $form.email.error.message
-          }}</Message>
+          <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple"
+            >{{ $form.email.error.message }}
+          </Message>
         </div>
       </Form>
+
       <Form
         v-slot="$form"
         :resolver
