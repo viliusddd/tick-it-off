@@ -130,7 +130,7 @@ const nameSchema = z
 const passwordSchema = z
   .string()
   .min(8, {message: 'Minimum 8 characters.'})
-  .max(22, {message: 'Maximum 22 characters.'})
+  .max(33, {message: 'Maximum 33 characters.'})
   .refine(value => /[a-z]/.test(value), {
     message: 'Must have a lowercase letter.'
   })
