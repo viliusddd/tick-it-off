@@ -164,3 +164,11 @@ const onFormSubmit = ({valid}: {valid: boolean}) => {
   }
 }
 </script>
+
+<style scoped>
+.card {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+</style>
