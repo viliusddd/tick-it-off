@@ -23,15 +23,18 @@
 </template>
 
 <script setup lang="ts">
-import {type Ref, ref, watch, computed} from 'vue'
+import {type Ref, ref, watch, computed, onMounted} from 'vue'
 import {trpc} from '@/trpc'
 import {useInfiniteScroll} from '@vueuse/core'
 import NewTask from '@/components/Todo/NewTask.vue'
 import TodoItem from '@/components/Todo/TodoItem.vue'
 import CalendarNavigation from '@/components/Todo/CalendarNavigation.vue'
 import {useUserStore} from '@/stores/userStore'
+import {useRoute, useRouter, onBeforeRouteUpdate} from 'vue-router'
 
 const userStore = useUserStore()
+const route = useRoute()
+const router = useRouter()
 
 const todos: Ref<{id: number; title: string; createdAt: Date; isCompleted?: boolean}[]> = ref([])
 const completions: Ref<{todoId: number}[]> = ref([])
@@ -41,7 +44,38 @@ const hasMore = ref(true)
 const loadMoreTrigger = ref(null)
 const currentDate = computed(() => userStore.currentDate)
 
-watch(currentDate, () => {
+function formatDate(date: Date): string {
+  return date.toISOString().slice(0, 10)
+}
+
+// Sync store with route param on mount
+onMounted(() => {
+  const dateParam = route.params.date as string | undefined
+  if (dateParam) {
+    const parsed = new Date(dateParam)
+    if (!isNaN(parsed.getTime()) && formatDate(userStore.currentDate) !== dateParam) {
+      userStore.currentDate = parsed
+    }
+  }
+})
+
+// Also update store if route changes (e.g. user navigates via browser)
+onBeforeRouteUpdate(to => {
+  const dateParam = to.params.date as string | undefined
+  if (dateParam) {
+    const parsed = new Date(dateParam)
+    if (!isNaN(parsed.getTime()) && formatDate(userStore.currentDate) !== dateParam) {
+      userStore.currentDate = parsed
+    }
+  }
+})
+
+// Watch for store date changes and update the route if needed
+watch(currentDate, newDate => {
+  const formatted = formatDate(newDate)
+  if (route.params.date !== formatted) {
+    router.replace({name: 'SpecificDate', params: {date: formatted}})
+  }
   todos.value = []
   completions.value = []
   hasMore.value = true
