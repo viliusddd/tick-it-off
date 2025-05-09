@@ -87,11 +87,13 @@
             <Button
               type="button"
               severity="secondary"
-              label="Reset"
               outlined
               @click="onProfileReset"
-              class="min-w-[120px] rounded-md font-medium transition"
-            />
+              class="flex min-w-[40px] items-center justify-center rounded-md font-medium transition sm:min-w-[120px]"
+            >
+              <i class="pi pi-refresh xxs:inline text-base"></i>
+              <span class="xxs:hidden">Reset</span>
+            </Button>
             <Button
               type="submit"
               severity="primary"
@@ -101,10 +103,8 @@
           </div>
         </Form>
       </div>
-
       <!-- Divider for large screens -->
       <div class="mx-2 hidden w-px bg-gray-200 lg:block dark:bg-gray-700"></div>
-
       <!-- Change Password -->
       <div class="flex-1 rounded-lg p-3 sm:p-6">
         <h2 class="mb-4 text-xl font-semibold text-gray-800 dark:text-gray-100">Change Password</h2>
@@ -203,11 +203,13 @@
             <Button
               type="button"
               severity="secondary"
-              label="Reset"
               outlined
               @click="onPasswordReset"
-              class="min-w-[120px] rounded-md font-medium transition"
-            />
+              class="flex min-w-[40px] items-center justify-center rounded-md font-medium transition sm:min-w-[120px]"
+            >
+              <i class="pi pi-refresh xxs:inline text-base"></i>
+              <span class="xxs:hidden">Reset</span>
+            </Button>
             <Button
               type="submit"
               severity="danger"
@@ -302,3 +304,22 @@ function onPasswordReset() {
   passwordFormKey.value++
 }
 </script>
+
+<style>
+@media (max-width: 309px) {
+  .xxs\:hidden {
+    display: none !important;
+  }
+  .xxs\:inline {
+    display: inline !important;
+  }
+}
+@media (min-width: 310px) {
+  .xxs\:hidden {
+    display: inline !important;
+  }
+  .xxs\:inline {
+    display: none !important;
+  }
+}
+</style>
