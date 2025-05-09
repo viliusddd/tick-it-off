@@ -24,9 +24,15 @@
               fluid
               class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
             />
-            <Message v-if="$form.firstName?.invalid" severity="error" size="small" variant="simple"
-              >{{ $form.firstName.error.message }}
-            </Message>
+            <div class="min-h-[1.1rem]">
+              <Message
+                v-if="$form.firstName?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.firstName.error.message }}
+              </Message>
+            </div>
           </div>
           <div>
             <label for="lastName" class="mb-1 block font-medium">Last Name</label>
@@ -37,9 +43,11 @@
               fluid
               class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
             />
-            <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple"
-              >{{ $form.lastName.error.message }}
-            </Message>
+            <div class="min-h-[1.1rem]">
+              <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple"
+                >{{ $form.lastName.error.message }}
+              </Message>
+            </div>
           </div>
           <div>
             <label for="email" class="mb-1 block font-medium">Email Address</label>
@@ -50,9 +58,11 @@
               fluid
               class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
             />
-            <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple"
-              >{{ $form.email.error.message }}
-            </Message>
+            <div class="min-h-[1.1rem]">
+              <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple"
+                >{{ $form.email.error.message }}
+              </Message>
+            </div>
           </div>
           <div class="mt-4 flex justify-end gap-2">
             <Button
@@ -99,13 +109,15 @@
               class="w-full"
               :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
             />
-            <Message
-              v-if="$form.originalPassword?.invalid"
-              severity="error"
-              size="small"
-              variant="simple"
-              >{{ $form.originalPassword.error.message }}</Message
-            >
+            <div class="min-h-[1.1rem]">
+              <Message
+                v-if="$form.originalPassword?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.originalPassword.error.message }}</Message
+              >
+            </div>
           </div>
           <div>
             <label for="changePassword" class="mb-1 block font-medium">New Password</label>
@@ -117,13 +129,15 @@
               toggleMask
               :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
             />
-            <Message
-              v-if="$form.changePassword?.invalid"
-              severity="error"
-              size="small"
-              variant="simple"
-              >{{ $form.changePassword.error.message }}</Message
-            >
+            <div class="min-h-[1.1rem]">
+              <Message
+                v-if="$form.changePassword?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.changePassword.error.message }}</Message
+              >
+            </div>
           </div>
           <div>
             <label for="repeatPassword" class="mb-1 block font-medium">Repeat New Password</label>
@@ -135,13 +149,15 @@
               class="w-full"
               :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
             />
-            <Message
-              v-if="$form.repeatPassword?.invalid"
-              severity="error"
-              size="small"
-              variant="simple"
-              >{{ $form.repeatPassword.error.message }}</Message
-            >
+            <div class="min-h-[1.1rem]">
+              <Message
+                v-if="$form.repeatPassword?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.repeatPassword.error.message }}</Message
+              >
+            </div>
           </div>
           <Message
             v-if="
