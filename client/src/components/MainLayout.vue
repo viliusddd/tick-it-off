@@ -1,4 +1,5 @@
 <template>
+  <Button label="Toggle Dark Mode" @click="toggleDarkMode()" />
   <Menubar :model="links">
     <template #start><div class="text-xl">Tick It Off</div></template>
     <template #item="{item, props, label}">
@@ -49,6 +50,8 @@ const links = computed(() => [
         {label: 'Signup', name: 'Signup'}
       ])
 ])
+
+const toggleDarkMode = () => document.documentElement.classList.toggle('p-dark')
 </script>
 
 <style>
