@@ -9,6 +9,7 @@
         </h2>
         <Form
           v-if="userValuesLoaded"
+          :key="profileFormKey"
           v-slot="$form"
           :resolver
           :initialValues="userValues"
@@ -27,12 +28,13 @@
               fluid
               class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
             />
-            <div class="min-h-[1.1rem]">
+            <div class="h-6">
               <Message
                 v-if="$form.firstName?.invalid"
                 severity="error"
                 size="small"
                 variant="simple"
+                class="text-xs"
                 >{{ $form.firstName.error.message }}
               </Message>
             </div>
@@ -48,8 +50,13 @@
               fluid
               class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
             />
-            <div class="min-h-[1.1rem]">
-              <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple"
+            <div class="h-6">
+              <Message
+                v-if="$form.lastName?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                class="text-xs"
                 >{{ $form.lastName.error.message }}
               </Message>
             </div>
@@ -65,24 +72,30 @@
               fluid
               class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
             />
-            <div class="min-h-[1.1rem]">
-              <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple"
+            <div class="h-6">
+              <Message
+                v-if="$form.email?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                class="text-xs"
                 >{{ $form.email.error.message }}
               </Message>
             </div>
           </div>
           <div class="mt-4 flex justify-end gap-2">
             <Button
-              type="reset"
+              type="button"
               severity="secondary"
-              label="Cancel"
+              label="Reset"
               outlined
+              @click="onProfileReset"
               class="min-w-[120px] rounded-md font-medium transition"
             />
             <Button
               type="submit"
               severity="primary"
-              label="Save Changes"
+              label="Update Details"
               class="min-w-[120px] rounded-md bg-indigo-600 font-medium text-white transition hover:bg-indigo-700"
             />
           </div>
@@ -96,6 +109,7 @@
       <div class="flex-1 rounded-lg p-3 sm:p-6">
         <h2 class="mb-4 text-xl font-semibold text-gray-800 dark:text-gray-100">Change Password</h2>
         <Form
+          :key="passwordFormKey"
           v-slot="$form"
           :resolver
           :initialValues="passwordValues"
@@ -116,12 +130,13 @@
               class="w-full"
               :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
             />
-            <div class="min-h-[1.1rem]">
+            <div class="h-6">
               <Message
                 v-if="$form.originalPassword?.invalid"
                 severity="error"
                 size="small"
                 variant="simple"
+                class="text-xs"
                 >{{ $form.originalPassword.error.message }}</Message
               >
             </div>
@@ -138,12 +153,13 @@
               toggleMask
               :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
             />
-            <div class="min-h-[1.1rem]">
+            <div class="h-6">
               <Message
                 v-if="$form.changePassword?.invalid"
                 severity="error"
                 size="small"
                 variant="simple"
+                class="text-xs"
                 >{{ $form.changePassword.error.message }}</Message
               >
             </div>
@@ -160,12 +176,13 @@
               class="w-full"
               :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
             />
-            <div class="min-h-[1.1rem]">
+            <div class="h-6">
               <Message
                 v-if="$form.repeatPassword?.invalid"
                 severity="error"
                 size="small"
                 variant="simple"
+                class="text-xs"
                 >{{ $form.repeatPassword.error.message }}</Message
               >
             </div>
@@ -179,14 +196,16 @@
             severity="error"
             size="small"
             variant="simple"
+            class="text-xs"
             >Passwords don't match.</Message
           >
           <div class="mt-4 flex justify-end gap-2">
             <Button
-              type="reset"
+              type="button"
               severity="secondary"
-              label="Cancel"
+              label="Reset"
               outlined
+              @click="onPasswordReset"
               class="min-w-[120px] rounded-md font-medium transition"
             />
             <Button
@@ -214,6 +233,8 @@ const toast = useToast()
 const userStore = useUserStore()
 const userValues = ref({firstName: '', lastName: '', email: ''})
 const userValuesLoaded = ref(false)
+const profileFormKey = ref(0)
+const passwordFormKey = ref(0)
 
 const passwordValues = reactive({
   originalPassword: '',
@@ -271,5 +292,13 @@ const onFormSubmit = ({valid}: {valid: boolean}) => {
       life: 3000
     })
   }
+}
+
+function onProfileReset() {
+  profileFormKey.value++
+}
+
+function onPasswordReset() {
+  passwordFormKey.value++
 }
 </script>
