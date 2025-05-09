@@ -11,6 +11,7 @@ declare module 'vue' {
     AlertError: typeof import('./src/components/AlertError.vue')['default']
     AuthComponent: typeof import('./src/components/AuthComponent.vue')['default']
     CalendarNavigation: typeof import('./src/components/Todo/CalendarNavigation.vue')['default']
+    ConfirmDeleteButton: typeof import('./src/components/Todo/ConfirmDeleteButton.vue')['default']
     MainLayout: typeof import('./src/components/MainLayout.vue')['default']
     NewTask: typeof import('./src/components/Todo/NewTask.vue')['default']
     OptionsMenu: typeof import('./src/components/Options/OptionsMenu.vue')['default']

@@ -1,6 +1,6 @@
 <template>
   <li
-    class="flex items-center space-x-3 rounded-md bg-gray-50 p-3 transition duration-300 ease-in-out hover:bg-gray-100"
+    class="relative flex items-center space-x-3 rounded-md bg-gray-50 p-3 transition duration-300 ease-in-out hover:bg-gray-100"
   >
     <input
       type="checkbox"
@@ -20,19 +20,15 @@
     >
       {{ todo.title }}
     </span>
-    <button
-      @click="deleteTodo()"
-      class="text-red-500 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-    >
-      <TrashIcon class="h-5 w-5" />
-    </button>
+    <ConfirmDeleteButton @confirm="confirmDelete" />
   </li>
 </template>
 
 <script setup lang="ts">
-import {TrashIcon} from '@heroicons/vue/24/solid'
+import ConfirmDeleteButton from './ConfirmDeleteButton.vue'
 import {useUserStore} from '@/stores/userStore'
 import {trpc} from '@/trpc'
+import {ref} from 'vue'
 
 const userStore = useUserStore()
 
@@ -46,12 +42,16 @@ const props = defineProps<{
   }
 }>()
 
-const deleteTodo = async () => {
+const showConfirm = ref(false)
+
+const confirmDelete = async () => {
   try {
     await trpc.todo.deleteById.mutate({id: props.todo.id})
     emit('deleted', props.todo.id)
   } catch (error) {
     console.error('Error deleting todo:', error)
+  } finally {
+    showConfirm.value = false
   }
 }
 
