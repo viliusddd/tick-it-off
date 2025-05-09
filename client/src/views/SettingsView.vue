@@ -1,9 +1,9 @@
 <template>
   <Toast />
-  <div class="m-2 flex flex-col gap-8 rounded-xl p-4 sm:m-6 sm:p-8">
+  <div class="m-2 flex flex-col gap-8 rounded-xl px-2 py-4 sm:px-8 sm:py-8">
     <div class="flex flex-col gap-8 lg:flex-row">
       <!-- Profile Information -->
-      <div class="flex-1 rounded-lg p-6">
+      <div class="flex-1 rounded-lg p-3 sm:p-6">
         <h2 class="mb-4 text-xl font-semibold text-gray-800 dark:text-gray-100">
           Profile Information
         </h2>
@@ -86,7 +86,7 @@
       <div class="mx-2 hidden w-px bg-gray-200 lg:block dark:bg-gray-700"></div>
 
       <!-- Change Password -->
-      <div class="flex-1 rounded-lg p-6">
+      <div class="flex-1 rounded-lg p-3 sm:p-6">
         <h2 class="mb-4 text-xl font-semibold text-gray-800 dark:text-gray-100">Change Password</h2>
         <Form
           v-slot="$form"
