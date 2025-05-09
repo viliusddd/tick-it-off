@@ -8,6 +8,7 @@
           Profile Information
         </h2>
         <Form
+          v-if="userValuesLoaded"
           v-slot="$form"
           :resolver
           :initialValues="userValues"
@@ -211,7 +212,8 @@ import {z} from 'zod'
 
 const toast = useToast()
 const userStore = useUserStore()
-const userValues = ref()
+const userValues = ref({firstName: '', lastName: '', email: ''})
+const userValuesLoaded = ref(false)
 
 const passwordValues = reactive({
   originalPassword: '',
@@ -219,7 +221,15 @@ const passwordValues = reactive({
   repeatPassword: ''
 })
 
-onBeforeMount(async () => (userValues.value = await userStore.currentUser))
+onBeforeMount(async () => {
+  const user = await userStore.currentUser
+  userValues.value = {
+    firstName: user?.firstName ?? '',
+    lastName: user?.lastName ?? '',
+    email: user?.email ?? ''
+  }
+  userValuesLoaded.value = true
+})
 
 const nameSchema = z
   .string()
