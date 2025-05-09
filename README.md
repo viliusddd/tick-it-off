@@ -32,6 +32,7 @@ More organised than a queue at the post office, and just as satisfying to get th
 - Use of pagination in todo list.
 - Sign in/up.
 - Password manager correctly recognize input fields.
+- Share same types and validation schemas between backend and frontend.
 - !WIP: Twilio Sendgrid integration
 - !TODO: Share todo's with others
 - !TODO: Ability to do the **TODO** item together, see each other's progress.

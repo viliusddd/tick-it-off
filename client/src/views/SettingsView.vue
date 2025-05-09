@@ -11,7 +11,7 @@
           v-if="userValuesLoaded"
           :key="profileFormKey"
           v-slot="$form"
-          :resolver
+          :resolver="zodResolver(userSchema.omit({password: true}))"
           :initialValues="userValues"
           @submit="onDetailsFormSubmit"
           :validateOnBlur="true"
@@ -114,7 +114,7 @@
         <Form
           :key="passwordFormKey"
           v-slot="$form"
-          :resolver
+          :resolver="zodResolver(userPasswordChangeSchema)"
           :initialValues="passwordValues"
           @submit="onPasswordFormSubmit"
           :validateOnBlur="true"
@@ -236,6 +236,7 @@ import {InputText, Button, useToast, Toast, Message, Password} from 'primevue'
 import {Form} from '@primevue/forms'
 import {zodResolver} from '@primevue/forms/resolvers/zod'
 import {z} from 'zod'
+import {userSchema, userPasswordChangeSchema} from '@entities/user'
 
 const toast = useToast()
 const userStore = useUserStore()
@@ -263,38 +264,6 @@ async function loadUserValues() {
 onBeforeMount(() => {
   loadUserValues()
 })
-
-const nameSchema = z
-  .string()
-  .min(2, {message: 'Minimum 2 characters.'})
-  .max(33, {message: 'Maximum 33 characters.'})
-
-const passwordSchema = z
-  .string()
-  .min(8, {message: 'Minimum 8 characters.'})
-  .max(33, {message: 'Maximum 33 characters.'})
-  .refine(value => /[a-z]/.test(value), {
-    message: 'Must have a lowercase letter.'
-  })
-  .refine(value => /[A-Z]/.test(value), {
-    message: 'Must have an uppercase letter.'
-  })
-  .refine(value => /[1-9]/.test(value), {
-    message: 'Must have a number.'
-  })
-
-const resolver = ref(
-  zodResolver(
-    z.object({
-      firstName: nameSchema,
-      lastName: nameSchema,
-      originalPassword: z.string(),
-      changePassword: passwordSchema,
-      repeatPassword: passwordSchema,
-      email: z.string().email()
-    })
-  )
-)
 
 const showToast = (
   severity: 'error' | 'success' | 'info' | 'warn' | 'secondary' | 'contrast',
