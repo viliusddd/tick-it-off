@@ -6,7 +6,7 @@
       type="checkbox"
       :checked="props.todo.isCompleted"
       @change="toggleTodo()"
-      class="h-5 w-5 rounded text-blue-600"
+      class="h-5 w-5 cursor-pointer rounded text-blue-600"
     />
     <span
       :class="[
