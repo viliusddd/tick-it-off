@@ -3,10 +3,14 @@ import login from './login'
 import signup from './signup'
 import findAll from './findAll'
 import findById from './findById'
+import updateDetails from './updateDetails'
+import deleteById from './deleteById'
 
 export default router({
   findAll,
   findById,
   login,
-  signup
+  signup,
+  updateDetails,
+  deleteById
 })

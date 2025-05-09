@@ -35,6 +35,21 @@ export function userRepository(db: Database) {
         .select(userKeysPublic)
         .where('id', '=', id)
         .executeTakeFirstOrThrow()
+    },
+    async update(user: Selectable<Omit<User, 'createdAt' | 'password'>>): Promise<UserPublic> {
+      return db
+        .updateTable('user')
+        .set({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email
+        })
+        .where('user.id', '=', user.id)
+        .returning(userKeysPublic)
+        .executeTakeFirstOrThrow()
+    },
+    async delete(id: number) {
+      db.deleteFrom('user').where('user.id', '=', id).execute()
     }
   }
 }

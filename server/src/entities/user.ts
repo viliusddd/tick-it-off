@@ -25,6 +25,7 @@ export const userKeysPublic = ['id', 'firstName', 'lastName', 'email'] as const
 
 export type UserPublic = Pick<Selectable<User>, (typeof userKeysPublic)[number]>
 export type UserSignup = Omit<User, 'id' | 'createdAt'>
+export type UserPassword = Pick<User, 'id' | 'password'>
 
 // a specific schema for authenticated user that is used in JWT
 export const authUserSchema = userSchema.pick({id: true})

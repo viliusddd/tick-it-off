@@ -58,6 +58,14 @@ export const useUserStore = defineStore('user', () => {
     return trpc.userRelationship.getStatus.query(userRel)
   }
 
+  const updateDetails = async (details: UserPublic) => {
+    trpc.user.updateDetails.mutate(details)
+  }
+
+  const deleteById = async (userId: {id: number}) => {
+    trpc.user.deleteById.mutate(userId)
+  }
+
   return {
     authUserId,
     userRelStatus,
@@ -67,6 +75,8 @@ export const useUserStore = defineStore('user', () => {
     login,
     logout,
     signup,
+    updateDetails,
+    deleteById,
     findUserById,
     getUserRelType
   }

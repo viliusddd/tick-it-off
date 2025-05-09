@@ -67,7 +67,7 @@
             </label>
             <InputText
               name="email"
-              type="email"
+              type="text"
               :placeholder="userValues?.email"
               fluid
               class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
@@ -113,7 +113,7 @@
           v-slot="$form"
           :resolver
           :initialValues="passwordValues"
-          @submit="onFormSubmit"
+          @submit="onFormSubmitPassword"
           :validateOnBlur="true"
           class="flex flex-col gap-4"
         >
@@ -244,7 +244,7 @@ const passwordValues = reactive({
   repeatPassword: ''
 })
 
-onBeforeMount(async () => {
+async function loadUserValues() {
   const user = await userStore.currentUser
   userValues.value = {
     firstName: user?.firstName ?? '',
@@ -252,6 +252,10 @@ onBeforeMount(async () => {
     email: user?.email ?? ''
   }
   userValuesLoaded.value = true
+}
+
+onBeforeMount(() => {
+  loadUserValues()
 })
 
 const nameSchema = z
@@ -286,14 +290,63 @@ const resolver = ref(
   )
 )
 
-const onFormSubmit = ({valid}: {valid: boolean}) => {
-  if (valid) {
+const onFormSubmit = async (event: any) => {
+  const {states, valid} = event
+  const firstName = states.firstName?.value
+  const lastName = states.lastName?.value
+  const email = states.email?.value
+
+  // Compare with original values
+  if (
+    valid &&
+    userValues.value &&
+    firstName === userValues.value.firstName &&
+    lastName === userValues.value.lastName &&
+    email === userValues.value.email
+  ) {
     toast.add({
-      severity: 'success',
-      summary: 'Details changed.',
+      severity: 'info',
+      summary: 'No changes detected.',
       life: 3000
     })
+    return
   }
+
+  if (valid && firstName && lastName && email) {
+    const id = userStore.authUserId
+    if (!id) {
+      toast.add({
+        severity: 'error',
+        summary: 'User not authenticated.',
+        life: 3000
+      })
+      return
+    }
+    try {
+      await userStore.updateDetails({
+        id,
+        firstName,
+        lastName,
+        email
+      })
+      toast.add({
+        severity: 'success',
+        summary: 'Details changed.',
+        life: 3000
+      })
+    } catch (error: any) {
+      toast.add({
+        severity: 'error',
+        summary: error?.message || 'Failed to update details.',
+        life: 3000
+      })
+    }
+  }
+}
+
+const onFormSubmitPassword = async ({values, valid}: any) => {
+  console.log('Password form values:', values, 'Valid:', valid)
+  // TODO: Implement password change logic here
 }
 
 function onProfileReset() {
