@@ -62,6 +62,10 @@ export const useUserStore = defineStore('user', () => {
     trpc.user.updateDetails.mutate(details)
   }
 
+  const updatePassword = async (oldPassword: string, newPassword: string) => {
+    return trpc.user.updatePassword.mutate({oldPassword, newPassword})
+  }
+
   const deleteById = async (userId: {id: number}) => {
     trpc.user.deleteById.mutate(userId)
   }
@@ -76,6 +80,7 @@ export const useUserStore = defineStore('user', () => {
     logout,
     signup,
     updateDetails,
+    updatePassword,
     deleteById,
     findUserById,
     getUserRelType

@@ -8,5 +8,5 @@ export default authenticatedProcedure
   .use(provideRepos({userRepository}))
   .input(userSchema.omit({password: true}))
   .mutation(async ({input, ctx: {authUser, repos}}) =>
-    repos.userRepository.update({...input, id: authUser.id})
+    repos.userRepository.updateDetails({...input, id: authUser.id})
   )

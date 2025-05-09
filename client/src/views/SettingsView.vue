@@ -13,7 +13,7 @@
           v-slot="$form"
           :resolver
           :initialValues="userValues"
-          @submit="onFormSubmit"
+          @submit="onDetailsFormSubmit"
           :validateOnBlur="true"
           class="flex flex-col gap-4"
         >
@@ -25,6 +25,7 @@
               name="firstName"
               type="text"
               :placeholder="userValues?.firstName"
+              autocomplete="given-name"
               fluid
               class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
             />
@@ -47,6 +48,7 @@
               name="lastName"
               type="text"
               :placeholder="userValues?.lastName"
+              autocomplete="family-name"
               fluid
               class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
             />
@@ -69,6 +71,7 @@
               name="email"
               type="text"
               :placeholder="userValues?.email"
+              autocomplete="email"
               fluid
               class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
             />
@@ -113,13 +116,13 @@
           v-slot="$form"
           :resolver
           :initialValues="passwordValues"
-          @submit="onFormSubmitPassword"
+          @submit="onPasswordFormSubmit"
           :validateOnBlur="true"
           class="flex flex-col gap-4"
         >
           <div>
             <label for="originalPassword" class="mb-1 block font-medium">
-              Old Password <span class="text-red-500">*</span>
+              Current Password <span class="text-red-500">*</span>
             </label>
             <Password
               name="originalPassword"
@@ -127,6 +130,7 @@
               :feedback="false"
               fluid
               toggleMask
+              autocomplete="current-password"
               class="w-full"
               :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
             />
@@ -151,6 +155,7 @@
               type="password"
               fluid
               toggleMask
+              autocomplete="new-password"
               :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
             />
             <div class="h-6">
@@ -173,6 +178,7 @@
               type="password"
               fluid
               toggleMask
+              autocomplete="new-password"
               class="w-full"
               :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
             />
@@ -290,7 +296,7 @@ const resolver = ref(
   )
 )
 
-const onFormSubmit = async (event: any) => {
+const onDetailsFormSubmit = async (event: any) => {
   const {states, valid} = event
   const firstName = states.firstName?.value
   const lastName = states.lastName?.value
@@ -344,9 +350,51 @@ const onFormSubmit = async (event: any) => {
   }
 }
 
-const onFormSubmitPassword = async ({values, valid}: any) => {
-  console.log('Password form values:', values, 'Valid:', valid)
-  // TODO: Implement password change logic here
+const onPasswordFormSubmit = async (event: any) => {
+  const {states, valid} = event
+  const originalPassword = states.originalPassword?.value
+  const changePassword = states.changePassword?.value
+  const repeatPassword = states.repeatPassword?.value
+
+  if (
+    valid &&
+    originalPassword &&
+    changePassword &&
+    repeatPassword &&
+    changePassword === repeatPassword
+  ) {
+    try {
+      await userStore.updatePassword(originalPassword, changePassword)
+      toast.add({
+        severity: 'success',
+        summary: 'Password changed successfully.',
+        life: 3000
+      })
+      onPasswordReset()
+    } catch (error: any) {
+      toast.add({
+        severity: 'error',
+        summary: error?.message || 'Failed to change password.',
+        life: 3000
+      })
+    }
+    return
+  }
+
+  if (changePassword !== repeatPassword) {
+    toast.add({
+      severity: 'error',
+      summary: "Passwords don't match.",
+      life: 3000
+    })
+    return
+  }
+
+  toast.add({
+    severity: 'error',
+    summary: 'Please fill in all password fields correctly.',
+    life: 3000
+  })
 }
 
 function onProfileReset() {

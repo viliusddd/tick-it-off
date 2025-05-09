@@ -1,6 +1,11 @@
 import type {Database} from '@server/database'
 import type {User} from '@server/database/types'
-import {type UserPublic, userKeysAll, userKeysPublic} from '@server/entities/user'
+import {
+  type UserPublic,
+  type UserPassword,
+  userKeysAll,
+  userKeysPublic
+} from '@server/entities/user'
 import type {Insertable, Selectable} from 'kysely'
 
 type Pagination = {offset: number; limit: number}
@@ -29,20 +34,32 @@ export function userRepository(db: Database) {
         .limit(limit)
         .execute()
     },
-    async findById(id: number) {
+    async findById(id: number, includePassword = false) {
       return db
         .selectFrom('user')
-        .select(userKeysPublic)
+        .select(includePassword ? userKeysAll : userKeysPublic)
         .where('id', '=', id)
         .executeTakeFirstOrThrow()
     },
-    async update(user: Selectable<Omit<User, 'createdAt' | 'password'>>): Promise<UserPublic> {
+    async updateDetails(
+      user: Selectable<Omit<User, 'createdAt' | 'password'>>
+    ): Promise<UserPublic> {
       return db
         .updateTable('user')
         .set({
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email
+        })
+        .where('user.id', '=', user.id)
+        .returning(userKeysPublic)
+        .executeTakeFirstOrThrow()
+    },
+    async updatePassword(user: Selectable<UserPassword>): Promise<UserPublic> {
+      return db
+        .updateTable('user')
+        .set({
+          password: user.password
         })
         .where('user.id', '=', user.id)
         .returning(userKeysPublic)

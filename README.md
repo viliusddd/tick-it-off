@@ -29,8 +29,9 @@ More organised than a queue at the post office, and just as satisfying to get th
 
 ## Features
 
-- Use pagination.
-- Sign in/signup.
+- Use of pagination in todo list.
+- Sign in/up.
+- Password manager correctly recognize input fields.
 - !WIP: Twilio Sendgrid integration
 - !TODO: Share todo's with others
 - !TODO: Ability to do the **TODO** item together, see each other's progress.
@@ -104,10 +105,12 @@ npm i && \
 npm run migrate:latest && \
 nvm use
 ```
+
 2. Run app:
-  - Start PostgreSQL server.
-  - Adjust `.env` variables.
-  - Execute `npm run dev` in `server/` for backend and `client/` for frontend.
+
+- Start PostgreSQL server.
+- Adjust `.env` variables.
+- Execute `npm run dev` in `server/` for backend and `client/` for frontend.
 
 ## Database Diagram
 
@@ -119,14 +122,14 @@ nvm use
   </a>
 </div>
 
-- __completion__ stores entries on when the todo item was completed.
-- __todo__ stores todo entries.
-- __user__ stores user information.
-- __shared_todo__ stores info on which users the todo item was shared with.
+- **completion** stores entries on when the todo item was completed.
+- **todo** stores todo entries.
+- **user** stores user information.
+- **shared_todo** stores info on which users the todo item was shared with.
 
 ## API Endpoints
 
-With the server running, go to http://localhost:3000/api/v1/trpc-panel to access available routes and their documentation.
+With the server running, go to <http://localhost:3000/api/v1/trpc-panel> to access available routes and their documentation.
 
 ### todo
 
@@ -240,9 +243,9 @@ curl -s http://localhost:3000/api/v1/trpc/completion.deleteById \
 Get "checked" todo items from that day with the ID in the chosen range.
 It's used when pagination loads to-do items in the app.
 
-* `firstId` - first id of the range.
-* `secondId` - last id of the range
-* `date`* - date in ISO 8601 format, e.g. `2024-10-02`. By default, it's current day date.
+- `firstId` - first id of the range.
+- `secondId` - last id of the range
+- `date`* - date in ISO 8601 format, e.g. `2024-10-02`. By default, it's current day date.
 
 ```sh
 N/A
@@ -256,8 +259,8 @@ N/A
 
 "Check" or "uncheck" the to-do item that day.
 
-* `todoId` - todo item id.
-* `date`* - date in ISO 8601 format, e.g. `2024-10-02`. By default, it's current day date.
+- `todoId` - todo item id.
+- `date`* - date in ISO 8601 format, e.g. `2024-10-02`. By default, it's current day date.
 
 ```sh
 curl -s http://localhost:3000/api/v1/trpc/completion.toggle?batch=1 \

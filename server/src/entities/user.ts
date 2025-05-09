@@ -30,3 +30,8 @@ export type UserPassword = Pick<User, 'id' | 'password'>
 // a specific schema for authenticated user that is used in JWT
 export const authUserSchema = userSchema.pick({id: true})
 export type AuthUser = z.infer<typeof authUserSchema>
+
+export const userPasswordChangeSchema = z.object({
+  oldPassword: z.string(),
+  newPassword: userSchema.shape.password
+})
