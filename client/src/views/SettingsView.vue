@@ -1,53 +1,104 @@
 <template>
   <Toast />
-  <div class="card m-1 flex flex-col gap-5 sm:m-3">
-    <div class="flex flex-row flex-wrap">
-      <Form
-        v-slot="$form"
-        :resolver
-        :initialValues="userValues"
-        @submit="onFormSubmit"
-        :validateOnBlur="true"
-        class="basis-sm flex w-1/2 min-w-52 flex-grow flex-col gap-2 p-1 lg:p-2"
-      >
-        <div class="mt-5">
-          <label for="firstName">First Name</label>
-          <InputText name="firstName" type="text" :placeholder="userValues?.firstName" fluid />
-          <Message v-if="$form.firstName?.invalid" severity="error" size="small" variant="simple"
-            >{{ $form.firstName.error.message }}
-          </Message>
-        </div>
-        <div>
-          <label for="lastName">Last Name</label>
-          <InputText name="lastName" type="text" :placeholder="userValues?.lastName" fluid />
-          <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple"
-            >{{ $form.lastName.error.message }}
-          </Message>
-        </div>
-        <div>
-          <label for="email">Email Address</label>
-          <InputText name="email" type="email" :placeholder="userValues?.email" fluid />
-          <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple"
-            >{{ $form.email.error.message }}
-          </Message>
-        </div>
-      </Form>
+  <div class="m-2 flex flex-col gap-8 rounded-xl p-4 sm:m-6 sm:p-8">
+    <div class="flex flex-col gap-8 lg:flex-row">
+      <!-- Profile Information -->
+      <div class="flex-1 rounded-lg p-6">
+        <h2 class="mb-4 text-xl font-semibold text-gray-800 dark:text-gray-100">
+          Profile Information
+        </h2>
+        <Form
+          v-slot="$form"
+          :resolver
+          :initialValues="userValues"
+          @submit="onFormSubmit"
+          :validateOnBlur="true"
+          class="flex flex-col gap-4"
+        >
+          <div>
+            <label for="firstName" class="mb-1 block font-medium">First Name</label>
+            <InputText
+              name="firstName"
+              type="text"
+              :placeholder="userValues?.firstName"
+              fluid
+              class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+            />
+            <Message v-if="$form.firstName?.invalid" severity="error" size="small" variant="simple"
+              >{{ $form.firstName.error.message }}
+            </Message>
+          </div>
+          <div>
+            <label for="lastName" class="mb-1 block font-medium">Last Name</label>
+            <InputText
+              name="lastName"
+              type="text"
+              :placeholder="userValues?.lastName"
+              fluid
+              class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+            />
+            <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple"
+              >{{ $form.lastName.error.message }}
+            </Message>
+          </div>
+          <div>
+            <label for="email" class="mb-1 block font-medium">Email Address</label>
+            <InputText
+              name="email"
+              type="email"
+              :placeholder="userValues?.email"
+              fluid
+              class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+            />
+            <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple"
+              >{{ $form.email.error.message }}
+            </Message>
+          </div>
+          <div class="mt-4 flex justify-end gap-2">
+            <Button
+              type="reset"
+              severity="secondary"
+              label="Cancel"
+              outlined
+              class="min-w-[120px] rounded-md font-medium transition"
+            />
+            <Button
+              type="submit"
+              severity="primary"
+              label="Save Changes"
+              class="min-w-[120px] rounded-md bg-indigo-600 font-medium text-white transition hover:bg-indigo-700"
+            />
+          </div>
+        </Form>
+      </div>
 
-      <Form
-        v-slot="$form"
-        :resolver
-        :initialValues="passwordValues"
-        @submit="onFormSubmit"
-        :validateOnBlur="true"
-        class="basis-sm flex w-1/2 min-w-52 flex-grow flex-col gap-2 p-1 lg:p-2"
-      >
-        <div>
-          <div class="mt-5">
-            <label for="originalPassword">
-              Old Password
-              <span class="text-red-500"> *</span>
+      <!-- Divider for large screens -->
+      <div class="mx-2 hidden w-px bg-gray-200 lg:block dark:bg-gray-700"></div>
+
+      <!-- Change Password -->
+      <div class="flex-1 rounded-lg p-6">
+        <h2 class="mb-4 text-xl font-semibold text-gray-800 dark:text-gray-100">Change Password</h2>
+        <Form
+          v-slot="$form"
+          :resolver
+          :initialValues="passwordValues"
+          @submit="onFormSubmit"
+          :validateOnBlur="true"
+          class="flex flex-col gap-4"
+        >
+          <div>
+            <label for="originalPassword" class="mb-1 block font-medium">
+              Old Password <span class="text-red-500">*</span>
             </label>
-            <Password name="originalPassword" type="password" :feedback="false" fluid toggleMask />
+            <Password
+              name="originalPassword"
+              type="password"
+              :feedback="false"
+              fluid
+              toggleMask
+              class="w-full"
+              :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
+            />
             <Message
               v-if="$form.originalPassword?.invalid"
               severity="error"
@@ -57,47 +108,69 @@
             >
           </div>
           <div>
-            <div>
-              <label for="changePassword">Change Password</label>
-              <Password class="my-1" name="changePassword" type="password" fluid toggleMask />
-              <Message
-                v-if="$form.changePassword?.invalid"
-                severity="error"
-                size="small"
-                variant="simple"
-                >{{ $form.changePassword.error.message }}</Message
-              >
-            </div>
-            <div>
-              <label for="repeatPassword">Repeat Password</label>
-              <Password name="repeatPassword" type="password" fluid toggleMask />
-              <Message
-                v-if="$form.repeatPassword?.invalid"
-                severity="error"
-                size="small"
-                variant="simple"
-                >{{ $form.repeatPassword.error.message }}</Message
-              >
-            </div>
+            <label for="changePassword" class="mb-1 block font-medium">New Password</label>
+            <Password
+              class="w-full"
+              name="changePassword"
+              type="password"
+              fluid
+              toggleMask
+              :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
+            />
             <Message
-              v-if="
-                $form.repeatPassword?.value &&
-                $form.repeatPassword?.value.length > 0 &&
-                $form.changePassword?.value !== $form.repeatPassword?.value
-              "
+              v-if="$form.changePassword?.invalid"
               severity="error"
               size="small"
               variant="simple"
-              >Passwords don't match.</Message
+              >{{ $form.changePassword.error.message }}</Message
             >
           </div>
-        </div>
-      </Form>
-    </div>
-
-    <div class="flex justify-between p-1 lg:p-2">
-      <Button type="reset" severity="secondary" label="Cancel" />
-      <Button type="submit" severity="danger" label="Submit" />
+          <div>
+            <label for="repeatPassword" class="mb-1 block font-medium">Repeat New Password</label>
+            <Password
+              name="repeatPassword"
+              type="password"
+              fluid
+              toggleMask
+              class="w-full"
+              :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
+            />
+            <Message
+              v-if="$form.repeatPassword?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              >{{ $form.repeatPassword.error.message }}</Message
+            >
+          </div>
+          <Message
+            v-if="
+              $form.repeatPassword?.value &&
+              $form.repeatPassword?.value.length > 0 &&
+              $form.changePassword?.value !== $form.repeatPassword?.value
+            "
+            severity="error"
+            size="small"
+            variant="simple"
+            >Passwords don't match.</Message
+          >
+          <div class="mt-4 flex justify-end gap-2">
+            <Button
+              type="reset"
+              severity="secondary"
+              label="Cancel"
+              outlined
+              class="min-w-[120px] rounded-md font-medium transition"
+            />
+            <Button
+              type="submit"
+              severity="danger"
+              label="Change Password"
+              class="min-w-[120px] rounded-md bg-red-600 font-medium text-white transition hover:bg-red-700"
+            />
+          </div>
+        </Form>
+      </div>
     </div>
   </div>
 </template>
@@ -164,11 +237,3 @@ const onFormSubmit = ({valid}: {valid: boolean}) => {
   }
 }
 </script>
-
-<style scoped>
-.card {
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-</style>
