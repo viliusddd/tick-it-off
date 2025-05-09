@@ -36,7 +36,7 @@ import {trpc} from '@/trpc'
 
 const userStore = useUserStore()
 
-const emit = defineEmits(['toggled'])
+const emit = defineEmits(['toggled', 'deleted'])
 
 const props = defineProps<{
   todo: {
@@ -49,6 +49,7 @@ const props = defineProps<{
 const deleteTodo = async () => {
   try {
     await trpc.todo.deleteById.mutate({id: props.todo.id})
+    emit('deleted', props.todo.id)
   } catch (error) {
     console.error('Error deleting todo:', error)
   }
