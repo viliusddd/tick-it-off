@@ -296,57 +296,44 @@ const resolver = ref(
   )
 )
 
+const showToast = (
+  severity: 'error' | 'success' | 'info' | 'warn' | 'secondary' | 'contrast',
+  summary: string,
+  life = 3000
+) => {
+  toast.add({severity, summary, life})
+}
+
 const onDetailsFormSubmit = async (event: any) => {
   const {states, valid} = event
   const firstName = states.firstName?.value
   const lastName = states.lastName?.value
   const email = states.email?.value
 
+  if (!valid) return
+
   // Compare with original values
   if (
-    valid &&
     userValues.value &&
     firstName === userValues.value.firstName &&
     lastName === userValues.value.lastName &&
     email === userValues.value.email
   ) {
-    toast.add({
-      severity: 'info',
-      summary: 'No changes detected.',
-      life: 3000
-    })
+    showToast('info', 'No changes detected.')
     return
   }
 
-  if (valid && firstName && lastName && email) {
-    const id = userStore.authUserId
-    if (!id) {
-      toast.add({
-        severity: 'error',
-        summary: 'User not authenticated.',
-        life: 3000
-      })
-      return
-    }
-    try {
-      await userStore.updateDetails({
-        id,
-        firstName,
-        lastName,
-        email
-      })
-      toast.add({
-        severity: 'success',
-        summary: 'Details changed.',
-        life: 3000
-      })
-    } catch (error: any) {
-      toast.add({
-        severity: 'error',
-        summary: error?.message || 'Failed to update details.',
-        life: 3000
-      })
-    }
+  const id = userStore.authUserId
+  if (!id) {
+    showToast('error', 'User not authenticated.')
+    return
+  }
+
+  try {
+    await userStore.updateDetails({id, firstName, lastName, email})
+    showToast('success', 'Details changed.')
+  } catch (error: any) {
+    showToast('error', error?.message || 'Failed to update details.')
   }
 }
 
@@ -356,45 +343,23 @@ const onPasswordFormSubmit = async (event: any) => {
   const changePassword = states.changePassword?.value
   const repeatPassword = states.repeatPassword?.value
 
-  if (
-    valid &&
-    originalPassword &&
-    changePassword &&
-    repeatPassword &&
-    changePassword === repeatPassword
-  ) {
-    try {
-      await userStore.updatePassword(originalPassword, changePassword)
-      toast.add({
-        severity: 'success',
-        summary: 'Password changed successfully.',
-        life: 3000
-      })
-      onPasswordReset()
-    } catch (error: any) {
-      toast.add({
-        severity: 'error',
-        summary: error?.message || 'Failed to change password.',
-        life: 3000
-      })
-    }
+  if (!valid) {
+    showToast('error', 'Please fill in all password fields correctly.')
     return
   }
 
   if (changePassword !== repeatPassword) {
-    toast.add({
-      severity: 'error',
-      summary: "Passwords don't match.",
-      life: 3000
-    })
+    showToast('error', "Passwords don't match.")
     return
   }
 
-  toast.add({
-    severity: 'error',
-    summary: 'Please fill in all password fields correctly.',
-    life: 3000
-  })
+  try {
+    await userStore.updatePassword(originalPassword, changePassword)
+    showToast('success', 'Password changed successfully.')
+    onPasswordReset()
+  } catch (error: any) {
+    showToast('error', error?.message || 'Failed to change password.')
+  }
 }
 
 function onProfileReset() {
