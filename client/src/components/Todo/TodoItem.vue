@@ -36,6 +36,8 @@ import {trpc} from '@/trpc'
 
 const userStore = useUserStore()
 
+const emit = defineEmits(['toggled'])
+
 const props = defineProps<{
   todo: {
     id: number
@@ -57,5 +59,6 @@ const toggleTodo = async () => {
     todoId: props.todo.id,
     date: userStore.currentDate.toLocaleDateString('lt')
   })
+  emit('toggled', props.todo.id)
 }
 </script>

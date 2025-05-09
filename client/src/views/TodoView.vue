@@ -5,7 +5,7 @@
         <CalendarNavigation class="mb-3" />
         <NewTask class="my-3" @add-todo="createTodo" />
         <div v-for="todo in todos" :key="todo.id">
-          <TodoItem :todo="todo" />
+          <TodoItem :todo="todo" @toggled="handleToggle" />
         </div>
         <div v-if="isFetching" class="py-4 text-center">
           <div
@@ -123,5 +123,10 @@ const createTodo = async (title: string) => {
   } catch (error) {
     console.error('Error creating todo:', error)
   }
+}
+
+const handleToggle = (id: number) => {
+  const todo = todos.value.find(t => t.id === id)
+  if (todo) todo.isCompleted = !todo.isCompleted
 }
 </script>
