@@ -16,7 +16,9 @@
           class="flex flex-col gap-4"
         >
           <div>
-            <label for="firstName" class="mb-1 block font-medium">First Name</label>
+            <label for="firstName" class="mb-1 block font-medium">
+              First Name <span class="text-red-500">*</span>
+            </label>
             <InputText
               name="firstName"
               type="text"
@@ -35,7 +37,9 @@
             </div>
           </div>
           <div>
-            <label for="lastName" class="mb-1 block font-medium">Last Name</label>
+            <label for="lastName" class="mb-1 block font-medium">
+              Last Name <span class="text-red-500">*</span>
+            </label>
             <InputText
               name="lastName"
               type="text"
@@ -50,7 +54,9 @@
             </div>
           </div>
           <div>
-            <label for="email" class="mb-1 block font-medium">Email Address</label>
+            <label for="email" class="mb-1 block font-medium">
+              Email Address <span class="text-red-500">*</span>
+            </label>
             <InputText
               name="email"
               type="email"
@@ -120,7 +126,9 @@
             </div>
           </div>
           <div>
-            <label for="changePassword" class="mb-1 block font-medium">New Password</label>
+            <label for="changePassword" class="mb-1 block font-medium">
+              New Password <span class="text-red-500">*</span>
+            </label>
             <Password
               class="w-full"
               name="changePassword"
@@ -140,7 +148,9 @@
             </div>
           </div>
           <div>
-            <label for="repeatPassword" class="mb-1 block font-medium">Repeat New Password</label>
+            <label for="repeatPassword" class="mb-1 block font-medium">
+              Repeat New Password <span class="text-red-500">*</span>
+            </label>
             <Password
               name="repeatPassword"
               type="password"
