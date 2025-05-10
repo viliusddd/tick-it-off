@@ -4,9 +4,7 @@
     <div class="flex flex-col gap-8 lg:flex-row">
       <!-- Profile Information -->
       <div class="flex-1 rounded-lg p-3 sm:p-6">
-        <h2 class="mb-4 text-xl font-semibold text-gray-800 dark:text-gray-100">
-          Profile Information
-        </h2>
+        <h2 class="mb-4 text-xl font-semibold">Profile Information</h2>
         <Form
           v-if="userValuesLoaded"
           :key="profileFormKey"
@@ -19,7 +17,7 @@
         >
           <div>
             <label for="firstName" class="mb-1 block font-medium">
-              First Name <span class="text-red-500">*</span>
+              First Name <RequiredStar />
             </label>
             <InputText
               name="firstName"
@@ -27,7 +25,7 @@
               :placeholder="userValues?.firstName"
               autocomplete="given-name"
               fluid
-              class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+              class="w-full rounded-md border"
             />
             <div class="h-6">
               <Message
@@ -35,14 +33,13 @@
                 severity="error"
                 size="small"
                 variant="simple"
-                class="text-xs"
                 >{{ $form.firstName.error.message }}
               </Message>
             </div>
           </div>
           <div>
             <label for="lastName" class="mb-1 block font-medium">
-              Last Name <span class="text-red-500">*</span>
+              Last Name <RequiredStar />
             </label>
             <InputText
               name="lastName"
@@ -50,22 +47,17 @@
               :placeholder="userValues?.lastName"
               autocomplete="family-name"
               fluid
-              class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+              class="w-full rounded-md border"
             />
             <div class="h-6">
-              <Message
-                v-if="$form.lastName?.invalid"
-                severity="error"
-                size="small"
-                variant="simple"
-                class="text-xs"
+              <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple"
                 >{{ $form.lastName.error.message }}
               </Message>
             </div>
           </div>
           <div>
             <label for="email" class="mb-1 block font-medium">
-              Email Address <span class="text-red-500">*</span>
+              Email Address <RequiredStar />
             </label>
             <InputText
               name="email"
@@ -73,15 +65,9 @@
               :placeholder="userValues?.email"
               autocomplete="email"
               fluid
-              class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
             />
             <div class="h-6">
-              <Message
-                v-if="$form.email?.invalid"
-                severity="error"
-                size="small"
-                variant="simple"
-                class="text-xs"
+              <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple"
                 >{{ $form.email.error.message }}
               </Message>
             </div>
@@ -92,25 +78,20 @@
               severity="secondary"
               outlined
               @click="onProfileReset"
-              class="flex min-w-[40px] items-center justify-center rounded-md font-medium transition sm:min-w-[120px]"
+              class="min-w-[40px] sm:min-w-[120px]"
             >
               <i class="pi pi-refresh xxs:inline text-base"></i>
               <span class="xxs:hidden">Reset</span>
             </Button>
-            <Button
-              type="submit"
-              severity="primary"
-              label="Update Details"
-              class="min-w-[120px] rounded-md bg-indigo-600 font-medium text-white transition hover:bg-indigo-700"
-            />
+            <Button type="submit" severity="primary" label="Update Details" />
           </div>
         </Form>
       </div>
       <!-- Divider for large screens -->
-      <div class="mx-2 hidden w-px bg-gray-200 lg:block dark:bg-gray-700"></div>
+      <div class="mx-2 hidden w-px lg:block"></div>
       <!-- Change Password -->
       <div class="flex-1 rounded-lg p-3 sm:p-6">
-        <h2 class="mb-4 text-xl font-semibold text-gray-800 dark:text-gray-100">Change Password</h2>
+        <h2 class="mb-4 text-xl font-semibold">Change Password</h2>
         <Form
           :key="passwordFormKey"
           v-slot="$form"
@@ -122,7 +103,7 @@
         >
           <div>
             <label for="originalPassword" class="mb-1 block font-medium">
-              Current Password <span class="text-red-500">*</span>
+              Current Password <RequiredStar />
             </label>
             <Password
               name="originalPassword"
@@ -132,7 +113,7 @@
               toggleMask
               autocomplete="current-password"
               class="w-full"
-              :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
+              :inputClass="'rounded-md border transition focus:ring-2'"
             />
             <div class="h-6">
               <Message
@@ -140,14 +121,13 @@
                 severity="error"
                 size="small"
                 variant="simple"
-                class="text-xs"
                 >{{ $form.originalPassword.error.message }}</Message
               >
             </div>
           </div>
           <div>
             <label for="changePassword" class="mb-1 block font-medium">
-              New Password <span class="text-red-500">*</span>
+              New Password <RequiredStar />
             </label>
             <Password
               class="w-full"
@@ -156,7 +136,6 @@
               fluid
               toggleMask
               autocomplete="new-password"
-              :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
             />
             <div class="h-6">
               <Message
@@ -164,14 +143,13 @@
                 severity="error"
                 size="small"
                 variant="simple"
-                class="text-xs"
                 >{{ $form.changePassword.error.message }}</Message
               >
             </div>
           </div>
           <div>
             <label for="repeatPassword" class="mb-1 block font-medium">
-              Repeat New Password <span class="text-red-500">*</span>
+              Repeat New Password <RequiredStar />
             </label>
             <Password
               name="repeatPassword"
@@ -180,7 +158,6 @@
               toggleMask
               autocomplete="new-password"
               class="w-full"
-              :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
             />
             <div class="h-6">
               <Message
@@ -188,7 +165,6 @@
                 severity="error"
                 size="small"
                 variant="simple"
-                class="text-xs"
                 >{{ $form.repeatPassword.error.message }}</Message
               >
             </div>
@@ -202,7 +178,6 @@
             severity="error"
             size="small"
             variant="simple"
-            class="text-xs"
             >Passwords don't match.</Message
           >
           <div class="mt-4 flex justify-end gap-2">
@@ -211,17 +186,12 @@
               severity="secondary"
               outlined
               @click="onPasswordReset"
-              class="flex min-w-[40px] items-center justify-center rounded-md font-medium transition sm:min-w-[120px]"
+              class="flex min-w-[40px] sm:min-w-[120px]"
             >
               <i class="pi pi-refresh xxs:inline text-base"></i>
               <span class="xxs:hidden">Reset</span>
             </Button>
-            <Button
-              type="submit"
-              severity="danger"
-              label="Change Password"
-              class="min-w-[120px] rounded-md bg-red-600 font-medium text-white transition hover:bg-red-700"
-            />
+            <Button type="submit" severity="danger" label="Change Password" />
           </div>
         </Form>
       </div>
@@ -235,8 +205,8 @@ import {useUserStore} from '@/stores/userStore'
 import {InputText, Button, useToast, Toast, Message, Password} from 'primevue'
 import {Form} from '@primevue/forms'
 import {zodResolver} from '@primevue/forms/resolvers/zod'
-import {z} from 'zod'
 import {userSchema, userPasswordChangeSchema} from '@entities/user'
+import RequiredStar from '@/components/RequiredStar.vue'
 
 const toast = useToast()
 const userStore = useUserStore()
