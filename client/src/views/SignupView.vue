@@ -1,7 +1,7 @@
 <template>
   <Toast />
   <div class="m-2 mx-auto flex max-w-md flex-col gap-8 rounded-xl px-2 py-4 sm:px-8 sm:py-8">
-    <div class="flex-1 rounded-lg bg-white p-3 shadow sm:p-6 dark:bg-gray-900">
+    <div class="flex-1 p-3 sm:p-6 dark:bg-gray-900">
       <h2 class="mb-4 text-center text-xl font-semibold text-gray-800 dark:text-gray-100">
         Sign up for an account
       </h2>
