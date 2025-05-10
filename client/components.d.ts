@@ -17,6 +17,7 @@ declare module 'vue' {
     OptionsMenu: typeof import('./src/components/Options/OptionsMenu.vue')['default']
     OptionsUser: typeof import('./src/components/Options/OptionsUser.vue')['default']
     PageForm: typeof import('./src/components/PageForm.vue')['default']
+    RequiredStar: typeof import('./src/components/RequiredStar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TodoItem: typeof import('./src/components/Todo/TodoItem.vue')['default']
