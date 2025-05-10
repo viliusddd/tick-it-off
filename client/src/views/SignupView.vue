@@ -1,120 +1,160 @@
-<script lang="ts" setup>
-import {ref} from 'vue'
-import PageForm from '@/components/PageForm.vue'
-import {FwbAlert, FwbButton, FwbInput} from 'flowbite-vue'
-import {DEFAULT_SERVER_ERROR} from '@/consts'
-import AlertError from '@/components/AlertError.vue'
-import {useUserStore} from '@/stores/userStore'
-// import useErrorMessage from '@/composables/useErrorMessage'
-
-const userStore = useUserStore()
-
-const userForm = ref({
-  email: '',
-  password: '',
-  firstName: '',
-  lastName: ''
-})
-
-const hasSucceeded = ref(false)
-
-// Wrap our signup call in a try/catch block to catch any errors.
-// Set the error message if there is an error.
-const errorMessage = ref('')
-async function submitSignup() {
-  try {
-    await userStore.signup(userForm.value)
-
-    // clear error
-    errorMessage.value = ''
-
-    // display success message
-    hasSucceeded.value = true
-  } catch (error) {
-    // set error, which will be automatically displayed
-    errorMessage.value = error instanceof Error ? error.message : DEFAULT_SERVER_ERROR
-  }
-}
-
-// Or, if we move the generic error handling to a separate composable
-// function, which creates an error message ref for us and handles
-// the try/catch block, we can simplify our submitSignup function to:
-// const [submitSignup, errorMessage] = useErrorMessage(async () => {
-//   await signup(userForm.value)
-
-//   hasSucceeded.value = true
-// })
-</script>
-
 <template>
-  <PageForm heading="Sign up for an account" formLabel="Signup" @submit="submitSignup">
-    <template #default>
-      <FwbInput
-        data-testid="firstName"
-        label="First Name"
-        type="text"
-        v-model="userForm.firstName"
-        :required="true"
-      />
-
-      <FwbInput
-        data-testid="lastName"
-        label="Last Name"
-        type="text"
-        v-model="userForm.lastName"
-        :required="true"
-      />
-
-      <FwbInput
-        label="Email"
-        type="email"
-        autocomplete="username"
-        v-model="userForm.email"
-        :required="true"
-      />
-
-      <FwbInput
-        label="Password"
-        id="password"
-        name="password"
-        type="password"
-        autocomplete="current-password"
-        v-model="userForm.password"
-        :required="true"
-      />
-
-      <FwbAlert v-if="hasSucceeded" data-testid="successMessage" type="success">
-        You have successfully signed up! You can now log in.
+  <Toast />
+  <div class="m-2 mx-auto flex max-w-md flex-col gap-8 rounded-xl px-2 py-4 sm:px-8 sm:py-8">
+    <div class="flex-1 rounded-lg bg-white p-3 shadow sm:p-6 dark:bg-gray-900">
+      <h2 class="mb-4 text-center text-xl font-semibold text-gray-800 dark:text-gray-100">
+        Sign up for an account
+      </h2>
+      <Form
+        v-slot="$form"
+        :resolver="zodResolver(signupSchema)"
+        :initialValues="userForm"
+        @submit="onSignupFormSubmit"
+        :validateOnBlur="true"
+        class="flex flex-col gap-4"
+      >
+        <div>
+          <label for="email" class="mb-1 block font-medium">
+            Email <span class="text-red-500">*</span>
+          </label>
+          <InputText
+            name="email"
+            type="email"
+            autocomplete="username"
+            fluid
+            class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+          />
+          <div class="h-6">
+            <Message
+              v-if="$form.email?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              class="text-xs"
+              >{{ $form.email.error.message }}</Message
+            >
+          </div>
+        </div>
+        <div>
+          <label for="password" class="mb-1 block font-medium">
+            Password <span class="text-red-500">*</span>
+          </label>
+          <Password
+            name="password"
+            type="password"
+            fluid
+            toggleMask
+            autocomplete="new-password"
+            class="w-full"
+            :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
+          />
+          <div class="h-6">
+            <Message
+              v-if="$form.password?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              class="text-xs"
+              >{{ $form.password.error.message }}</Message
+            >
+          </div>
+        </div>
+        <div>
+          <label for="confirmPassword" class="mb-1 block font-medium">
+            Confirm Password <span class="text-red-500">*</span>
+          </label>
+          <Password
+            name="confirmPassword"
+            type="password"
+            fluid
+            toggleMask
+            autocomplete="new-password"
+            class="w-full"
+            :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
+          />
+          <div class="h-6">
+            <Message
+              v-if="$form.confirmPassword?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              class="text-xs"
+              >{{ $form.confirmPassword.error.message }}</Message
+            >
+          </div>
+        </div>
+        <div class="mt-4 flex justify-end">
+          <Button
+            type="submit"
+            severity="primary"
+            label="Sign up"
+            class="min-w-[120px] rounded-md bg-indigo-600 font-medium text-white transition hover:bg-indigo-700"
+          />
+        </div>
+      </Form>
+      <div class="mt-6 text-center text-sm text-gray-600 dark:text-gray-300">
+        Already have an account?
         <RouterLink
           to="/login"
           class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-          >Go to the login page</RouterLink
         >
-      </FwbAlert>
-      <AlertError :message="errorMessage">
-        {{ errorMessage }}
-      </AlertError>
-
-      <div class="grid">
-        <FwbButton color="default" type="submit" size="xl">Sign up</FwbButton>
-      </div>
-    </template>
-
-    <template #footer>
-      <FwbAlert class="bg-transparent text-center">
-        Already a member?
-        {{ ' ' }}
-        <RouterLink
-          to="/login"
-          class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-          >Log in</RouterLink
-        >
+          Log in
+        </RouterLink>
         <br />
         or go
         <RouterLink to="/" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
           back home
         </RouterLink>
-      </FwbAlert>
-    </template>
-  </PageForm>
+      </div>
+    </div>
+  </div>
 </template>
+
+<script setup lang="ts">
+import {ref} from 'vue'
+import {useUserStore} from '@/stores/userStore'
+import {useRouter} from 'vue-router'
+import {InputText, Button, useToast, Toast, Message, Password} from 'primevue'
+import {Form} from '@primevue/forms'
+import {zodResolver} from '@primevue/forms/resolvers/zod'
+import {z} from 'zod'
+
+const toast = useToast()
+const router = useRouter()
+const userStore = useUserStore()
+
+const signupSchema = z
+  .object({
+    email: z.string().email('Invalid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+    confirmPassword: z.string().min(6, 'Password must be at least 6 characters')
+  })
+  .refine(data => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword']
+  })
+
+const userForm = ref({
+  email: '',
+  password: '',
+  confirmPassword: '',
+  firstName: '',
+  lastName: ''
+})
+
+const onSignupFormSubmit = async (event: any) => {
+  try {
+    await userStore.signup(userForm.value)
+    // Support redirects back to the page the user was on before signing up
+    const redirectTo = (router.currentRoute.value.query.redirect as string) ?? {name: 'TodoToday'}
+    router.push(redirectTo)
+  } catch (error: any) {
+    console.error('Signup error:', error)
+    toast.add({
+      severity: 'error',
+      summary: error?.message || 'Signup failed',
+      life: 4000
+    })
+  }
+}
+</script>
