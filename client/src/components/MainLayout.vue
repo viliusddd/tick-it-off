@@ -1,5 +1,4 @@
 <template>
-  <Button label="Toggle Dark Mode" @click="toggleDarkMode()" />
   <Menubar :model="links">
     <template #start><div class="text-xl">Tick It Off</div></template>
     <template #item="{item, props, label}">
@@ -22,14 +21,9 @@
 
 <script setup lang="ts">
 import {computed} from 'vue'
-import {useRoute} from 'vue-router'
-import {Menubar, Button} from 'primevue'
+import {Menubar} from 'primevue'
 import OptionsMenu from '@/components/Options/OptionsMenu.vue'
 import {useUserStore} from '@/stores/userStore'
-
-const route = useRoute()
-
-computed(() => links.value.map(item => ({...item, isActive: route.name === item.name})))
 
 const userStore = useUserStore()
 
@@ -50,8 +44,6 @@ const links = computed(() => [
         {label: 'Signup', name: 'Signup'}
       ])
 ])
-
-const toggleDarkMode = () => document.documentElement.classList.toggle('p-dark')
 </script>
 
 <style>

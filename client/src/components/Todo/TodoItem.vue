@@ -1,20 +1,19 @@
 <template>
   <li
-    class="relative flex items-center space-x-3 rounded-md bg-gray-50 p-3 transition duration-300 ease-in-out hover:bg-gray-100"
+    class="relative flex items-center space-x-3 rounded-md p-3 transition duration-300 ease-in-out"
   >
     <input
       type="checkbox"
       :checked="props.todo.isCompleted"
       @change="toggleTodo()"
-      class="h-5 w-5 cursor-pointer rounded text-blue-600"
+      class="h-5 w-5 cursor-pointer rounded"
     />
     <span
       :class="[
         'flex-grow',
         {
           'line-through': props.todo.isCompleted,
-          'text-gray-400': props.todo.isCompleted,
-          'text-gray-800': !props.todo.isCompleted
+          'text-gray-400': props.todo.isCompleted
         }
       ]"
     >
