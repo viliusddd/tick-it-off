@@ -22,12 +22,15 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watch, type Ref} from 'vue'
-import {useDark, useToggle} from '@vueuse/core'
+import {ref, watch} from 'vue'
 import {useRouter} from 'vue-router'
 import {useUserStore} from '@/stores/userStore'
 import {Button, Menu} from 'primevue'
 import OptionsUser from './OptionsUser.vue'
+import {useDark, useToggle} from '@vueuse/core'
+
+const isDark = useDark()
+const toggleDarkMode = useToggle(isDark)
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -48,11 +51,11 @@ const menuItems = ref([
         icon: 'pi pi-cog',
         command: () => router.push({name: 'Settings'})
       },
-      // {
-      //   label: 'Dark Mode',
-      //   icon: 'pi pi-moon',
-      //   command: () => toggleDark()
-      // },
+      {
+        label: 'Dark Mode',
+        icon: 'pi pi-moon',
+        command: () => toggleDarkMode()
+      },
       {
         separator: true
       },
