@@ -113,7 +113,6 @@
               toggleMask
               autocomplete="current-password"
               class="w-full"
-              :inputClass="'rounded-md border transition focus:ring-2'"
             />
             <div class="h-6">
               <Message

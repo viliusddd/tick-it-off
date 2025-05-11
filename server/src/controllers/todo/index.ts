@@ -4,11 +4,19 @@ import deleteById from './deleteById'
 import findAll from './findAll'
 import update from './update'
 import share from './share'
+import unshare from './unshare'
+import getSharedUsers from './getSharedUsers'
+import findSharedWithMe from './findSharedWithMe'
+import removeSharedWithMe from './removeSharedWithMe'
 
 export default router({
   create,
   deleteById,
   findAll,
   share,
-  update
+  update,
+  unshare,
+  getSharedUsers,
+  findSharedWithMe,
+  removeSharedWithMe
 })

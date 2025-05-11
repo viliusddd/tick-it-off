@@ -12,6 +12,7 @@ declare module 'vue' {
     AuthComponent: typeof import('./src/components/AuthComponent.vue')['default']
     CalendarNavigation: typeof import('./src/components/Todo/CalendarNavigation.vue')['default']
     ConfirmDeleteButton: typeof import('./src/components/Todo/ConfirmDeleteButton.vue')['default']
+    EditTodoButton: typeof import('./src/components/Todo/EditTodoButton.vue')['default']
     MainLayout: typeof import('./src/components/MainLayout.vue')['default']
     NewTask: typeof import('./src/components/Todo/NewTask.vue')['default']
     OptionsMenu: typeof import('./src/components/Options/OptionsMenu.vue')['default']
@@ -20,7 +21,9 @@ declare module 'vue' {
     RequiredStar: typeof import('./src/components/RequiredStar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ShareTodoButton: typeof import('./src/components/Todo/ShareTodoButton.vue')['default']
     TodoItem: typeof import('./src/components/Todo/TodoItem.vue')['default']
+    UnshareButton: typeof import('./src/components/Todo/UnshareButton.vue')['default']
   }
   export interface ComponentCustomProperties {
     Ripple: typeof import('primevue/ripple')['default']

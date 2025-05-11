@@ -2,10 +2,7 @@
   <div class="flex min-h-screen flex-col items-center justify-center bg-gray-100">
     <div class="rounded-lg bg-white p-8 shadow-md">
       <h2 class="mb-4 text-2xl font-bold">Sign In</h2>
-      <button
-        @click="$emit('login')"
-        class="flex w-full items-center justify-center rounded-md bg-gray-800 px-4 py-2 text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2"
-      >
+      <button @click="$emit('login')">
         <svg class="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
           <path
             fill-rule="evenodd"

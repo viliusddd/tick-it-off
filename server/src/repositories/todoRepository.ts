@@ -20,6 +20,17 @@ export function todoRepository(db: Database) {
         .execute()
     },
 
+    async findAllForUser({offset, limit}: Pagination, userId: number): Promise<TodoPublic[]> {
+      return db
+        .selectFrom('todo')
+        .select(todoKeysPublic)
+        .where('userId', '=', userId)
+        .orderBy('id', 'desc')
+        .offset(offset)
+        .limit(limit)
+        .execute()
+    },
+
     async create(todo: Insertable<Todo>): Promise<TodoPublic> {
       return db.insertInto('todo').values(todo).returning(todoKeysPublic).executeTakeFirstOrThrow()
     },

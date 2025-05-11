@@ -4,18 +4,32 @@
       <div class="mb:p-5 p-3">
         <CalendarNavigation class="mb-3" />
         <NewTask class="my-3" @add-todo="createTodo" />
-        <div v-for="todo in todos" :key="todo.id">
-          <TodoItem :todo="todo" @toggled="handleToggle" @deleted="handleDelete" />
+
+        <!-- Combined list of all todos -->
+        <div>
+          <div v-for="todo in allTodos" :key="`todo-${todo.id}`">
+            <TodoItem
+              :todo="todo"
+              :isShared="todo.isSharedWithMe"
+              @toggled="handleToggle"
+              @deleted="handleDelete"
+              @unshared="handleUnshared"
+              @title-updated="handleTitleUpdate"
+            />
+          </div>
         </div>
-        <div v-if="isFetching" class="py-4 text-center">
-          <div
-            :class="['inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-t-2']"
-          ></div>
+
+        <div v-if="isLoading" class="py-4 text-center">
+          <ProgressSpinner style="width: 30px; height: 30px" />
         </div>
-        <div v-if="!isFetching && todos.length === 0">
-          No tasks for this day. Add one above to start your magical journey!
+        <div v-if="!isLoading && allTodos.length === 0">
+          <Message severity="info"
+            >No tasks for this day. Add one above to start your magical journey!</Message
+          >
         </div>
-        <div v-if="!isFetching && hasMore">Scroll down to reveal more tasks...</div>
+        <div v-if="!isLoading && hasMore">
+          <Message severity="info">Scroll down to reveal more tasks...</Message>
+        </div>
         <div ref="loadMoreTrigger" class="h-1"></div>
       </div>
     </div>
@@ -31,21 +45,69 @@ import TodoItem from '@/components/Todo/TodoItem.vue'
 import CalendarNavigation from '@/components/Todo/CalendarNavigation.vue'
 import {useUserStore} from '@/stores/userStore'
 import {useRoute, useRouter, onBeforeRouteUpdate} from 'vue-router'
+import ProgressSpinner from 'primevue/progressspinner'
+import Message from 'primevue/message'
 
 const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
 
-const todos: Ref<{id: number; title: string; createdAt: Date; isCompleted?: boolean}[]> = ref([])
+// Define todo types with additional properties for shared status
+type TodoItemType = {
+  id: number
+  title: string
+  createdAt: Date
+  isCompleted?: boolean
+  owner?: string
+  isSharedWithMe?: boolean
+  isSharedByMe?: boolean
+}
+
+const todos: Ref<TodoItemType[]> = ref([])
 const completions: Ref<{todoId: number}[]> = ref([])
+const sharedTodos: Ref<TodoItemType[]> = ref([])
+const sharedWithUsersByTodo = ref<Record<number, number[]>>({}) // Track sharing status for own todos
 const pageSize = 10
 const isFetching = ref(false)
+const isSharedFetching = ref(false)
+const isLoading = computed(() => isFetching.value || isSharedFetching.value)
 const hasMore = ref(true)
 const loadMoreTrigger = ref(null)
 const currentDate = computed(() => userStore.currentDate)
 
+// Combine own and shared todos into a single list
+const allTodos = computed(() => {
+  // Combine both lists, with shared todos having isSharedWithMe property
+  const combined = [
+    ...sharedTodos.value,
+    ...todos.value.map(todo => ({
+      ...todo,
+      isSharedByMe: (sharedWithUsersByTodo.value[todo.id]?.length || 0) > 0
+    }))
+  ]
+
+  // Sort by creation date (newest first)
+  return combined.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  })
+})
+
 function formatDate(date: Date): string {
   return date.toISOString().slice(0, 10)
+}
+
+// Load sharing status for each of user's own todos
+const loadSharingStatus = async () => {
+  for (const todo of todos.value) {
+    try {
+      const sharedUsers = await trpc.todo.getSharedUsers.query({todoId: todo.id})
+      if (sharedUsers && sharedUsers.length > 0) {
+        sharedWithUsersByTodo.value[todo.id] = sharedUsers.map(user => user.userId)
+      }
+    } catch (err) {
+      console.error(`Error fetching sharing status for todo ${todo.id}:`, err)
+    }
+  }
 }
 
 // Sync store with route param on mount
@@ -57,6 +119,8 @@ onMounted(() => {
       userStore.currentDate = parsed
     }
   }
+  fetchAll()
+  fetchSharedTodos()
 })
 
 // Also update store if route changes (e.g. user navigates via browser)
@@ -78,8 +142,11 @@ watch(currentDate, newDate => {
   }
   todos.value = []
   completions.value = []
+  sharedTodos.value = []
+  sharedWithUsersByTodo.value = {}
   hasMore.value = true
   fetchAll()
+  fetchSharedTodos()
 })
 
 const fetchAllTodos = async () => {
@@ -91,6 +158,25 @@ const fetchAllTodos = async () => {
   hasMore.value = queryResult.length === pageSize
 
   return queryResult
+}
+
+const fetchSharedTodos = async () => {
+  isSharedFetching.value = true
+  try {
+    // Get all todos shared with the current user
+    const result = await trpc.todo.findSharedWithMe.query({
+      date: userStore.currentDate.toLocaleDateString('lt')
+    })
+    // Mark these todos as shared with the current user
+    sharedTodos.value = result.map(todo => ({
+      ...todo,
+      isSharedWithMe: true
+    }))
+  } catch (error) {
+    console.error('Error fetching shared todos:', error)
+  } finally {
+    isSharedFetching.value = false
+  }
 }
 
 const fetchCompletionsByIdRange = async (firstId: number, secondId: number) =>
@@ -129,6 +215,9 @@ const fetchAll = async () => {
       createdAt: todo.createdAt,
       isCompleted: completions.value.some(compl => compl.todoId === todo.id)
     }))
+
+    // Load sharing status for own todos
+    await loadSharingStatus()
   }
 }
 
@@ -160,14 +249,41 @@ const createTodo = async (title: string) => {
 }
 
 const handleToggle = (id: number) => {
-  const todo = todos.value.find(t => t.id === id)
-  if (todo) todo.isCompleted = !todo.isCompleted
+  // Find todo in either list
+  const ownTodo = todos.value.find(t => t.id === id)
+  const sharedTodo = sharedTodos.value.find(t => t.id === id)
+
+  if (ownTodo) ownTodo.isCompleted = !ownTodo.isCompleted
+  if (sharedTodo) sharedTodo.isCompleted = !sharedTodo.isCompleted
+}
+
+const handleUnshared = (id: number) => {
+  const index = sharedTodos.value.findIndex(t => t.id === id)
+  if (index !== -1) {
+    sharedTodos.value.splice(index, 1)
+  }
 }
 
 const handleDelete = (id: number) => {
   const index = todos.value.findIndex(t => t.id === id)
   if (index !== -1) {
     todos.value.splice(index, 1)
+    // Also remove from sharedWithUsersByTodo if present
+    if (id in sharedWithUsersByTodo.value) {
+      delete sharedWithUsersByTodo.value[id]
+    }
+  }
+}
+
+const handleTitleUpdate = (updatedTodo: {id: number; title: string}) => {
+  // Update in the appropriate array
+  const ownTodoIndex = todos.value.findIndex(t => t.id === updatedTodo.id)
+  const sharedTodoIndex = sharedTodos.value.findIndex(t => t.id === updatedTodo.id)
+
+  if (ownTodoIndex !== -1) {
+    todos.value[ownTodoIndex].title = updatedTodo.title
+  } else if (sharedTodoIndex !== -1) {
+    sharedTodos.value[sharedTodoIndex].title = updatedTodo.title
   }
 }
 </script>

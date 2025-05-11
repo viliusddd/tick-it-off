@@ -48,7 +48,7 @@ const menuItems = ref([
       },
       {
         label: 'Settings',
-        icon: 'pi pi-cog',
+        icon: 'pi pi-user-edit',
         command: () => router.push({name: 'Settings'})
       },
       {

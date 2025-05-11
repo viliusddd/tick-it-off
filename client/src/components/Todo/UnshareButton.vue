@@ -1,12 +1,21 @@
 <template>
   <span ref="rootEl">
     <template v-if="!showConfirm">
-      <button
-        @click="!disabled && (showConfirm = true)"
-        :class="[trashClass, disabled ? 'cursor-not-allowed opacity-50' : '']"
-        :style="iconStyle"
-      >
-        <TrashIcon :class="iconSizeClass" />
+      <button @click="showConfirm = true" :class="unshareClass" :style="iconStyle" :title="title">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 7l5 5m0 0l-5 5m5-5H6"
+          />
+        </svg>
       </button>
     </template>
     <template v-else>
@@ -22,7 +31,7 @@
 
 <script setup lang="ts">
 import {ref, computed, onMounted, onUnmounted} from 'vue'
-import {TrashIcon, CheckIcon, XMarkIcon} from '@heroicons/vue/24/solid'
+import {CheckIcon, XMarkIcon} from '@heroicons/vue/24/solid'
 
 const props = defineProps({
   iconSize: {
@@ -33,7 +42,7 @@ const props = defineProps({
     type: String,
     default: 'text-green-500 hover:text-green-600'
   },
-  trashColor: {
+  unshareColor: {
     type: String,
     default: 'text-red-500 hover:text-red-600'
   },
@@ -41,9 +50,9 @@ const props = defineProps({
     type: String,
     default: 'text-gray-400 hover:text-gray-600'
   },
-  disabled: {
-    type: Boolean,
-    default: false
+  title: {
+    type: String,
+    default: 'Remove from my list'
   }
 })
 
@@ -52,7 +61,7 @@ const showConfirm = ref(false)
 
 const iconSizeClass = computed(() => props.iconSize)
 const confirmClass = computed(() => `${props.confirmColor} focus:outline-none`)
-const trashClass = computed(() => `${props.trashColor} focus:outline-none `)
+const unshareClass = computed(() => `${props.unshareColor} focus:outline-none `)
 const cancelClass = computed(() => `${props.cancelColor} mr-1 focus:outline-none`)
 const iconStyle = ''
 

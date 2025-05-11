@@ -1,12 +1,12 @@
 import provideRepos from '@server/trpc/provideRepos'
 import {sharedTodoRepository} from '@server/repositories/sharedTodoRepository'
-import {todoRepository} from '@server/repositories/todoRepository'
 import {authenticatedProcedure} from '@server/trpc/authenticatedProcedure'
 import {sharedTodoIdsSchema} from '@server/entities/sharedTodo'
+import {todoRepository} from '@server/repositories/todoRepository'
 import {TRPCError} from '@trpc/server'
 
 export default authenticatedProcedure
-  .meta({description: 'Share todo item with other user.'})
+  .meta({description: 'Unshare todo item with other user.'})
   .use(provideRepos({sharedTodoRepository, todoRepository}))
   .input(sharedTodoIdsSchema)
   .mutation(async ({input, ctx: {authUser, repos}}) => {
@@ -15,9 +15,13 @@ export default authenticatedProcedure
     if (!todo || todo.userId !== authUser.id) {
       throw new TRPCError({
         code: 'UNAUTHORIZED',
-        message: 'User is not authorized to share this todo'
+        message: 'User is not authorized to unshare this todo'
       })
     }
 
-    return repos.sharedTodoRepository.create(input)
+    // Delete the share relationship
+    return repos.sharedTodoRepository.delete({
+      todoId: input.todoId,
+      userId: input.userId
+    })
   })

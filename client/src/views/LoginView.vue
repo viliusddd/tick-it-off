@@ -17,13 +17,7 @@
           <label for="email" class="mb-1 block font-medium">
             Email <span class="text-red-500">*</span>
           </label>
-          <InputText
-            name="email"
-            type="email"
-            autocomplete="username"
-            fluid
-            class="w-full rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-          />
+          <InputText name="email" type="email" autocomplete="username" fluid />
           <div class="h-6">
             <Message
               v-if="$form.email?.invalid"
@@ -46,7 +40,6 @@
             toggleMask
             autocomplete="current-password"
             class="w-full"
-            :inputClass="'rounded-md border border-gray-300 bg-gray-50 transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'"
           />
           <div class="h-6">
             <Message
