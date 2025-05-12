@@ -20,7 +20,7 @@
         ]"
       >
         {{ todo.title }}
-        <SharedByMeIndicator v-if="!isLocalShared" />
+        <SharedByMeIndicator v-if="props.todo.isSharedByMe" />
         <Tag v-if="props.isShared && todo.owner" severity="info" class="ml-2">
           {{ todo.owner }}
         </Tag>
@@ -36,7 +36,7 @@
         v-if="!props.isShared"
         :todoId="todo.id"
         :todoTitle="todo.title"
-        :isShared="isLocalShared"
+        :isShared="props.todo.isSharedByMe"
         @share-status-changed="updateShareStatus"
         @title-updated="updateTitle"
       />
@@ -53,7 +53,7 @@ import EditTodoButton from './EditTodoButton.vue'
 import UnshareButton from './UnshareButton.vue'
 import {useUserStore} from '@/stores/userStore'
 import {trpc} from '@/trpc'
-import {ref} from 'vue'
+import {ref, watch} from 'vue'
 import Checkbox from 'primevue/checkbox'
 import Tag from 'primevue/tag'
 import SharedByMeIndicator from './SharedByMeIndicator.vue'
@@ -75,6 +75,16 @@ const props = defineProps<{
 
 // Local state to track sharing status that can be updated immediately
 const isLocalShared = ref(props.todo.isSharedByMe || false)
+
+// Watch for changes in the todo prop's isSharedByMe property
+watch(
+  () => props.todo.isSharedByMe,
+  newValue => {
+    if (newValue !== undefined) {
+      isLocalShared.value = newValue
+    }
+  }
+)
 
 const confirmDelete = async () => {
   if (props.isShared) return // Don't allow deletion of shared items
@@ -99,9 +109,12 @@ const unshareItem = async () => {
   if (!props.isShared) return
 
   try {
+    // Improved error handling with specific error message
     await trpc.todo.removeSharedWithMe.mutate({
       todoId: props.todo.id
     })
+
+    // Emit unshared event to remove the item from the list
     emit('unshared', props.todo.id)
   } catch (error) {
     console.error('Error unsharing todo:', error)
@@ -111,10 +124,20 @@ const unshareItem = async () => {
 const updateShareStatus = (isShared: boolean) => {
   // Update local state immediately when sharing status changes
   isLocalShared.value = isShared
+  // Also update the parent's data by emitting an event
+  emit('title-updated', {
+    id: props.todo.id,
+    title: props.todo.title,
+    isSharedByMe: isShared
+  })
 }
 
 const updateTitle = (newTitle: string) => {
   // Emit event to update title in parent component
-  emit('title-updated', {id: props.todo.id, title: newTitle})
+  emit('title-updated', {
+    id: props.todo.id,
+    title: newTitle,
+    isSharedByMe: isLocalShared.value
+  })
 }
 </script>

@@ -120,9 +120,7 @@ const selectedUser = ref<{id: number; firstName: string; lastName: string; email
 const confirmationAction = ref<'share' | 'unshare'>('share')
 
 // Computed property to determine if todo is shared with anyone
-const isSharedWithOthers = computed(() => {
-  return sharedWithIds.value.length > 0
-})
+const isSharedWithOthers = ref(false)
 
 // Watch for changes to todoTitle prop to update the editedTitle
 watch(
@@ -133,8 +131,11 @@ watch(
 )
 
 // Initialize shared status immediately and load shared users
-onMounted(() => {
-  loadSharedUsers()
+onMounted(async () => {
+  // Load sharing status immediately
+  await loadSharedUsers()
+
+  // Set up event listeners
   document.addEventListener('mousedown', handleClickOutside)
 })
 
@@ -142,15 +143,22 @@ onUnmounted(() => {
   document.removeEventListener('mousedown', handleClickOutside)
 })
 
-// Watch for external changes to the isShared prop
+// Watch for changes to isShared prop
 watch(
   () => props.isShared,
   newValue => {
-    if (newValue !== undefined && !showModal.value) {
-      // Refresh sharing status when prop changes
-      loadSharedUsers()
+    if (newValue !== undefined) {
+      // Update component state immediately based on prop
+      isSharedWithOthers.value = newValue === true
+
+      // Refresh users list if dialog is open
+      if (showModal.value) {
+        loadUsers()
+        loadSharedUsers()
+      }
     }
-  }
+  },
+  {immediate: true} // Run immediately when component is created
 )
 
 const rootEl = ref<HTMLElement | null>(null)
@@ -191,8 +199,16 @@ const loadUsers = async () => {
 const loadSharedUsers = async () => {
   try {
     // Get users who this todo is shared with
-    const sharedTodos = await trpc.todo.getSharedUsers.query({todoId: props.todoId})
-    sharedWithIds.value = sharedTodos.map(share => share.userId)
+    const sharedUsers = await trpc.todo.getSharedUsers.query({todoId: props.todoId})
+    sharedWithIds.value = sharedUsers.map(share => share.userId)
+
+    // Update the shared status based on whether there are any shared users
+    isSharedWithOthers.value = sharedWithIds.value.length > 0
+
+    // Emit event to parent to sync the status
+    if (isSharedWithOthers.value !== (props.isShared === true)) {
+      emit('share-status-changed', isSharedWithOthers.value)
+    }
   } catch (err) {
     console.error('Error loading shared users:', err)
   }

@@ -259,6 +259,8 @@ const handleUnshared = (id: number) => {
   const index = sharedTodos.value.findIndex(t => t.id === id)
   if (index !== -1) {
     sharedTodos.value.splice(index, 1)
+  } else {
+    console.error('Could not find shared todo with ID:', id)
   }
 }
 
@@ -273,15 +275,36 @@ const handleDelete = (id: number) => {
   }
 }
 
-const handleTitleUpdate = (updatedTodo: {id: number; title: string}) => {
+const handleTitleUpdate = (updatedTodo: {id: number; title: string; isSharedByMe?: boolean}) => {
   // Update in the appropriate array
   const ownTodoIndex = todos.value.findIndex(t => t.id === updatedTodo.id)
   const sharedTodoIndex = sharedTodos.value.findIndex(t => t.id === updatedTodo.id)
 
   if (ownTodoIndex !== -1) {
     todos.value[ownTodoIndex].title = updatedTodo.title
+    // Update the isSharedByMe property if provided
+    if (updatedTodo.isSharedByMe !== undefined) {
+      todos.value[ownTodoIndex].isSharedByMe = updatedTodo.isSharedByMe
+
+      // Also update the sharedWithUsersByTodo tracking object
+      if (updatedTodo.isSharedByMe) {
+        // If no existing value, initialize with an empty array
+        if (!sharedWithUsersByTodo.value[updatedTodo.id]) {
+          sharedWithUsersByTodo.value[updatedTodo.id] = []
+        }
+      } else {
+        // If no longer shared, remove it from tracking
+        if (updatedTodo.id in sharedWithUsersByTodo.value) {
+          delete sharedWithUsersByTodo.value[updatedTodo.id]
+        }
+      }
+    }
   } else if (sharedTodoIndex !== -1) {
     sharedTodos.value[sharedTodoIndex].title = updatedTodo.title
+    // Update isSharedByMe for shared todos too if provided
+    if (updatedTodo.isSharedByMe !== undefined) {
+      sharedTodos.value[sharedTodoIndex].isSharedByMe = updatedTodo.isSharedByMe
+    }
   }
 }
 </script>
