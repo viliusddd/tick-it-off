@@ -1,45 +1,30 @@
 <template>
   <li
-    class="group relative flex items-center space-x-3 rounded-md p-3 transition duration-300 ease-in-out"
+    class="group relative flex justify-between rounded-md p-3 transition duration-300 ease-in-out"
     :class="{'hover:bg-surface-hover': true}"
   >
-    <Checkbox
-      :modelValue="props.todo.isCompleted"
-      @change="toggleTodo()"
-      class="h-5 w-5"
-      :binary="true"
-    />
-    <span
-      :class="[
-        'flex-grow',
-        {
-          'line-through': props.todo.isCompleted,
-          'text-gray-400': props.todo.isCompleted
-        }
-      ]"
-    >
-      {{ todo.title }}
-      <Tag v-if="props.isShared && todo.owner" severity="info" class="ml-2">
-        {{ todo.owner }}
-      </Tag>
-    </span>
-
-    <!-- Shared by me indicator -->
-    <div v-if="isLocalShared && !props.isShared" class="mr-2 text-blue-500">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
+    <div class="flex items-center gap-2">
+      <Checkbox
+        :modelValue="props.todo.isCompleted"
+        @change="toggleTodo()"
         class="h-5 w-5"
+        :binary="true"
+      />
+      <div
+        :class="[
+          'flex items-center gap-2',
+          {
+            'line-through': props.todo.isCompleted,
+            'text-gray-400': props.todo.isCompleted
+          }
+        ]"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935-2.186 2.25 2.25 0 0 0-3.935-2.186"
-        />
-      </svg>
+        {{ todo.title }}
+        <SharedByMeIndicator v-if="!isLocalShared" />
+        <Tag v-if="props.isShared && todo.owner" severity="info" class="ml-2">
+          {{ todo.owner }}
+        </Tag>
+      </div>
     </div>
 
     <div class="flex items-center space-x-2 opacity-0 transition-opacity group-hover:opacity-100">
@@ -71,6 +56,7 @@ import {trpc} from '@/trpc'
 import {ref} from 'vue'
 import Checkbox from 'primevue/checkbox'
 import Tag from 'primevue/tag'
+import SharedByMeIndicator from './SharedByMeIndicator.vue'
 
 const userStore = useUserStore()
 

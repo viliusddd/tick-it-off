@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AlertError: typeof import('./src/components/AlertError.vue')['default']
     AuthComponent: typeof import('./src/components/AuthComponent.vue')['default']
+    Button: typeof import('primevue/button')['default']
     CalendarNavigation: typeof import('./src/components/Todo/CalendarNavigation.vue')['default']
     ConfirmDeleteButton: typeof import('./src/components/Todo/ConfirmDeleteButton.vue')['default']
     EditTodoButton: typeof import('./src/components/Todo/EditTodoButton.vue')['default']
@@ -21,6 +22,7 @@ declare module 'vue' {
     RequiredStar: typeof import('./src/components/RequiredStar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SharedByMeIndicator: typeof import('./src/components/Todo/SharedByMeIndicator.vue')['default']
     TodoItem: typeof import('./src/components/Todo/TodoItem.vue')['default']
     UnshareButton: typeof import('./src/components/Todo/UnshareButton.vue')['default']
   }
