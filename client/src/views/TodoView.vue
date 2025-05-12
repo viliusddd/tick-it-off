@@ -164,9 +164,7 @@ const fetchSharedTodos = async () => {
   isSharedFetching.value = true
   try {
     // Get all todos shared with the current user
-    const result = await trpc.todo.findSharedWithMe.query({
-      date: userStore.currentDate.toLocaleDateString('lt')
-    })
+    const result = await trpc.todo.findSharedWithMe.query()
     // Mark these todos as shared with the current user
     sharedTodos.value = result.map(todo => ({
       ...todo,
