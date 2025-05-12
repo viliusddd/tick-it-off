@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+- User PrimeVue components when possible.
+- PrimeVue has Noir theme, try not to override the colors.
+- Use TailwindCSS.
