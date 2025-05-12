@@ -3,6 +3,7 @@ import {createTestDatabase} from '@tests/utils/database'
 import {createCallerFactory} from '@server/trpc'
 import {wrapInRollbacks} from '@tests/utils/transactions'
 import {clearTables, insertAll} from '@tests/utils/records'
+import {authContext} from '@tests/utils/context'
 import todoRouter from '..'
 
 const createCaller = createCallerFactory(todoRouter)
@@ -12,8 +13,8 @@ const db = await wrapInRollbacks(createTestDatabase())
 await clearTables(db, ['todo'])
 const [user] = await insertAll(db, 'user', fakeUser())
 
-// as a non-logged in user
-const {findAll} = createCaller({db})
+// as a logged in user
+const {findAll} = createCaller(authContext({db}, user))
 
 it('should return an empty list, if there are no todos', async () => {
   // Given (ARRANGE)

@@ -1,5 +1,5 @@
 import {authContext, requestContext} from '@tests/utils/context'
-import {fakeUser} from '@server/entities/tests/fakes'
+import {fakeTodo, fakeUser} from '@server/entities/tests/fakes'
 import {createTestDatabase} from '@tests/utils/database'
 import {createCallerFactory} from '@server/trpc'
 import {wrapInRollbacks} from '@tests/utils/transactions'
@@ -19,15 +19,16 @@ it('should throw an error if user is not authenticated', async () => {
 
 it('should persist the updated title', async () => {
   // ARRANGE
-  const todo = {id: 1, title: 'FooBar'}
   const [user] = await insertAll(db, 'user', fakeUser())
+  const [todo] = await insertAll(db, 'todo', fakeTodo({userId: user.id}))
+  const updatedTodo = {id: todo.id, title: 'FooBar'}
   const {update} = createCaller(authContext({db}, user))
 
   // ACT
-  const todoReturned = await update(todo)
+  const todoReturned = await update(updatedTodo)
 
   // ASSERT
-  expect(todoReturned).toMatchObject(todo)
+  expect(todoReturned).toMatchObject(updatedTodo)
 
   const [todoCreated] = await selectAll(db, 'todo', eb => eb('id', '=', todoReturned.id))
 
