@@ -134,7 +134,7 @@ const userForm = ref({
   lastName: ''
 })
 
-const onSignupFormSubmit = async (event: any) => {
+const onSignupFormSubmit = async () => {
   try {
     await userStore.signup(userForm.value)
     // Support redirects back to the page the user was on before signing up

@@ -86,7 +86,6 @@ import {useRouter} from 'vue-router'
 import {InputText, Button, useToast, Toast, Message, Password} from 'primevue'
 import {Form} from '@primevue/forms'
 import {zodResolver} from '@primevue/forms/resolvers/zod'
-import {z} from 'zod'
 import {userSchema} from '@entities/user'
 
 const toast = useToast()
