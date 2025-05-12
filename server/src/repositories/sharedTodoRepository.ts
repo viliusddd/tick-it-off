@@ -1,5 +1,6 @@
 import type {Database, SharedTodo} from '@server/database'
 import {type SharedTodoPublic, sharedTodoKeysPublic} from '@server/entities/sharedTodo'
+import type {TodoPublic} from '@server/entities/todo'
 import {type Insertable, type Selectable} from 'kysely'
 
 type Pagination = {offset: number; limit: number}
@@ -18,8 +19,14 @@ export function sharedTodoRepository(db: Database) {
         .execute()
     },
 
-    async findTodos(userId: number): Promise<{todoId: number}[]> {
-      return db.selectFrom('sharedTodo').where('userId', '=', userId).select('todoId').execute()
+    async findTodos(userId: number): Promise<TodoPublic[]> {
+      return db
+        .selectFrom('sharedTodo')
+        .innerJoin('todo', 'todo.id', 'sharedTodo.todoId')
+        .innerJoin('user', 'user.id', 'sharedTodo.userId')
+        .where('sharedTodo.userId', '=', userId)
+        .select(['todo.id', 'todo.title', 'todo.createdAt', 'todo.userId'])
+        .execute()
     },
 
     async findUsers(todoId: number): Promise<{userId: number}[]> {

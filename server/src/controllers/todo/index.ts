@@ -8,6 +8,7 @@ import unshare from './unshare'
 import getSharedUsers from './getSharedUsers'
 import findSharedWithMe from './findSharedWithMe'
 import removeSharedWithMe from './removeSharedWithMe'
+import findById from './findById'
 
 export default router({
   create,
@@ -18,5 +19,6 @@ export default router({
   unshare,
   getSharedUsers,
   findSharedWithMe,
-  removeSharedWithMe
+  removeSharedWithMe,
+  findById
 })
