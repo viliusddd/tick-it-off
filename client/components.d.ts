@@ -21,7 +21,6 @@ declare module 'vue' {
     RequiredStar: typeof import('./src/components/RequiredStar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    ShareTodoButton: typeof import('./src/components/Todo/ShareTodoButton.vue')['default']
     TodoItem: typeof import('./src/components/Todo/TodoItem.vue')['default']
     UnshareButton: typeof import('./src/components/Todo/UnshareButton.vue')['default']
   }
