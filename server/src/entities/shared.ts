@@ -4,7 +4,7 @@ const POSTGRES_INT_MAX = 2147483647
 
 export const idSchema = z.number().int().positive().describe('ID number.')
 
-export const userIdSchema = z.number().int().positive().describe('User id number.')
+export const userIdSchema = idSchema.describe('User id number.')
 
 export const createdAtSchema = z.date().default(() => new Date())
 

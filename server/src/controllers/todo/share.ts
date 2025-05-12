@@ -1,23 +1,10 @@
 import provideRepos from '@server/trpc/provideRepos'
 import {sharedTodoRepository} from '@server/repositories/sharedTodoRepository'
-import {todoRepository} from '@server/repositories/todoRepository'
 import {authenticatedProcedure} from '@server/trpc/authenticatedProcedure'
 import {sharedTodoIdsSchema} from '@server/entities/sharedTodo'
-import {TRPCError} from '@trpc/server'
 
 export default authenticatedProcedure
   .meta({description: 'Share todo item with other user.'})
-  .use(provideRepos({sharedTodoRepository, todoRepository}))
+  .use(provideRepos({sharedTodoRepository}))
   .input(sharedTodoIdsSchema)
-  .mutation(async ({input, ctx: {authUser, repos}}) => {
-    // First verify the todo belongs to the user
-    const todo = await repos.todoRepository.findById(input.todoId)
-    if (!todo || todo.userId !== authUser.id) {
-      throw new TRPCError({
-        code: 'UNAUTHORIZED',
-        message: 'User is not authorized to share this todo'
-      })
-    }
-
-    return repos.sharedTodoRepository.create(input)
-  })
+  .mutation(async ({input, ctx}) => ctx.repos.sharedTodoRepository.create(input))

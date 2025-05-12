@@ -18,6 +18,10 @@ export function sharedTodoRepository(db: Database) {
         .execute()
     },
 
+    async findUsers(todoId: number): Promise<{userId: number}[]> {
+      return db.selectFrom('sharedTodo').select(['userId']).where('todoId', '=', todoId).execute()
+    },
+
     async create(sharedTodo: Insertable<SharedTodo>): Promise<SharedTodoPublic> {
       return db
         .insertInto('sharedTodo')

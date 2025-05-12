@@ -6,8 +6,13 @@ type Pagination = {offset: number; limit: number}
 
 export function todoRepository(db: Database) {
   return {
-    async findById(id: number) {
-      return db.selectFrom('todo').select(todoKeysPublic).where('id', '=', id).executeTakeFirst()
+    async findById(id: number, userId: number) {
+      return db
+        .selectFrom('todo')
+        .select(todoKeysPublic)
+        .where('id', '=', id)
+        .where('userId', '=', userId)
+        .executeTakeFirst()
     },
 
     async findAll({offset, limit}: Pagination): Promise<TodoPublic[]> {
@@ -40,12 +45,16 @@ export function todoRepository(db: Database) {
         .updateTable('todo')
         .set({title: todo.title})
         .where('todo.id', '=', todo.id)
+        .where('todo.userId', '=', todo.userId)
         .returning(todoKeysPublic)
         .executeTakeFirstOrThrow()
     },
 
-    async delete(id: number) {
-      db.deleteFrom('todo').where('todo.id', '=', id).execute()
+    async delete(todoId: number, userId: number) {
+      db.deleteFrom('todo')
+        .where('todo.id', '=', todoId)
+        .where('todo.userId', '=', userId)
+        .executeTakeFirstOrThrow()
     }
   }
 }
