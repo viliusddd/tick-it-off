@@ -13,7 +13,9 @@ declare module 'vue' {
     Button: typeof import('primevue/button')['default']
     CalendarNavigation: typeof import('./src/components/Todo/CalendarNavigation.vue')['default']
     ConfirmDeleteButton: typeof import('./src/components/Todo/ConfirmDeleteButton.vue')['default']
+    EditButton: typeof import('./src/components/Todo/EditButton.vue')['default']
     EditTodoButton: typeof import('./src/components/Todo/EditTodoButton.vue')['default']
+    EditTodoModal: typeof import('./src/components/Todo/EditTodoModal.vue')['default']
     MainLayout: typeof import('./src/components/MainLayout.vue')['default']
     NewTask: typeof import('./src/components/Todo/NewTask.vue')['default']
     OptionsMenu: typeof import('./src/components/Options/OptionsMenu.vue')['default']
@@ -22,8 +24,11 @@ declare module 'vue' {
     RequiredStar: typeof import('./src/components/RequiredStar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ShareConfirmDialog: typeof import('./src/components/Todo/ShareConfirmDialog.vue')['default']
     SharedByMeIndicator: typeof import('./src/components/Todo/SharedByMeIndicator.vue')['default']
+    ShareWithOthers: typeof import('./src/components/Todo/ShareWithOthers.vue')['default']
     TodoItem: typeof import('./src/components/Todo/TodoItem.vue')['default']
+    TodoTitleInput: typeof import('./src/components/Todo/TodoTitleInput.vue')['default']
     UnshareButton: typeof import('./src/components/Todo/UnshareButton.vue')['default']
   }
   export interface ComponentCustomProperties {
