@@ -1,21 +1,46 @@
 <template>
   <div class="flex items-center">
-    <InputGroup>
-      <InputText
-        v-model="newTodo"
-        ref="inputRef"
-        @keyup.enter="addTodo"
-        placeholder="Add a new task..."
-        class="flex-grow"
-      />
-      <Button @mousedown.prevent @click="addTodo" label="Add" />
-    </InputGroup>
+    <Form
+      v-slot="$form"
+      :resolver="zodResolver(todoSchema)"
+      :initialValues="{title: newTodo}"
+      :validateOnBlur="true"
+      class="w-full"
+    >
+      <InputGroup>
+        <InputText
+          name="title"
+          type="text"
+          v-model="newTodo"
+          ref="inputRef"
+          @keyup.enter="addTodo"
+          placeholder="Add a new task..."
+          class="flex-grow"
+        />
+        <Button
+          @mousedown.prevent
+          @click="addTodo"
+          label="Add"
+          :disabled="$form.title?.invalid || !newTodo"
+        >
+          <p :class="{'cursor-not-allowed': $form.title?.invalid || !newTodo}">Add</p>
+        </Button>
+      </InputGroup>
+      <div class="flex h-4">
+        <Message v-if="$form.title?.invalid" severity="error" size="small" variant="simple">{{
+          $form.title.error.message
+        }}</Message>
+      </div>
+    </Form>
   </div>
 </template>
 
 <script setup lang="ts">
 import {ref, nextTick} from 'vue'
 import {Button, InputText, InputGroup} from 'primevue'
+import {Form} from '@primevue/forms'
+import {zodResolver} from '@primevue/forms/resolvers/zod'
+import {todoSchema} from '@entities/todo'
 
 const emit = defineEmits<{
   (e: 'addTodo', title: string): void
@@ -23,7 +48,6 @@ const emit = defineEmits<{
 
 const newTodo = ref('')
 const inputRef = ref()
-
 const addTodo = () => {
   if (newTodo.value.trim()) {
     emit('addTodo', newTodo.value.trim())

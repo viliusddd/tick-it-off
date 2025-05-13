@@ -29,18 +29,31 @@
             :initialValues="{title: props.todoTitle}"
             :validateOnBlur="true"
           >
-            <div>{{ $form }}</div>
-            <label for="todoTitle" class="text-md mb-2 block font-medium">Change todo title</label>
-            <div class="flex">
-              <InputText
-                name="todoTitle"
-                type="text"
-                placeholder="Todo title"
-                v-model="editedTitle"
-                class="mr-2 w-full"
-                :resolver="zodResolver(todoSchema)"
-              />
-              <div class="h-6">
+            <div class="flex flex-col gap-2">
+              <label for="todoTitle" class="text-md mb-2 block font-medium"
+                >Change todo title</label
+              >
+              <div class="flex">
+                <InputText
+                  name="title"
+                  type="text"
+                  placeholder="Todo title"
+                  v-model="editedTitle"
+                  class="mr-2 w-full"
+                />
+                <Button
+                  icon="pi pi-check"
+                  :disabled="!titleChanged || $form.title?.invalid"
+                  @click="updateTodoTitle($form)"
+                  :class="{'cursor-not-allowed': !titleChanged || $form.title?.invalid}"
+                >
+                  <i
+                    class="pi pi-check"
+                    :class="{'cursor-not-allowed': !titleChanged || $form.title?.invalid}"
+                  />
+                </Button>
+              </div>
+              <div class="flex h-6">
                 <Message
                   v-if="$form.title?.invalid"
                   severity="error"
@@ -49,7 +62,6 @@
                   >{{ $form.title.error.message }}</Message
                 >
               </div>
-              <Button icon="pi pi-check" :disabled="!titleChanged" @click="updateTodoTitle" />
             </div>
           </Form>
         </div>
@@ -112,7 +124,10 @@ import {ref, computed, onMounted, onUnmounted, watch} from 'vue'
 import {trpc} from '@/trpc'
 import {useUserStore} from '@/stores/userStore'
 import {Button, InputText, Dialog, ProgressSpinner} from 'primevue'
+import {Form} from '@primevue/forms'
 import {PencilSquareIcon, CheckIcon} from '@heroicons/vue/24/solid'
+import {todoSchema} from '@entities/todo'
+import {zodResolver} from '@primevue/forms/resolvers/zod'
 
 const props = defineProps<{
   todoId: number
@@ -233,8 +248,8 @@ const loadSharedUsers = async () => {
   }
 }
 
-const updateTodoTitle = async () => {
-  if (!titleChanged.value) return
+const updateTodoTitle = async ({valid}: {valid: boolean}) => {
+  if (!valid) return
 
   try {
     isLoading.value = true
@@ -316,10 +331,8 @@ const unshareTodo = async (userId: number) => {
     // Update local state
     sharedWithIds.value = sharedWithIds.value.filter(id => id !== userId)
 
-    // Emit event to parent when no longer shared with anyone
-    if (sharedWithIds.value.length === 0) {
-      emit('share-status-changed', false)
-    }
+    // Always emit event to parent with current sharing status
+    emit('share-status-changed', sharedWithIds.value.length > 0)
   } catch (err) {
     console.error('Error unsharing todo:', err)
     error.value = 'Failed to unshare todo'
