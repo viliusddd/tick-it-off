@@ -159,10 +159,8 @@ const unshareTodo = async (userId: number) => {
     // Update local state
     sharedWithIds.value = sharedWithIds.value.filter(id => id !== userId)
 
-    // Emit event to parent when no longer shared with anyone
-    if (sharedWithIds.value.length === 0) {
-      emit('share-status-changed', false)
-    }
+    // Always emit event to parent with current sharing status
+    emit('share-status-changed', sharedWithIds.value.length > 0)
   } catch (err) {
     console.error('Error unsharing todo:', err)
     error.value = 'Failed to unshare todo'

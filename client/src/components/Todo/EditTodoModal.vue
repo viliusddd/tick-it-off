@@ -18,27 +18,19 @@
         :todo-id="todoId"
         :todo-title="todoTitle"
         @title-updated="handleTitleUpdated"
-        @loading="handleLoading"
-        @error="handleError"
       />
 
-      <ShareWithOthers
-        :todo-id="todoId"
-        @share-status-changed="handleShareStatusChanged"
-        @loading="handleLoading"
-        @error="handleError"
-      />
+      <ShareWithOthers :todo-id="todoId" @share-status-changed="handleShareStatusChanged" />
     </div>
   </Dialog>
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
 import {Dialog, ProgressSpinner} from 'primevue'
 import TodoTitleInput from './TodoTitleInput.vue'
 import ShareWithOthers from './ShareWithOthers.vue'
 
-const props = defineProps<{
+defineProps<{
   visible: boolean
   todoId: number
   todoTitle: string
@@ -54,13 +46,5 @@ const handleTitleUpdated = (newTitle: string) => {
 
 const handleShareStatusChanged = (isShared: boolean) => {
   emit('share-status-changed', isShared)
-}
-
-const handleLoading = (loading: boolean) => {
-  // Will be handled by parent
-}
-
-const handleError = (errorMessage: string) => {
-  // Will be handled by parent
 }
 </script>

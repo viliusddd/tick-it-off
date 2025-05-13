@@ -23,16 +23,35 @@
       </div>
       <div v-else>
         <div class="mb-4">
-          <label for="todoTitle" class="text-md mb-2 block font-medium">Change todo title</label>
-          <div class="flex">
-            <InputText
-              id="todoTitle"
-              v-model="editedTitle"
-              class="mr-2 w-full"
-              placeholder="Todo title"
-            />
-            <Button icon="pi pi-check" :disabled="!titleChanged" @click="updateTodoTitle" />
-          </div>
+          <Form
+            v-slot="$form"
+            :resolver="zodResolver(todoSchema)"
+            :initialValues="{title: props.todoTitle}"
+            :validateOnBlur="true"
+          >
+            <div>{{ $form }}</div>
+            <label for="todoTitle" class="text-md mb-2 block font-medium">Change todo title</label>
+            <div class="flex">
+              <InputText
+                name="todoTitle"
+                type="text"
+                placeholder="Todo title"
+                v-model="editedTitle"
+                class="mr-2 w-full"
+                :resolver="zodResolver(todoSchema)"
+              />
+              <div class="h-6">
+                <Message
+                  v-if="$form.title?.invalid"
+                  severity="error"
+                  size="small"
+                  variant="simple"
+                  >{{ $form.title.error.message }}</Message
+                >
+              </div>
+              <Button icon="pi pi-check" :disabled="!titleChanged" @click="updateTodoTitle" />
+            </div>
+          </Form>
         </div>
 
         <div class="mb-2 mt-6 flex items-center">
