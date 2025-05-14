@@ -20,7 +20,7 @@
         ]"
       >
         {{ todo.title }}
-        <SharedByMeIndicator v-if="props.todo.isSharedByMe" />
+        <SharedByMeIndicator v-if="isLocalShared" />
         <Tag v-if="props.isShared && todo.owner" severity="info" class="ml-2">
           {{ todo.owner }}
         </Tag>
@@ -36,7 +36,7 @@
         v-if="!props.isShared"
         :todoId="todo.id"
         :todoTitle="todo.title"
-        :isShared="props.todo.isSharedByMe"
+        :isShared="isLocalShared"
         @share-status-changed="updateShareStatus"
         @title-updated="updateTitle"
       />
