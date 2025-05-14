@@ -12,7 +12,7 @@
       />
       <div
         :class="[
-          'flex items-center gap-2',
+          'flex items-center gap-2 break-all',
           {
             'line-through': isCompletedLocal,
             'text-gray-400': isCompletedLocal
