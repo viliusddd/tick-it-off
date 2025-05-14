@@ -9,7 +9,6 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     MainLayout: typeof import('./src/components/MainLayout.vue')['default']
-    Message: typeof import('primevue/message')['default']
     OptionsMenu: typeof import('./src/components/Options/OptionsMenu.vue')['default']
     OptionsUser: typeof import('./src/components/Options/OptionsUser.vue')['default']
     RequiredStar: typeof import('./src/components/UI/RequiredStar.vue')['default']
@@ -17,12 +16,11 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     ShareConfirmDialog: typeof import('./src/components/Todo/TodoItemEdit/ShareConfirmDialog.vue')['default']
     SharedByMeIndicator: typeof import('./src/components/Todo/TodoItem/SharedByMeIndicator.vue')['default']
-    ShareWithOthers: typeof import('./src/components/Todo/TodoItemEdit/ShareWithOthers.vue')['default']
     TodoAdd: typeof import('./src/components/Todo/TodoAdd.vue')['default']
     TodoCalendar: typeof import('./src/components/Todo/TodoCalendar.vue')['default']
     TodoItem: typeof import('./src/components/Todo/TodoItem.vue')['default']
     TodoItemDelete: typeof import('./src/components/Todo/TodoItem/TodoItemDelete.vue')['default']
-    TodoItemEdit: typeof import('./src/components/Todo/TodoItem/TodoItemEdit.vue')['default']
+    TodoItemEdit: typeof import('./src/components/Todo/TodoItemEdit.vue')['default']
     TodoSharingManager: typeof import('./src/components/Todo/TodoItemEdit/TodoSharingManager.vue')['default']
     TodoTitleEditor: typeof import('./src/components/Todo/TodoItemEdit/TodoTitleEditor.vue')['default']
     UnshareButton: typeof import('./src/components/Todo/TodoItem/UnshareButton.vue')['default']

@@ -54,7 +54,7 @@ import {useUserStore} from '@/stores/userStore'
 import {Checkbox, Tag} from 'primevue'
 import SharedByMeIndicator from './TodoItem/SharedByMeIndicator.vue'
 import TodoItemDelete from './TodoItem/TodoItemDelete.vue'
-import EditTodoButton from './TodoItem/TodoItemEdit.vue'
+import EditTodoButton from './TodoItemEdit.vue'
 import UnshareButton from './TodoItem/UnshareButton.vue'
 
 const userStore = useUserStore()
