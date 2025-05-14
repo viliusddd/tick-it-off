@@ -1,46 +1,50 @@
 <template>
-  <Listbox
-    :options="usersUpdated"
-    optionLabel="firstName"
-    :filter="true"
-    :pt="{
-      listContainer: {style: 'max-height: none'},
-      option: {
-        class: 'flex flex-row items-center justify-between',
-        style: 'cursor: default'
-      }
-    }"
-  >
-    <template #option="slotProps">
-      <div class="flex items-center gap-2">
-        <div>{{ slotProps.option.userbFirstName }} {{ slotProps.option.userbLastName }}</div>
-        <div v-if="slotProps.option.isFriend">
-          <Tag value="friend" severity="info" />
+  <div class="p-4">
+    <Listbox
+      multiple
+      v-model="selectedUsers"
+      :options="usersUpdated"
+      optionLabel="userbFirstName"
+      :filter="true"
+      :pt="{
+        listContainer: {style: 'max-height: none'},
+        option: {
+          class: 'flex flex-row items-center justify-between',
+          style: 'cursor: pointer'
+        }
+      }"
+      @change="handleSelectionChange"
+    >
+      <template #header>
+        <h2 class="mb-4 text-2xl font-bold">User Management</h2>
+        <div class="mb-4">
+          <p class="text-gray-600">Add friends to share your todo lists with them.</p>
+          <p class="mt-2 text-sm text-blue-600">
+            Click on a user to add or remove them as a friend.
+          </p>
         </div>
-      </div>
-      <div>
-        <Button
-          v-if="!slotProps.option.isFriend"
-          icon="pi pi-plus"
-          class="p-button-rounded p-button-text"
-          @click="addUser(slotProps.option.userbId)"
-        />
-        <Button
-          v-else
-          icon="pi pi-minus"
-          class="p-button-rounded p-button-text"
-          @click="removeUser(slotProps.option.userbId)"
-        />
-      </div>
-    </template>
-  </Listbox>
+      </template>
+      <template #option="slotProps">
+        <div class="flex items-center gap-2">
+          <div>{{ slotProps.option.userbFirstName }} {{ slotProps.option.userbLastName }}</div>
+          <div v-if="slotProps.option.isFriend">
+            <Tag value="Friend" severity="success" />
+          </div>
+        </div>
+      </template>
+      <template #empty>
+        <div class="p-4 text-center text-gray-500">No users found</div>
+      </template>
+    </Listbox>
+  </div>
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, ref} from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import {trpc} from '@/trpc'
-import {Tag, Listbox, Button} from 'primevue'
+import {Tag, Listbox} from 'primevue'
 import {useUserStore} from '@/stores/userStore'
+import {useToast} from 'primevue/usetoast'
 
 type UsersConnections = {
   useraId: number | null
@@ -59,11 +63,27 @@ type UserUpdated = {
 }
 
 const userStore = useUserStore()
-
+const toast = useToast()
 const users = ref<UsersConnections[]>([])
+const isLoading = ref(false)
+const selectedUsers = ref<UserUpdated[]>([])
 
 onMounted(async () => {
-  users.value = await trpc.userRelationship.findAllWithUsers.query()
+  isLoading.value = true
+  try {
+    users.value = await trpc.userRelationship.findAllWithUsers.query()
+    initializeSelectedUsers()
+  } catch (error) {
+    console.error('Failed to load users:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to load users',
+      life: 3000
+    })
+  } finally {
+    isLoading.value = false
+  }
 })
 
 const usersUpdated = computed(() => {
@@ -85,25 +105,114 @@ const usersUpdated = computed(() => {
   }, [])
 })
 
-const addUser = async (userbId: number) => {
-  for (const usr of usersUpdated.value) {
-    if (usr.userbId === userbId) {
-      usr.isFriend = !usr.isFriend
-    }
-  }
-
-  if (userStore.authUserId)
-    await trpc.userRelationship.add.mutate({useraId: userStore.authUserId, userbId})
+// Initialize selectedUsers with current friends
+const initializeSelectedUsers = () => {
+  selectedUsers.value = usersUpdated.value.filter(user => user.isFriend)
 }
 
-const removeUser = async (userbId: number) => {
-  for (const usr of usersUpdated.value) {
-    if (usr.userbId === userbId) {
-      usr.isFriend = !usr.isFriend
-    }
+// Handle when selection changes
+const handleSelectionChange = async (event: any) => {
+  const currentSelection = event.value as UserUpdated[]
+
+  // Find users that were added (in current selection but not marked as friends yet)
+  const usersToAdd = currentSelection.filter(
+    user => !usersUpdated.value.find(u => u.userbId === user.userbId)?.isFriend
+  )
+
+  // Find users that were removed (marked as friends but not in current selection)
+  const usersToRemove = usersUpdated.value.filter(
+    user => user.isFriend && !currentSelection.some(s => s.userbId === user.userbId)
+  )
+
+  // Process additions
+  for (const user of usersToAdd) {
+    await addUser(user.userbId)
   }
 
-  if (userStore.authUserId)
-    await trpc.userRelationship.remove.mutate({useraId: userStore.authUserId, userbId})
+  // Process removals
+  for (const user of usersToRemove) {
+    await removeUser(user.userbId)
+  }
 }
+
+const addUser = async (userbId: number | null) => {
+  if (!userbId || !userStore.authUserId) return
+
+  try {
+    await trpc.userRelationship.add.mutate({
+      useraId: userStore.authUserId,
+      userbId
+    })
+
+    // Update local state
+    for (const usr of usersUpdated.value) {
+      if (usr.userbId === userbId) {
+        usr.isFriend = true
+      }
+    }
+
+    toast.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'User added as friend',
+      life: 3000
+    })
+  } catch (error) {
+    console.error('Failed to add friend:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to add friend',
+      life: 3000
+    })
+
+    // Reset selection on error
+    initializeSelectedUsers()
+  }
+}
+
+const removeUser = async (userbId: number | null) => {
+  if (!userbId || !userStore.authUserId) return
+
+  try {
+    await trpc.userRelationship.remove.mutate({
+      useraId: userStore.authUserId,
+      userbId
+    })
+
+    // Update local state
+    for (const usr of usersUpdated.value) {
+      if (usr.userbId === userbId) {
+        usr.isFriend = false
+      }
+    }
+
+    toast.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Friend removed',
+      life: 3000
+    })
+  } catch (error) {
+    console.error('Failed to remove friend:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to remove friend',
+      life: 3000
+    })
+
+    // Reset selection on error
+    initializeSelectedUsers()
+  }
+}
+
+// Sync selectedUsers with usersUpdated when friendship status changes
+watch(
+  usersUpdated,
+  () => {
+    selectedUsers.value = usersUpdated.value.filter(user => user.isFriend)
+  },
+  {deep: true}
+)
 </script>
