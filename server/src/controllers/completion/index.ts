@@ -3,10 +3,12 @@ import create from './create'
 import findByRange from './findByRange'
 import deleteById from './deleteById'
 import toggle from './toggle'
+import getDailyCompletions from './getDailyCompletions'
 
 export default router({
   create,
   findByRange,
   deleteById,
-  toggle
+  toggle,
+  getDailyCompletions,
 })

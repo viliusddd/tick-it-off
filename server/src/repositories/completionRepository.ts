@@ -1,11 +1,11 @@
 import type {Database, Completion} from '@server/database'
+import {type Insertable, sql} from 'kysely'
 import {
   type CompletionItem,
   type CompletionPagination,
   type CompletionPublic,
   completionKeysPublic
 } from '@server/entities/completion'
-import type {Insertable} from 'kysely'
 
 export function completionRepository(db: Database) {
   return {
@@ -60,6 +60,16 @@ export function completionRepository(db: Database) {
       const foundItems = await this.findById(completion)
       if (!foundItems) return this.create(completion)
       return this.delete(completion)
+    },
+
+    async getDailyCompletions() {
+      return db
+        .selectFrom('completion')
+        .select([sql<Date>`DATE(created_at)`.as('date'), sql<number>`COUNT(*)`.as('dailycount')])
+        .groupBy(sql`DATE(created_at)`)
+        .execute()
+    },
+
     }
   }
 }

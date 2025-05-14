@@ -27,9 +27,14 @@
         </Button>
       </InputGroup>
       <div class="flex h-4">
-        <Message v-if="$form.title?.invalid" severity="warn" size="small" variant="simple">{{
-          $form.title.error.message
-        }}</Message>
+        <Message
+          v-if="$form.title?.invalid"
+          severity="warn"
+          :life="3000"
+          size="small"
+          variant="simple"
+          >{{ $form.title.error.message }}</Message
+        >
       </div>
     </Form>
   </div>
