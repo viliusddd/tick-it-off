@@ -56,7 +56,7 @@
               <div class="flex h-6">
                 <Message
                   v-if="$form.title?.invalid"
-                  severity="error"
+                  severity="warn"
                   size="small"
                   variant="simple"
                   >{{ $form.title.error.message }}</Message
