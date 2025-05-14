@@ -11,6 +11,6 @@ export default authenticatedProcedure
   .mutation(async ({input, ctx}) =>
     ctx.repos.sharedTodoRepository.delete({
       todoId: input.todoId,
-      userId: ctx.authUser.id
+      userId: input.userId
     })
   )

@@ -42,11 +42,12 @@ export function sharedTodoRepository(db: Database) {
     },
 
     async delete(sharedTodo: Selectable<Omit<SharedTodo, 'createdAt'>>) {
-      db.deleteFrom('sharedTodo')
+      return db
+        .deleteFrom('sharedTodo')
         .where('todoId', '=', sharedTodo.todoId)
         .where('userId', '=', sharedTodo.userId)
         .returning(['todoId', 'userId'])
-        .execute()
+        .executeTakeFirst()
     }
   }
 }
