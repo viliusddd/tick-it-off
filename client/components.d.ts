@@ -23,6 +23,8 @@ declare module 'vue' {
     TodoItem: typeof import('./src/components/Todo/TodoItem.vue')['default']
     TodoItemDelete: typeof import('./src/components/Todo/TodoItem/TodoItemDelete.vue')['default']
     TodoItemEdit: typeof import('./src/components/Todo/TodoItem/TodoItemEdit.vue')['default']
+    TodoSharingManager: typeof import('./src/components/Todo/TodoItem/TodoSharingManager.vue')['default']
+    TodoTitleEditor: typeof import('./src/components/Todo/TodoItem/TodoTitleEditor.vue')['default']
     UnshareButton: typeof import('./src/components/Todo/TodoItem/UnshareButton.vue')['default']
   }
   export interface ComponentCustomProperties {
