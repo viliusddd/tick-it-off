@@ -68,8 +68,6 @@ export function completionRepository(db: Database) {
         .select([sql<Date>`DATE(created_at)`.as('date'), sql<number>`COUNT(*)`.as('dailycount')])
         .groupBy(sql`DATE(created_at)`)
         .execute()
-    },
-
     }
   }
 }
