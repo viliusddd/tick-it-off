@@ -33,13 +33,8 @@ const links = computed(() => [
   ...(userStore.isLoggedIn
     ? [
         {label: 'Todo', name: 'TodoToday', icon: 'pi pi-pen-to-square', route: '/todo'},
-        {label: 'Users', name: 'Users', icon: 'pi pi-users', route: '/users'},
-        {
-          label: 'Friends Statistics',
-          name: 'FriendsStats',
-          icon: 'pi pi-share-alt',
-          route: '/friends-stats'
-        }
+        {label: 'Statistics', name: 'Statistics', icon: 'pi pi-chart-bar', route: '/statistics'},
+        {label: 'Users', name: 'Users', icon: 'pi pi-users', route: '/users'}
       ]
     : [
         {label: 'Login', name: 'Login'},
