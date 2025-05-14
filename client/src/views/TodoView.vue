@@ -24,7 +24,7 @@
         </div>
         <div v-if="!isLoading && allTodos.length === 0">
           <Message severity="info"
-            >No tasks for this day. Add one above to start your magical journey!</Message
+            >No tasks for this day. Add one above to start your journey!</Message
           >
         </div>
         <div v-if="!isLoading && hasMore">

@@ -9,7 +9,6 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     MainLayout: typeof import('./src/components/MainLayout.vue')['default']
-    Message: typeof import('primevue/message')['default']
     OptionsMenu: typeof import('./src/components/Options/OptionsMenu.vue')['default']
     OptionsUser: typeof import('./src/components/Options/OptionsUser.vue')['default']
     RequiredStar: typeof import('./src/components/UI/RequiredStar.vue')['default']

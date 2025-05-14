@@ -123,7 +123,7 @@
 import {ref, computed, onMounted, onUnmounted, watch} from 'vue'
 import {trpc} from '@/trpc'
 import {useUserStore} from '@/stores/userStore'
-import {Button, InputText, Dialog, ProgressSpinner} from 'primevue'
+import {Button, InputText, Dialog, ProgressSpinner, Message} from 'primevue'
 import {Form} from '@primevue/forms'
 import {PencilSquareIcon, CheckIcon} from '@heroicons/vue/24/solid'
 import {todoSchema} from '@entities/todo'
