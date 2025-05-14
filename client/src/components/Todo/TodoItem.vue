@@ -52,10 +52,10 @@ import {ref, watch} from 'vue'
 import {trpc} from '@/trpc'
 import {useUserStore} from '@/stores/userStore'
 import {Checkbox, Tag} from 'primevue'
-import SharedByMeIndicator from './SharedByMeIndicator.vue'
+import SharedByMeIndicator from './TodoItem/SharedByMeIndicator.vue'
 import TodoItemDelete from './TodoItem/TodoItemDelete.vue'
-import EditTodoButton from './EditTodoButton.vue'
-import UnshareButton from './UnshareButton.vue'
+import EditTodoButton from './TodoItem/TodoItemEdit.vue'
+import UnshareButton from './TodoItem/UnshareButton.vue'
 
 const userStore = useUserStore()
 

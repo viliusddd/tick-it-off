@@ -39,8 +39,8 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue'
 import {trpc} from '@/trpc'
-import {useUserStore} from '@/stores/userStore'
 import {Tag, Listbox, Button} from 'primevue'
+import {useUserStore} from '@/stores/userStore'
 
 type UsersConnections = {
   useraId: number | null

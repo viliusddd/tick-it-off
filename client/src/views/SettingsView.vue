@@ -205,7 +205,7 @@ import {InputText, Button, useToast, Toast, Message, Password} from 'primevue'
 import {Form} from '@primevue/forms'
 import {zodResolver} from '@primevue/forms/resolvers/zod'
 import {userSchema, userPasswordChangeSchema} from '@entities/user'
-import RequiredStar from '@/components/RequiredStar.vue'
+import RequiredStar from '@/components/UI/RequiredStar.vue'
 
 const toast = useToast()
 const userStore = useUserStore()

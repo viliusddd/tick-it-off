@@ -8,22 +8,22 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    EditTodoButton: typeof import('./src/components/Todo/EditTodoButton.vue')['default']
     MainLayout: typeof import('./src/components/MainLayout.vue')['default']
     Message: typeof import('primevue/message')['default']
-    NewTask: typeof import('./src/components/Todo/NewTask.vue')['default']
     OptionsMenu: typeof import('./src/components/Options/OptionsMenu.vue')['default']
     OptionsUser: typeof import('./src/components/Options/OptionsUser.vue')['default']
-    RequiredStar: typeof import('./src/components/RequiredStar.vue')['default']
+    RequiredStar: typeof import('./src/components/UI/RequiredStar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    ShareConfirmDialog: typeof import('./src/components/Todo/TodoItemOptions/ShareConfirmDialog.vue')['default']
-    SharedByMeIndicator: typeof import('./src/components/Todo/SharedByMeIndicator.vue')['default']
-    ShareWithOthers: typeof import('./src/components/Todo/TodoItemOptions/ShareWithOthers.vue')['default']
+    ShareConfirmDialog: typeof import('./src/components/Todo/TodoItemEdit/ShareConfirmDialog.vue')['default']
+    SharedByMeIndicator: typeof import('./src/components/Todo/TodoItem/SharedByMeIndicator.vue')['default']
+    ShareWithOthers: typeof import('./src/components/Todo/TodoItemEdit/ShareWithOthers.vue')['default']
+    TodoAdd: typeof import('./src/components/Todo/TodoAdd.vue')['default']
     TodoCalendar: typeof import('./src/components/Todo/TodoCalendar.vue')['default']
     TodoItem: typeof import('./src/components/Todo/TodoItem.vue')['default']
     TodoItemDelete: typeof import('./src/components/Todo/TodoItem/TodoItemDelete.vue')['default']
-    UnshareButton: typeof import('./src/components/Todo/UnshareButton.vue')['default']
+    TodoItemEdit: typeof import('./src/components/Todo/TodoItem/TodoItemEdit.vue')['default']
+    UnshareButton: typeof import('./src/components/Todo/TodoItem/UnshareButton.vue')['default']
   }
   export interface ComponentCustomProperties {
     Ripple: typeof import('primevue/ripple')['default']

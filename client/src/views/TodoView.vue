@@ -43,7 +43,7 @@ import {trpc} from '@/trpc'
 import {useInfiniteScroll} from '@vueuse/core'
 import {ProgressSpinner, Message} from 'primevue'
 import {useUserStore} from '@/stores/userStore'
-import NewTask from '@/components/Todo/NewTask.vue'
+import NewTask from '@/components/Todo/TodoAdd.vue'
 import TodoItem from '@/components/Todo/TodoItem.vue'
 import Calendar from '@/components/Todo/TodoCalendar.vue'
 
