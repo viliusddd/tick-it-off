@@ -245,28 +245,40 @@ const createTodo = async (title: string) => {
   }
 }
 
-const handleToggle = async (todoData: {id: number; isCompleted: boolean}) => {
+const handleToggle = async (todoData: number | {id: number; isCompleted: boolean}) => {
+  // Convert old format (just id) to new format for backward compatibility
+  const todoId = typeof todoData === 'number' ? todoData : todoData.id
+  const isCompleted =
+    typeof todoData === 'number'
+      ? // If old format, we need to toggle the current state
+        !(
+          todos.value.find(t => t.id === todoId)?.isCompleted ||
+          sharedTodos.value.find(t => t.id === todoId)?.isCompleted
+        )
+      : // If new format, use the provided isCompleted value
+        todoData.isCompleted
+
   // Find todo in either list
-  const ownTodo = todos.value.find(t => t.id === todoData.id)
-  const sharedTodo = sharedTodos.value.find(t => t.id === todoData.id)
+  const ownTodo = todos.value.find(t => t.id === todoId)
+  const sharedTodo = sharedTodos.value.find(t => t.id === todoId)
 
   // Update with the new completion state directly from the event
   if (ownTodo) {
-    ownTodo.isCompleted = todoData.isCompleted
+    ownTodo.isCompleted = isCompleted
 
     // Update completions list for consistency
-    const existingCompletion = completions.value.findIndex(c => c.todoId === todoData.id)
-    if (todoData.isCompleted && existingCompletion === -1) {
+    const existingCompletion = completions.value.findIndex(c => c.todoId === todoId)
+    if (isCompleted && existingCompletion === -1) {
       // Add to completions if marked as completed and not already there
-      completions.value.push({todoId: todoData.id})
-    } else if (!todoData.isCompleted && existingCompletion !== -1) {
+      completions.value.push({todoId: todoId})
+    } else if (!isCompleted && existingCompletion !== -1) {
       // Remove from completions if marked as not completed
       completions.value.splice(existingCompletion, 1)
     }
   }
 
   if (sharedTodo) {
-    sharedTodo.isCompleted = todoData.isCompleted
+    sharedTodo.isCompleted = isCompleted
   }
 }
 

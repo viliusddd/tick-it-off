@@ -5,7 +5,7 @@
   >
     <div class="flex items-center gap-2">
       <Checkbox
-        :modelValue="props.todo.isCompleted"
+        :modelValue="isCompletedLocal"
         @change="toggleTodo()"
         class="h-5 w-5"
         :binary="true"
@@ -14,8 +14,8 @@
         :class="[
           'flex items-center gap-2',
           {
-            'line-through': props.todo.isCompleted,
-            'text-gray-400': props.todo.isCompleted
+            'line-through': isCompletedLocal,
+            'text-gray-400': isCompletedLocal
           }
         ]"
       >
@@ -74,6 +74,8 @@ const props = defineProps<{
 
 // Local state to track sharing status that can be updated immediately
 const isLocalShared = ref(props.todo.isSharedByMe || false)
+// Local state to track completion status
+const isCompletedLocal = ref(props.todo.isCompleted || false)
 
 // Watch for changes in the todo prop's isSharedByMe property
 watch(
@@ -81,6 +83,16 @@ watch(
   newValue => {
     if (newValue !== undefined) {
       isLocalShared.value = newValue
+    }
+  }
+)
+
+// Watch for changes in the todo prop's isCompleted property
+watch(
+  () => props.todo.isCompleted,
+  newValue => {
+    if (newValue !== undefined) {
+      isCompletedLocal.value = newValue
     }
   }
 )
@@ -97,11 +109,21 @@ const confirmDelete = async () => {
 }
 
 const toggleTodo = async () => {
-  await trpc.completion.toggle.mutate({
-    todoId: props.todo.id,
-    date: userStore.currentDate.toLocaleDateString('lt')
-  })
-  emit('toggled', props.todo.id)
+  // Update local state immediately for responsive UI
+  isCompletedLocal.value = !isCompletedLocal.value
+
+  try {
+    await trpc.completion.toggle.mutate({
+      todoId: props.todo.id,
+      date: userStore.currentDate.toLocaleDateString('lt')
+    })
+    // Emit event with updated state
+    emit('toggled', {id: props.todo.id, isCompleted: isCompletedLocal.value})
+  } catch (error) {
+    console.error('Error toggling todo:', error)
+    // Revert local state if API call fails
+    isCompletedLocal.value = !isCompletedLocal.value
+  }
 }
 
 const unshareItem = async () => {
