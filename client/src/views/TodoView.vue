@@ -246,13 +246,29 @@ const createTodo = async (title: string) => {
   }
 }
 
-const handleToggle = (id: number) => {
+const handleToggle = async (todoData: {id: number; isCompleted: boolean}) => {
   // Find todo in either list
-  const ownTodo = todos.value.find(t => t.id === id)
-  const sharedTodo = sharedTodos.value.find(t => t.id === id)
+  const ownTodo = todos.value.find(t => t.id === todoData.id)
+  const sharedTodo = sharedTodos.value.find(t => t.id === todoData.id)
 
-  if (ownTodo) ownTodo.isCompleted = !ownTodo.isCompleted
-  if (sharedTodo) sharedTodo.isCompleted = !sharedTodo.isCompleted
+  // Update with the new completion state directly from the event
+  if (ownTodo) {
+    ownTodo.isCompleted = todoData.isCompleted
+
+    // Update completions list for consistency
+    const existingCompletion = completions.value.findIndex(c => c.todoId === todoData.id)
+    if (todoData.isCompleted && existingCompletion === -1) {
+      // Add to completions if marked as completed and not already there
+      completions.value.push({todoId: todoData.id})
+    } else if (!todoData.isCompleted && existingCompletion !== -1) {
+      // Remove from completions if marked as not completed
+      completions.value.splice(existingCompletion, 1)
+    }
+  }
+
+  if (sharedTodo) {
+    sharedTodo.isCompleted = todoData.isCompleted
+  }
 }
 
 const handleUnshared = (id: number) => {
@@ -275,36 +291,53 @@ const handleDelete = (id: number) => {
   }
 }
 
-const handleTitleUpdate = (updatedTodo: {id: number; title: string; isSharedByMe?: boolean}) => {
-  // Update in the appropriate array
-  const ownTodoIndex = todos.value.findIndex(t => t.id === updatedTodo.id)
-  const sharedTodoIndex = sharedTodos.value.findIndex(t => t.id === updatedTodo.id)
-
-  if (ownTodoIndex !== -1) {
-    todos.value[ownTodoIndex].title = updatedTodo.title
-    // Update the isSharedByMe property if provided
-    if (updatedTodo.isSharedByMe !== undefined) {
-      todos.value[ownTodoIndex].isSharedByMe = updatedTodo.isSharedByMe
-
-      // Also update the sharedWithUsersByTodo tracking object
-      if (updatedTodo.isSharedByMe) {
-        // If no existing value, initialize with an empty array
-        if (!sharedWithUsersByTodo.value[updatedTodo.id]) {
-          sharedWithUsersByTodo.value[updatedTodo.id] = []
-        }
-      } else {
-        // If no longer shared, remove it from tracking
-        if (updatedTodo.id in sharedWithUsersByTodo.value) {
-          delete sharedWithUsersByTodo.value[updatedTodo.id]
-        }
+// Helper function to update a todo in a specific array
+const updateTodoInArray = (
+  todoList: TodoItemType[],
+  updatedTodo: {id: number; title: string; isSharedByMe?: boolean}
+): TodoItemType[] => {
+  return todoList.map(todo => {
+    if (todo.id === updatedTodo.id) {
+      return {
+        ...todo,
+        title: updatedTodo.title,
+        ...(updatedTodo.isSharedByMe !== undefined ? {isSharedByMe: updatedTodo.isSharedByMe} : {})
       }
     }
-  } else if (sharedTodoIndex !== -1) {
-    sharedTodos.value[sharedTodoIndex].title = updatedTodo.title
-    // Update isSharedByMe for shared todos too if provided
-    if (updatedTodo.isSharedByMe !== undefined) {
-      sharedTodos.value[sharedTodoIndex].isSharedByMe = updatedTodo.isSharedByMe
+    return todo
+  })
+}
+
+// Helper function to update shared status tracking
+const updateSharedStatus = (todoId: number, isSharedByMe: boolean | undefined) => {
+  if (isSharedByMe === undefined) return
+
+  if (isSharedByMe) {
+    // Initialize with empty array if not already tracked
+    if (!sharedWithUsersByTodo.value[todoId]) {
+      sharedWithUsersByTodo.value[todoId] = []
     }
+  } else {
+    // Remove from tracking if no longer shared
+    if (todoId in sharedWithUsersByTodo.value) {
+      delete sharedWithUsersByTodo.value[todoId]
+    }
+  }
+}
+
+const handleTitleUpdate = (updatedTodo: {id: number; title: string; isSharedByMe?: boolean}) => {
+  // Find where the todo exists - in own todos or shared todos
+  const existsInOwn = todos.value.some(t => t.id === updatedTodo.id)
+  const existsInShared = sharedTodos.value.some(t => t.id === updatedTodo.id)
+
+  // Update in the appropriate array(s)
+  if (existsInOwn) {
+    todos.value = updateTodoInArray(todos.value, updatedTodo)
+    updateSharedStatus(updatedTodo.id, updatedTodo.isSharedByMe)
+  }
+
+  if (existsInShared) {
+    sharedTodos.value = updateTodoInArray(sharedTodos.value, updatedTodo)
   }
 }
 </script>

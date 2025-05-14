@@ -9,7 +9,9 @@
         </a>
       </router-link>
     </template>
-    <template #end><OptionsMenu /></template>
+    <template #end>
+      <OptionsMenu />
+    </template>
   </Menubar>
 
   <main>
@@ -22,8 +24,8 @@
 <script setup lang="ts">
 import {computed} from 'vue'
 import {Menubar} from 'primevue'
-import OptionsMenu from '@/components/Options/OptionsMenu.vue'
 import {useUserStore} from '@/stores/userStore'
+import OptionsMenu from '@/components/Options/OptionsMenu.vue'
 
 const userStore = useUserStore()
 
@@ -45,13 +47,3 @@ const links = computed(() => [
       ])
 ])
 </script>
-
-<style>
-html.cafe {
-  filter: sepia(0.9) hue-rotate(315deg) brightness(0.9);
-}
-
-html.contrast {
-  filter: contrast(2);
-}
-</style>
