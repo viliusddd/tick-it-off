@@ -42,8 +42,8 @@
 import {ref, onMounted, onUnmounted, watch} from 'vue'
 import {PencilSquareIcon} from '@heroicons/vue/24/solid'
 import {Dialog, ProgressSpinner} from 'primevue'
-import TodoTitleEditor from './TodoTitleEditor.vue'
-import TodoSharingManager from './TodoSharingManager.vue'
+import TodoTitleEditor from '../TodoItemEdit/TodoTitleEditor.vue'
+import TodoSharingManager from '../TodoItemEdit/TodoSharingManager.vue'
 
 const props = defineProps<{
   todoId: number
