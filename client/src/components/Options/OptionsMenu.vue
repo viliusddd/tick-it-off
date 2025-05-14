@@ -24,10 +24,10 @@
 <script setup lang="ts">
 import {ref, watch} from 'vue'
 import {useRouter} from 'vue-router'
-import {useUserStore} from '@/stores/userStore'
 import {Button, Menu} from 'primevue'
-import OptionsUser from './OptionsUser.vue'
 import {useDark, useToggle} from '@vueuse/core'
+import {useUserStore} from '@/stores/userStore'
+import OptionsUser from './OptionsUser.vue'
 
 const isDark = useDark()
 const toggleDarkMode = useToggle(isDark)

@@ -42,21 +42,20 @@
       />
 
       <!-- Delete button - disabled for shared items -->
-      <ConfirmDeleteButton @confirm="confirmDelete" :disabled="props.isShared" />
+      <TodoItemDelete @confirm="confirmDelete" :disabled="props.isShared" />
     </div>
   </li>
 </template>
 
 <script setup lang="ts">
-import ConfirmDeleteButton from './ConfirmDeleteButton.vue'
+import {ref, watch} from 'vue'
+import {trpc} from '@/trpc'
+import {useUserStore} from '@/stores/userStore'
+import {Checkbox, Tag} from 'primevue'
+import SharedByMeIndicator from './SharedByMeIndicator.vue'
+import TodoItemDelete from './TodoItem/TodoItemDelete.vue'
 import EditTodoButton from './EditTodoButton.vue'
 import UnshareButton from './UnshareButton.vue'
-import {useUserStore} from '@/stores/userStore'
-import {trpc} from '@/trpc'
-import {ref, watch} from 'vue'
-import Checkbox from 'primevue/checkbox'
-import Tag from 'primevue/tag'
-import SharedByMeIndicator from './SharedByMeIndicator.vue'
 
 const userStore = useUserStore()
 

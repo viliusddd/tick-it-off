@@ -2,7 +2,7 @@
   <div :class="['flex justify-center']">
     <div :class="'overflow-hidden rounded-lg shadow-xl max-sm:w-full'">
       <div class="mb:p-5 p-3">
-        <CalendarNavigation class="mb-3" />
+        <Calendar class="mb-3" />
         <NewTask class="my-3" @add-todo="createTodo" />
 
         <!-- Combined list of all todos -->
@@ -38,15 +38,14 @@
 
 <script setup lang="ts">
 import {type Ref, ref, watch, computed, onMounted} from 'vue'
+import {useRoute, useRouter, onBeforeRouteUpdate} from 'vue-router'
 import {trpc} from '@/trpc'
 import {useInfiniteScroll} from '@vueuse/core'
+import {ProgressSpinner, Message} from 'primevue'
+import {useUserStore} from '@/stores/userStore'
 import NewTask from '@/components/Todo/NewTask.vue'
 import TodoItem from '@/components/Todo/TodoItem.vue'
-import CalendarNavigation from '@/components/Todo/CalendarNavigation.vue'
-import {useUserStore} from '@/stores/userStore'
-import {useRoute, useRouter, onBeforeRouteUpdate} from 'vue-router'
-import ProgressSpinner from 'primevue/progressspinner'
-import Message from 'primevue/message'
+import Calendar from '@/components/Todo/TodoCalendar.vue'
 
 const userStore = useUserStore()
 const route = useRoute()

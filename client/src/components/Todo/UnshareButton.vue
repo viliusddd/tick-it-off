@@ -1,7 +1,11 @@
 <template>
   <span ref="rootEl">
     <template v-if="!showConfirm">
-      <button @click="showConfirm = true" :class="unshareClass" :style="iconStyle" :title="title">
+      <button
+        @click="showConfirm = true"
+        class="text-red-500 hover:text-red-600"
+        title="Remove from my list"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5"
@@ -19,51 +23,22 @@
       </button>
     </template>
     <template v-else>
-      <button @click="showConfirm = false" :class="cancelClass" :style="iconStyle">
-        <XMarkIcon :class="iconSizeClass" />
+      <button @click="showConfirm = false" class="text-gray-400 hover:text-gray-600">
+        <XMarkIcon class="h-5 w-5" />
       </button>
-      <button @click="onConfirm" :class="confirmClass" :style="iconStyle">
-        <CheckIcon :class="iconSizeClass" />
+      <button @click="onConfirm" class="text-green-500 hover:text-green-600">
+        <CheckIcon class="h-5 w-5" />
       </button>
     </template>
   </span>
 </template>
 
 <script setup lang="ts">
-import {ref, computed, onMounted, onUnmounted} from 'vue'
+import {ref, onMounted, onUnmounted} from 'vue'
 import {CheckIcon, XMarkIcon} from '@heroicons/vue/24/solid'
-
-const props = defineProps({
-  iconSize: {
-    type: String,
-    default: 'h-5 w-5'
-  },
-  confirmColor: {
-    type: String,
-    default: 'text-green-500 hover:text-green-600'
-  },
-  unshareColor: {
-    type: String,
-    default: 'text-red-500 hover:text-red-600'
-  },
-  cancelColor: {
-    type: String,
-    default: 'text-gray-400 hover:text-gray-600'
-  },
-  title: {
-    type: String,
-    default: 'Remove from my list'
-  }
-})
 
 const emit = defineEmits(['confirm'])
 const showConfirm = ref(false)
-
-const iconSizeClass = computed(() => props.iconSize)
-const confirmClass = computed(() => `${props.confirmColor} focus:outline-none`)
-const unshareClass = computed(() => `${props.unshareColor} focus:outline-none `)
-const cancelClass = computed(() => `${props.cancelColor} mr-1 focus:outline-none`)
-const iconStyle = ''
 
 const rootEl = ref<HTMLElement | null>(null)
 
@@ -79,10 +54,6 @@ function handleClickOutside(event: MouseEvent) {
   }
 }
 
-onMounted(() => {
-  document.addEventListener('mousedown', handleClickOutside)
-})
-onUnmounted(() => {
-  document.removeEventListener('mousedown', handleClickOutside)
-})
+onMounted(() => document.addEventListener('mousedown', handleClickOutside))
+onUnmounted(() => document.removeEventListener('mousedown', handleClickOutside))
 </script>
