@@ -1,6 +1,6 @@
 import type {Database, Todo} from '@server/database'
 import {type TodoPublic, todoKeysPublic} from '@server/entities/todo'
-import {type Insertable, type Selectable} from 'kysely'
+import {type Insertable, type Selectable, sql} from 'kysely'
 
 type Pagination = {offset: number; limit: number}
 
@@ -55,6 +55,15 @@ export function todoRepository(db: Database) {
         .where('todo.id', '=', todoId)
         .where('todo.userId', '=', userId)
         .executeTakeFirstOrThrow()
+    },
+
+    async getTotalTodoCount() {
+      const result = await db
+        .selectFrom('todo')
+        .select(sql<number>`COUNT(*)`.as('count'))
+        .executeTakeFirstOrThrow()
+
+      return result.count ?? 0
     }
   }
 }

@@ -8,6 +8,7 @@ import unshare from './unshare'
 import getSharedUsers from './getSharedUsers'
 import findSharedWithMe from './findSharedWithMe'
 import removeSharedWithMe from './removeSharedWithMe'
+import getTotalTodoCount from './getTotalTodoCount'
 import findById from './findById'
 
 export default router({
@@ -20,5 +21,6 @@ export default router({
   getSharedUsers,
   findSharedWithMe,
   removeSharedWithMe,
+  getTotalTodoCount,
   findById
 })
