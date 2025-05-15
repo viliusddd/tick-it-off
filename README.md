@@ -20,7 +20,7 @@ More organised than a queue at the post office, and just as satisfying to get th
 - [Tick It Off](#tick-it-off)
   - [Features](#features)
   - [Tech Stack](#tech-stack)
-  - [TL;DR Setup](#tldr-setup)
+  - [TL;DR Development Setup](#tldr-development-setup)
   - [Database Diagram](#database-diagram)
   - [tRPC Panel](#trpc-panel)
 
@@ -30,7 +30,6 @@ More organised than a queue at the post office, and just as satisfying to get th
 - Sign in/up.
 - Password manager correctly recognize input fields.
 - Share same types and validation schemas between backend and frontend.
-- !WIP: Twilio Sendgrid integration
 - Share todo with afriend.
 
 ## Tech Stack
@@ -90,32 +89,24 @@ More organised than a queue at the post office, and just as satisfying to get th
   >
 </a>
 
-## TL;DR Setup
+## TL;DR Development Setup
 
 1. Install dependencies
 
 ```sh
-git clone git@github.com:viliusddd/tick-it-off.git && \
-
-# backend
-cd tick-it-off && \
-npm i && \
-cd server && \
-cp .env.example .env && \
-# adjust .env values
-npm run migrate:latest && \
+git clone git@github.com:viliusddd/tick-it-off.git && cd tick-it-off && \
 nvm use && \
+npm i && \
+cp server/.env.example server/.env && \
+npm run migrate:latest --prefix server/ && \
+cp client/.env.example client/.env
 
-# frontend
-cd ../server && \
-cp .env.example .env
-# adjust .env values
+# (optionally) adjust .env values
 ```
 
 2. Run app:
 
-- Start PostgreSQL server.
-- Adjust `.env` variables.
+- Start PostgreSQL server: `docker compose up`.
 - Execute `npm run dev` in `server/` for backend and same in `client/` for frontend.
 
 ## Database Diagram
