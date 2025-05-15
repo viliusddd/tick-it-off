@@ -34,8 +34,7 @@ More organised than a queue at the post office, and just as satisfying to get th
 - Password manager correctly recognize input fields.
 - Share same types and validation schemas between backend and frontend.
 - !WIP: Twilio Sendgrid integration
-- !TODO: Share todo's with others
-- !TODO: Ability to do the **TODO** item together, see each other's progress.
+- Share todo with afriend.
 
 ## Tech Stack
 
@@ -100,11 +99,20 @@ More organised than a queue at the post office, and just as satisfying to get th
 
 ```sh
 git clone git@github.com:viliusddd/tick-it-off.git && \
-cd tick-it-off && \
+
+# backend
+cd tick-it-off/server && \
 cp .env.example .env && \
+# adjust .env values
 npm i && \
 npm run migrate:latest && \
-nvm use
+nvm use && \
+
+# frontend
+cd ../server && \
+cp .env.example .env && \
+# adjust .env values
+npm i
 ```
 
 2. Run app:
