@@ -1,10 +1,8 @@
 <template>
   <Toast />
   <div class="m-2 mx-auto flex max-w-md flex-col gap-8 rounded-xl px-2 py-4 sm:px-8 sm:py-8">
-    <div class="flex-1 p-3 sm:p-6 dark:bg-gray-900">
-      <h2 class="mb-4 text-center text-xl font-semibold text-gray-800 dark:text-gray-100">
-        Sign up for an account
-      </h2>
+    <div class="flex-1 p-3 sm:p-6">
+      <h2 class="mb-4 text-center text-xl font-semibold">Sign up for an account</h2>
       <Form
         v-slot="$form"
         :resolver="zodResolver(signupSchema)"
@@ -106,23 +104,16 @@
             type="submit"
             severity="primary"
             label="Sign up"
-            class="min-w-[120px] rounded-md bg-indigo-600 font-medium text-white transition hover:bg-indigo-700"
+            class="min-w-[120px] rounded-md font-medium transition"
           />
         </div>
       </Form>
-      <div class="mt-6 text-center text-sm text-gray-600 dark:text-gray-300">
+      <div class="mt-6 text-center text-sm">
         Already have an account?
-        <RouterLink
-          to="/login"
-          class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-        >
-          Log in
-        </RouterLink>
+        <RouterLink to="/login" class="font-semibold leading-6"> Log in </RouterLink>
         <br />
         or go
-        <RouterLink to="/" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-          back home
-        </RouterLink>
+        <RouterLink to="/" class="font-semibold leading-6"> back home </RouterLink>
       </div>
     </div>
   </div>
