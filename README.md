@@ -22,7 +22,8 @@ More organised than a queue at the post office, and just as satisfying to get th
   - [Tech Stack](#tech-stack)
   - [TL;DR Setup](#tldr-setup)
   - [Database Diagram](#database-diagram)
-  - [API Endpoints](#api-endpoints)
+  - [tRPC Panel](#trpc-panel)
+  - [API Endpoints with cURL](#api-endpoints-with-curl)
     - [todo](#todo)
     - [completion](#completion)
     - [user](#user)
@@ -139,9 +140,16 @@ cp .env.example .env
 - **shared:_todo** stores info on which users the todo item was shared with.
 - **user_relationship**: are users friends.
 
-## API Endpoints
+## tRPC Panel
 
 With the server running, go to <http://localhost:3000/api/v1/trpc-panel> to access available routes and their documentation.
+
+Need to login first, to be able to poke around the tRPC Panel:
+
+1. Login, using `user/login`, copy `accessToken` value from the response.
+2. Go to `Headers` at the top right corner, enter `Authorization` to `key` and `accessToken` from previous step to `value` field. Confirm
+
+## API Endpoints with cURL
 
 ### todo
 
