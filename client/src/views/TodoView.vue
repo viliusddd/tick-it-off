@@ -165,11 +165,30 @@ const fetchSharedTodos = async () => {
     // Get all todos shared with the current user
     const result = await trpc.todo.findSharedWithMe.query()
 
+    // Need to fetch owner information for each shared todo
+    const sharedWithOwnerInfo = await Promise.all(
+      result.map(async todo => {
+        try {
+          // Fetch user info for the owner of this todo
+          const user = await trpc.user.findById.query({id: todo.userId})
+          return {
+            ...todo,
+            isSharedWithMe: true,
+            owner: user ? `${user.firstName} ${user.lastName}` : 'Unknown User'
+          }
+        } catch (err) {
+          console.error(`Error fetching owner for todo ${todo.id}:`, err)
+          return {
+            ...todo,
+            isSharedWithMe: true,
+            owner: 'Unknown User'
+          }
+        }
+      })
+    )
+
     // Mark these todos as shared with the current user
-    sharedTodos.value = result.map(todo => ({
-      ...todo,
-      isSharedWithMe: true
-    }))
+    sharedTodos.value = sharedWithOwnerInfo
 
     // Fetch completions for shared todos if there are any shared todos
     if (sharedTodos.value.length > 0) {

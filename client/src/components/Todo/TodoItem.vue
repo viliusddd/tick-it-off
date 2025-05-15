@@ -21,10 +21,8 @@
       >
         {{ todo.title }}
         <SharedByMeIndicator v-if="isLocalShared" />
-        <Tag v-if="props.isShared && todo.owner" severity="info" class="ml-2">
-          {{ todo.owner }}
-        </Tag>
       </div>
+      <Tag v-if="todo.owner" severity="info"> {{ todo.owner }} </Tag>
     </div>
 
     <div class="flex items-center space-x-2 opacity-0 transition-opacity group-hover:opacity-100">
