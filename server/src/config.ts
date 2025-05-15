@@ -40,7 +40,6 @@ const config = schema.parse({
   env: env.NODE_ENV,
   port: env.PORT,
   isCi: env.CI,
-  sgKey: env.SENDGRID_API_KEY,
 
   auth: {
     tokenKey: env.TOKEN_KEY,
