@@ -106,7 +106,11 @@ cp client/.env.example client/.env
 
 2. Run app:
 
-- Start PostgreSQL server: `docker compose up`.
+- Start PostgreSQL server: `docker-compose up -d postgres`.
+
+> [!IMPORTANT]
+> `POSTGRES_PORT=5433 docker-compose up -d postgres` to override default port. Check `docker-compose ps`.
+
 - Execute `npm run dev` in `server/` for backend and same in `client/` for frontend.
 
 ## Database Diagram
