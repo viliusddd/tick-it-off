@@ -215,13 +215,6 @@ const fetchSharedTodos = async () => {
   }
 }
 
-const fetchCompletionsByIdRange = async (firstId: number, secondId: number) =>
-  trpc.completion.findByRange.query({
-    date: userStore.currentDate.toLocaleDateString('lt'),
-    firstId,
-    secondId
-  })
-
 const fetch = async <T,>(queryRef: Ref<T[]>, queryCallback: () => Promise<T[]>) => {
   if (isFetching.value || !hasMore.value) return
   isFetching.value = true
