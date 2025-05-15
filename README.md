@@ -1,4 +1,4 @@
-# Tick It Off
+# Tick It Off | TODO App
 
 <div align="left">
   <a href="https://github.com/viliusddd/tick-it-off/actions/workflows/deploy.yaml">
@@ -26,11 +26,11 @@ More organised than a queue at the post office, and just as satisfying to get th
 
 ## Features
 
-- Use of pagination in todo list.
+- Pagination is used in the todo list.
 - Sign in/up.
-- Password manager correctly recognize input fields.
-- Share same types and validation schemas between backend and frontend.
-- Share todo with afriend.
+- Password manager correctly recognises input fields.
+- Share the same types and validation schemas between backend and frontend.
+- Share todo with a friend.
 
 ## Tech Stack
 
