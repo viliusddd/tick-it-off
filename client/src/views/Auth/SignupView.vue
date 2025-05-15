@@ -28,9 +28,7 @@
           </div>
         </div>
         <div>
-          <label for="password" class="mb-1 block font-medium">
-            Password <span class="text-red-500">*</span>
-          </label>
+          <label for="password" class="mb-1 block font-medium"> Password <RequiredStar /> </label>
           <Password
             name="password"
             type="password"
@@ -52,7 +50,7 @@
         </div>
         <div>
           <label for="confirmPassword" class="mb-1 block font-medium">
-            Confirm Password <span class="text-red-500">*</span>
+            Confirm Password <RequiredStar />
           </label>
           <Password
             name="confirmPassword"
