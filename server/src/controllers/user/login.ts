@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import config from '@server/config'
-import jsonwebtoken from 'jsonwebtoken'
+import jsonwebtoken, {type SignOptions} from 'jsonwebtoken'
 import {publicProcedure} from '@server/trpc'
 import {TRPCError} from '@trpc/server'
 import {userSchema} from '@server/entities/user'
@@ -44,10 +44,7 @@ export default publicProcedure
 
     // What we will include in the token.
     const payload = prepareTokenPayload(user)
-
-    const accessToken = jsonwebtoken.sign(payload, tokenKey, {
-      expiresIn
-    })
+    const accessToken = jsonwebtoken.sign(payload, tokenKey, {expiresIn} as SignOptions)
 
     return {
       accessToken
