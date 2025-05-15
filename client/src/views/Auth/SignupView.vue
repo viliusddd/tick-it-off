@@ -14,6 +14,36 @@
         class="flex flex-col gap-4"
       >
         <div>
+          <label for="firstName" class="mb-1 block font-medium">
+            First Name <RequiredStar />
+          </label>
+          <InputText name="firstName" type="text" autocomplete="given-name" fluid />
+          <div class="h-6">
+            <Message
+              v-if="$form.firstName?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              class="text-xs"
+              >{{ $form.firstName.error.message }}</Message
+            >
+          </div>
+        </div>
+        <div>
+          <label for="lastName" class="mb-1 block font-medium"> Last Name <RequiredStar /> </label>
+          <InputText name="lastName" type="text" autocomplete="family-name" fluid />
+          <div class="h-6">
+            <Message
+              v-if="$form.lastName?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              class="text-xs"
+              >{{ $form.lastName.error.message }}</Message
+            >
+          </div>
+        </div>
+        <div>
           <label for="email" class="mb-1 block font-medium"> Email <RequiredStar /> </label>
           <InputText name="email" type="email" autocomplete="username" fluid />
           <div class="h-6">
