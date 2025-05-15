@@ -152,9 +152,16 @@ const userForm = ref({
   lastName: ''
 })
 
-const onSignupFormSubmit = async () => {
+const onSignupFormSubmit = async (event: any) => {
+  const {states, valid} = event
+  if (!valid) return
   try {
-    await userStore.signup(userForm.value)
+    await userStore.signup({
+      email: states.email.value,
+      password: states.password.value,
+      firstName: states.firstName.value,
+      lastName: states.lastName.value
+    })
     // Support redirects back to the page the user was on before signing up
     const redirectTo = (router.currentRoute.value.query.redirect as string) ?? {name: 'TodoToday'}
     router.push(redirectTo)
