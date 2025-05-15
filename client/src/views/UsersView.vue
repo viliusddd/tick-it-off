@@ -16,19 +16,16 @@
       @change="handleSelectionChange"
     >
       <template #header>
-        <h2 class="mb-4 text-2xl font-bold">User Management</h2>
-        <div class="mb-4">
-          <p class="text-gray-600">Add friends to share your todo lists with them.</p>
-          <p class="mt-2 text-sm text-blue-600">
-            Click on a user to add or remove them as a friend.
-          </p>
+        <div class="mb-6 text-lg">
+          <p>Add friends to share your todo lists with them.</p>
+          <p class="mt-2 text-sm">Click on a user to add or remove them as a friend.</p>
         </div>
       </template>
       <template #option="slotProps">
         <div class="flex items-center gap-2">
           <div>{{ slotProps.option.userbFirstName }} {{ slotProps.option.userbLastName }}</div>
           <div v-if="slotProps.option.isFriend">
-            <Tag value="Friend" severity="success" />
+            <Tag value="Friend" severity="info" />
           </div>
         </div>
       </template>
