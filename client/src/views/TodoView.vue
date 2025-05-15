@@ -164,11 +164,31 @@ const fetchSharedTodos = async () => {
   try {
     // Get all todos shared with the current user
     const result = await trpc.todo.findSharedWithMe.query()
+
     // Mark these todos as shared with the current user
     sharedTodos.value = result.map(todo => ({
       ...todo,
       isSharedWithMe: true
     }))
+
+    // Fetch completions for shared todos if there are any shared todos
+    if (sharedTodos.value.length > 0) {
+      const lowestId = getMinMaxId(sharedTodos.value, 'min')
+      const highestId = getMinMaxId(sharedTodos.value, 'max')
+
+      // Fetch completion status for shared todos
+      const sharedCompletions = await trpc.completion.findByRange.query({
+        date: userStore.currentDate.toLocaleDateString('lt'),
+        firstId: lowestId,
+        secondId: highestId
+      })
+
+      // Update completion status for shared todos
+      sharedTodos.value = sharedTodos.value.map(todo => ({
+        ...todo,
+        isCompleted: sharedCompletions.some(compl => compl.todoId === todo.id)
+      }))
+    }
   } catch (error) {
     console.error('Error fetching shared todos:', error)
   } finally {
