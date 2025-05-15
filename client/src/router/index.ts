@@ -10,6 +10,10 @@ const routes: RouteRecordRaw[] = [
     beforeEnter: [authenticate],
     children: [
       {
+        path: '',
+        redirect: '/todo'
+      },
+      {
         path: '/todo',
         name: 'TodoToday',
         component: TodoView,
