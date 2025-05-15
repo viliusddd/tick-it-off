@@ -1,5 +1,5 @@
 import {authContext, requestContext} from '@tests/utils/context'
-import {fakeUser, fakeTodo} from '@server/entities/tests/fakes'
+import {fakeUser, fakeTodo, fakeAuthUser} from '@server/entities/tests/fakes'
 import {createTestDatabase} from '@tests/utils/database'
 import {createCallerFactory} from '@server/trpc'
 import {wrapInRollbacks} from '@tests/utils/transactions'
@@ -17,17 +17,14 @@ test('unauthenticated', async () => {
   await expect(removeSharedWithMe({todoId: 1})).rejects.toThrow(/unauthenticated/i)
 })
 
-test('remove shared todo', async () => {
+test('removeSharedWithMe removes a todo shared with the current user', async () => {
   // ARRANGE
   const [owner] = await insertAll(db, 'user', fakeUser())
   const [sharedUser] = await insertAll(db, 'user', fakeUser())
   const [todo] = await insertAll(db, 'todo', fakeTodo({userId: owner.id}))
 
-  // Share the todo with the user
-  await insertAll(db, 'sharedTodo', {
-    todoId: todo.id,
-    userId: sharedUser.id
-  })
+  // Share the todo with sharedUser
+  await insertAll(db, 'sharedTodo', {todoId: todo.id, userId: sharedUser.id})
 
   // Verify the todo is shared
   const sharedTodosBefore = await selectAll(db, 'sharedTodo', eb =>
@@ -35,25 +32,50 @@ test('remove shared todo', async () => {
   )
   expect(sharedTodosBefore.length).toBe(1)
 
-  const {removeSharedWithMe} = createCaller(authContext({db}, sharedUser))
+  const authUser = fakeAuthUser({id: sharedUser.id})
+  const {removeSharedWithMe} = createCaller(authContext({db}, authUser))
 
-  // ACT - the shared user removes the shared todo
+  // ACT
   await removeSharedWithMe({todoId: todo.id})
 
-  // ASSERT - verify the todo is no longer shared
+  // ASSERT
   const sharedTodosAfter = await selectAll(db, 'sharedTodo', eb =>
     eb('todoId', '=', todo.id).and('userId', '=', sharedUser.id)
   )
   expect(sharedTodosAfter.length).toBe(0)
 })
 
-test('no error when removing non-existent share', async () => {
+test('removeSharedWithMe does nothing when todo is not shared with user', async () => {
+  // ARRANGE
+  const [owner] = await insertAll(db, 'user', fakeUser())
+  const [sharedUser] = await insertAll(db, 'user', fakeUser())
+  const [anotherUser] = await insertAll(db, 'user', fakeUser())
+  const [todo] = await insertAll(db, 'todo', fakeTodo({userId: owner.id}))
+
+  // Share the todo with sharedUser but not with anotherUser
+  await insertAll(db, 'sharedTodo', {todoId: todo.id, userId: sharedUser.id})
+
+  const authUser = fakeAuthUser({id: anotherUser.id})
+  const {removeSharedWithMe} = createCaller(authContext({db}, authUser))
+
+  // ACT - Attempt to remove a share that doesn't exist for this user
+  await removeSharedWithMe({todoId: todo.id})
+
+  // ASSERT - The share with sharedUser should still exist
+  const sharedTodosAfter = await selectAll(db, 'sharedTodo', eb =>
+    eb('todoId', '=', todo.id).and('userId', '=', sharedUser.id)
+  )
+  expect(sharedTodosAfter.length).toBe(1)
+})
+
+test('removeSharedWithMe works with non-existent todo', async () => {
   // ARRANGE
   const [user] = await insertAll(db, 'user', fakeUser())
-  const [owner] = await insertAll(db, 'user', fakeUser())
-  const [todo] = await insertAll(db, 'todo', fakeTodo({userId: owner.id}))
-  const {removeSharedWithMe} = createCaller(authContext({db}, user))
+  const nonExistentTodoId = 99999
+
+  const authUser = fakeAuthUser({id: user.id})
+  const {removeSharedWithMe} = createCaller(authContext({db}, authUser))
 
   // ACT & ASSERT - Should not throw an error
-  await expect(removeSharedWithMe({todoId: todo.id})).resolves.not.toThrow()
+  await expect(removeSharedWithMe({todoId: nonExistentTodoId})).resolves.not.toThrow()
 })

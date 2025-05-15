@@ -4,29 +4,84 @@ import {createCallerFactory} from '@server/trpc'
 import {wrapInRollbacks} from '@tests/utils/transactions'
 import {selectAll} from '@tests/utils/records'
 import {random} from '@tests/utils/random'
+import {requestContext} from '@tests/utils/context'
+import bcrypt from 'bcrypt'
 import userRouter from '..'
 
 const db = await wrapInRollbacks(createTestDatabase())
 const createCaller = createCallerFactory(userRouter)
-const {signup} = createCaller({db})
+const {signup} = createCaller(requestContext({db}))
 
-it('should save a user', async () => {
-  const user = fakeUser()
-  const response = await signup(user)
+test('signup creates a new user', async () => {
+  // ARRANGE
+  const userData = fakeUser()
 
-  const [userCreated] = await selectAll(db, 'user', eb => eb('email', '=', user.email))
-
-  expect(userCreated).toMatchObject({
-    id: expect.any(Number),
-    ...user,
-    password: expect.not.stringContaining(user.password)
+  // ACT
+  const result = await signup({
+    email: userData.email,
+    password: userData.password,
+    firstName: userData.firstName,
+    lastName: userData.lastName
   })
 
-  expect(userCreated.password).toHaveLength(60)
+  // ASSERT
+  expect(result.id).toBeDefined()
 
-  expect(response).toEqual({
-    id: userCreated.id
+  // Verify user was created in the database
+  const createdUser = await selectAll(db, 'user', eb => eb('id', '=', result.id))
+  expect(createdUser.length).toBe(1)
+  expect(createdUser[0].email).toBe(userData.email)
+  expect(createdUser[0].firstName).toBe(userData.firstName)
+  expect(createdUser[0].lastName).toBe(userData.lastName)
+
+  // Password should be hashed
+  expect(createdUser[0].password).not.toBe(userData.password)
+  const isPasswordValid = await bcrypt.compare(userData.password, createdUser[0].password)
+  expect(isPasswordValid).toBe(true)
+})
+
+test('signup with existing email throws error', async () => {
+  // ARRANGE
+  const userData = fakeUser()
+  await signup({
+    email: userData.email,
+    password: userData.password,
+    firstName: userData.firstName,
+    lastName: userData.lastName
   })
+
+  // ACT & ASSERT - Attempt to create another user with the same email
+  await expect(
+    signup({
+      email: userData.email,
+      password: 'DifferentPassword.123!',
+      firstName: 'Different',
+      lastName: 'User'
+    })
+  ).rejects.toThrow(/User with this email already exists/)
+})
+
+test('signup with invalid data throws error', async () => {
+  // ARRANGE
+  // ACT & ASSERT - Missing required fields
+  await expect(
+    signup({
+      email: '',
+      password: 'Password.123!',
+      firstName: 'Test',
+      lastName: 'User'
+    })
+  ).rejects.toThrow()
+
+  // ACT & ASSERT - Invalid email format
+  await expect(
+    signup({
+      email: 'invalid-email',
+      password: 'Password.123!',
+      firstName: 'Test',
+      lastName: 'User'
+    })
+  ).rejects.toThrow()
 })
 
 it('should require a valid email', async () => {
