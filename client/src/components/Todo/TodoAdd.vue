@@ -16,6 +16,7 @@
           @keyup.enter="addTodo"
           placeholder="Add a new task..."
           class="flex-grow"
+          autocomplete="off"
         />
         <Button
           @mousedown.prevent
