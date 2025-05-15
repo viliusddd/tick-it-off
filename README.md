@@ -101,10 +101,11 @@ More organised than a queue at the post office, and just as satisfying to get th
 git clone git@github.com:viliusddd/tick-it-off.git && \
 
 # backend
-cd tick-it-off/server && \
+cd tick-it-off && \
+npm i && \
+cd server && \
 cp .env.example .env && \
 # adjust .env values
-npm i && \
 npm run migrate:latest && \
 nvm use && \
 
@@ -112,14 +113,13 @@ nvm use && \
 cd ../server && \
 cp .env.example .env && \
 # adjust .env values
-npm i
 ```
 
 2. Run app:
 
 - Start PostgreSQL server.
 - Adjust `.env` variables.
-- Execute `npm run dev` in `server/` for backend and `client/` for frontend.
+- Execute `npm run dev` in `server/` for backend and same in `client/` for frontend.
 
 ## Database Diagram
 
