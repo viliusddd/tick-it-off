@@ -17,7 +17,7 @@
       <div
         v-for="friend in friends"
         :key="friend.id"
-        class="flex cursor-pointer items-center rounded px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+        class="flex cursor-pointer items-center rounded px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-900"
         @click="confirmShareAction(friend)"
       >
         <div class="flex-1">

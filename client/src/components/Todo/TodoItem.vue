@@ -1,6 +1,6 @@
 <template>
   <li
-    class="group relative flex justify-between rounded-md p-3 transition duration-300 ease-in-out"
+    class="group relative flex justify-between rounded-md p-3 transition duration-300 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-900"
     :class="{'hover:bg-surface-hover': true}"
   >
     <div class="flex items-center gap-2">
