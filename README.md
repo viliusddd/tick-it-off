@@ -111,7 +111,7 @@ nvm use && \
 
 # frontend
 cd ../server && \
-cp .env.example .env && \
+cp .env.example .env
 # adjust .env values
 ```
 
@@ -131,10 +131,13 @@ cp .env.example .env && \
   </a>
 </div>
 
-- **completion** stores entries on when the todo item was completed.
-- **todo** stores todo entries.
-- **user** stores user information.
-- **shared_todo** stores info on which users the todo item was shared with.
+<br>
+
+- **completion**: stores entries on when the todo item was completed.
+- **todo**: stores todo entries.
+- **user**: stores user information.
+- **shared:_todo** stores info on which users the todo item was shared with.
+- **user_relationship**: are users friends.
 
 ## API Endpoints
 
