@@ -14,9 +14,7 @@
         class="flex flex-col gap-4"
       >
         <div>
-          <label for="email" class="mb-1 block font-medium">
-            Email <span class="text-red-500">*</span>
-          </label>
+          <label for="email" class="mb-1 block font-medium"> Email <RequiredStar /> </label>
           <InputText name="email" type="email" autocomplete="username" fluid />
           <div class="h-6">
             <Message
@@ -110,16 +108,17 @@ import {InputText, Button, useToast, Toast, Message, Password} from 'primevue'
 import {Form} from '@primevue/forms'
 import {zodResolver} from '@primevue/forms/resolvers/zod'
 import {z} from 'zod'
+import {userSchema} from '@entities/user'
+import RequiredStar from '@/components/UI/RequiredStar.vue'
 
 const toast = useToast()
 const router = useRouter()
 const userStore = useUserStore()
 
-const signupSchema = z
-  .object({
-    email: z.string().email('Invalid email address'),
-    password: z.string().min(6, 'Password must be at least 6 characters'),
-    confirmPassword: z.string().min(6, 'Password must be at least 6 characters')
+const signupSchema = userSchema
+  .pick({firstName: true, lastName: true, email: true, password: true})
+  .extend({
+    confirmPassword: userSchema.shape.password
   })
   .refine(data => data.password === data.confirmPassword, {
     message: "Passwords don't match",
