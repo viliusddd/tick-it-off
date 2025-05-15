@@ -1,62 +1,66 @@
 <template>
-  <div class="statistics-container p-5">
-    <h1 class="mb-6 text-2xl font-bold">Statistics</h1>
+  <div :class="['flex justify-center']">
+    <div :class="'overflow-hidden rounded-lg shadow-xl max-sm:w-full'">
+      <div class="mb:p-5 p-3">
+        <h1 class="mb-6 text-2xl font-bold">Statistics</h1>
 
-    <div v-if="isLoading" class="flex items-center justify-center p-8">
-      <ProgressSpinner style="width: 50px; height: 50px" />
-    </div>
+        <div v-if="isLoading" class="flex items-center justify-center p-8">
+          <ProgressSpinner style="width: 50px; height: 50px" />
+        </div>
 
-    <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-3">
-      <!-- Total Todo Count Card -->
-      <Card class="shadow-md">
-        <template #title>
-          <div class="flex items-center">
-            <i class="pi pi-list mr-2 text-xl"></i>
-            <span>Total Todos</span>
-          </div>
-        </template>
-        <template #content>
-          <div class="py-4 text-center text-4xl font-bold">{{ stats.totalTodoCount }}</div>
-          <div class="text-center text-sm text-gray-500">Total tasks created</div>
-        </template>
-      </Card>
+        <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <!-- Total Todo Count Card -->
+          <Card class="shadow-md">
+            <template #title>
+              <div class="flex items-center">
+                <i class="pi pi-list mr-2 text-xl"></i>
+                <span>Total Todos</span>
+              </div>
+            </template>
+            <template #content>
+              <div class="py-4 text-center text-4xl font-bold">{{ stats.totalTodoCount }}</div>
+              <div class="text-center text-sm text-gray-500">Total tasks created</div>
+            </template>
+          </Card>
 
-      <!-- Average Completion Card -->
-      <Card class="shadow-md">
-        <template #title>
-          <div class="flex items-center">
-            <i class="pi pi-chart-line mr-2 text-xl"></i>
-            <span>Daily Average</span>
-          </div>
-        </template>
-        <template #content>
-          <div class="py-4 text-center text-4xl font-bold">
-            {{ stats.averageCompletionsPerDay.toFixed(1) }}
-          </div>
-          <div class="text-center text-sm text-gray-500">Tasks completed per day</div>
-        </template>
-      </Card>
+          <!-- Average Completion Card -->
+          <Card class="shadow-md">
+            <template #title>
+              <div class="flex items-center">
+                <i class="pi pi-chart-line mr-2 text-xl"></i>
+                <span>Daily Average</span>
+              </div>
+            </template>
+            <template #content>
+              <div class="py-4 text-center text-4xl font-bold">
+                {{ stats.averageCompletionsPerDay.toFixed(1) }}
+              </div>
+              <div class="text-center text-sm text-gray-500">Tasks completed per day</div>
+            </template>
+          </Card>
 
-      <!-- Most Active Day Card -->
-      <Card class="shadow-md">
-        <template #title>
-          <div class="flex items-center">
-            <i class="pi pi-calendar mr-2 text-xl"></i>
-            <span>Most Active Day</span>
-          </div>
-        </template>
-        <template #content>
-          <div v-if="stats.mostActiveDay">
-            <div class="py-2 text-center text-xl font-bold">
-              {{ formatDate(stats.mostActiveDay.date) }}
-            </div>
-            <div class="text-center text-sm text-gray-500">
-              {{ stats.mostActiveDay.dailycount }} Tasks completed
-            </div>
-          </div>
-          <div v-else class="py-4 text-center text-gray-500">No completions yet</div>
-        </template>
-      </Card>
+          <!-- Most Active Day Card -->
+          <Card class="shadow-md">
+            <template #title>
+              <div class="flex items-center">
+                <i class="pi pi-calendar mr-2 text-xl"></i>
+                <span>Most Active Day</span>
+              </div>
+            </template>
+            <template #content>
+              <div v-if="stats.mostActiveDay">
+                <div class="py-2 text-center text-xl font-bold">
+                  {{ formatDate(stats.mostActiveDay.date) }}
+                </div>
+                <div class="text-center text-sm text-gray-500">
+                  {{ stats.mostActiveDay.dailycount }} Tasks completed
+                </div>
+              </div>
+              <div v-else class="py-4 text-center text-gray-500">No completions yet</div>
+            </template>
+          </Card>
+        </div>
+      </div>
     </div>
   </div>
 </template>

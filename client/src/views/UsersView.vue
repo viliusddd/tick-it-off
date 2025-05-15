@@ -1,38 +1,42 @@
 <template>
-  <div class="p-4">
-    <Listbox
-      multiple
-      v-model="selectedUsers"
-      :options="usersUpdated"
-      optionLabel="userbFirstName"
-      :filter="true"
-      :pt="{
-        listContainer: {style: 'max-height: none'},
-        option: {
-          class: 'flex flex-row items-center justify-between',
-          style: 'cursor: pointer'
-        }
-      }"
-      @change="handleSelectionChange"
-    >
-      <template #header>
-        <div class="mb-6 text-lg">
-          <p>Add friends to share your todo lists with them.</p>
-          <p class="mt-2 text-sm">Click on a user to add or remove them as a friend.</p>
-        </div>
-      </template>
-      <template #option="slotProps">
-        <div class="flex items-center gap-2">
-          <div>{{ slotProps.option.userbFirstName }} {{ slotProps.option.userbLastName }}</div>
-          <div v-if="slotProps.option.isFriend">
-            <Tag value="Friend" severity="info" />
-          </div>
-        </div>
-      </template>
-      <template #empty>
-        <div class="p-4 text-center text-gray-500">No users found</div>
-      </template>
-    </Listbox>
+  <div :class="['flex justify-center']">
+    <div :class="'overflow-hidden rounded-lg shadow-xl max-sm:w-full'">
+      <div class="mb:p-5 p-3">
+        <Listbox
+          multiple
+          v-model="selectedUsers"
+          :options="usersUpdated"
+          optionLabel="userbFirstName"
+          :filter="true"
+          :pt="{
+            listContainer: {style: 'max-height: none'},
+            option: {
+              class: 'flex flex-row items-center justify-between',
+              style: 'cursor: pointer'
+            }
+          }"
+          @change="handleSelectionChange"
+        >
+          <template #header>
+            <div class="mb-6 text-lg">
+              <p>Add friends to share your todo lists with them.</p>
+              <p class="mt-2 text-sm">Click on a user to add or remove them as a friend.</p>
+            </div>
+          </template>
+          <template #option="slotProps">
+            <div class="flex items-center gap-2">
+              <div>{{ slotProps.option.userbFirstName }} {{ slotProps.option.userbLastName }}</div>
+              <div v-if="slotProps.option.isFriend">
+                <Tag value="Friend" severity="info" />
+              </div>
+            </div>
+          </template>
+          <template #empty>
+            <div class="p-4 text-center text-gray-500">No users found</div>
+          </template>
+        </Listbox>
+      </div>
+    </div>
   </div>
 </template>
 
