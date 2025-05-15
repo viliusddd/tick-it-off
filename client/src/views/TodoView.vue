@@ -221,17 +221,31 @@ const fetchAll = async () => {
   const fetchedTodos = await fetch(todos, fetchAllTodos)
 
   if (fetchedTodos && fetchedTodos.length !== 0) {
-    const lowestId = getMinMaxId(fetchedTodos, 'min')
-    const highestId = getMinMaxId(fetchedTodos, 'max')
+    // Use all todos for finding the ID range to ensure we get completions for all todos
+    const allTodosForCompletions = [...todos.value]
 
-    await fetch(completions, () => fetchCompletionsByIdRange(lowestId, highestId))
+    if (allTodosForCompletions.length > 0) {
+      const lowestId = getMinMaxId(allTodosForCompletions, 'min')
+      const highestId = getMinMaxId(allTodosForCompletions, 'max')
 
-    todos.value = todos.value.map(todo => ({
-      id: todo.id,
-      title: todo.title,
-      createdAt: todo.createdAt,
-      isCompleted: completions.value.some(compl => compl.todoId === todo.id)
-    }))
+      // Fetch completions directly without using the incremental fetch
+      const fetchedCompletions = await trpc.completion.findByRange.query({
+        date: userStore.currentDate.toLocaleDateString('lt'),
+        firstId: lowestId,
+        secondId: highestId
+      })
+
+      // Update completions reference
+      completions.value = fetchedCompletions
+
+      // Apply completion status to all todos
+      todos.value = todos.value.map(todo => ({
+        id: todo.id,
+        title: todo.title,
+        createdAt: todo.createdAt,
+        isCompleted: completions.value.some(compl => compl.todoId === todo.id)
+      }))
+    }
 
     // Load sharing status for own todos
     await loadSharingStatus()
@@ -299,6 +313,16 @@ const handleToggle = async (todoData: number | {id: number; isCompleted: boolean
 
   if (sharedTodo) {
     sharedTodo.isCompleted = isCompleted
+
+    // Update completions list for shared todos to ensure persistence
+    const existingCompletion = completions.value.findIndex(c => c.todoId === todoId)
+    if (isCompleted && existingCompletion === -1) {
+      // Add to completions if marked as completed and not already there
+      completions.value.push({todoId: todoId})
+    } else if (!isCompleted && existingCompletion !== -1) {
+      // Remove from completions if marked as not completed
+      completions.value.splice(existingCompletion, 1)
+    }
   }
 }
 
