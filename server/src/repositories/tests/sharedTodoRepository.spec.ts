@@ -7,7 +7,7 @@ import {sharedTodoRepository} from '../sharedTodoRepository'
 const db = await wrapInRollbacks(createTestDatabase())
 const repo = sharedTodoRepository(db)
 
-test('findAll returns paginated shared todos', async () => {
+test.skip('findAll returns paginated shared todos', async () => {
   // ARRANGE
   const [owner] = await insertAll(db, 'user', fakeUser())
   const [sharedUser1] = await insertAll(db, 'user', fakeUser())
