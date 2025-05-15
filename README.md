@@ -124,7 +124,7 @@ cp .env.example .env && \
 ## Database Diagram
 
 <div>
-  <a href="https://drawsql.app/teams/my-team-2119/diagrams/tick-it-off/embed">
+  <a href="https://drawsql.app/teams/my-team-2119/diagrams/tickitoff2/embed">
   <img
     title="tick-it-off postgreSQL diagram."
     src="./assets/tick-it-off-sql-diagram.png">
