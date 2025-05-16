@@ -94,11 +94,11 @@ More organised than a queue at the post office, and just as satisfying to get th
 1. Install dependencies
 
 ```sh
-git clone git@github.com:viliusddd/tick-it-off.git && cd tick-it-off && \
-nvm use && \
-npm i && \
-cp server/.env.example server/.env && \
-npm run migrate:latest --prefix server/ && \
+git clone git@github.com:viliusddd/tick-it-off.git && cd tick-it-off
+nvm use
+npm i
+cp server/.env.example server/.env
+npm run migrate:latest --prefix server/
 cp client/.env.example client/.env
 
 # (optionally) adjust .env values
