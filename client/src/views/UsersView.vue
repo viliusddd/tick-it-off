@@ -1,6 +1,9 @@
 <template>
   <div :class="['flex justify-center']">
-    <div :class="'overflow-hidden rounded-lg shadow-xl max-sm:w-full'">
+    <div
+      :class="'overflow-hidden rounded-lg shadow-xl max-sm:w-full'"
+      data-testid="users-container"
+    >
       <div class="mb:p-5 p-3">
         <Listbox
           multiple
@@ -16,23 +19,29 @@
             }
           }"
           @change="handleSelectionChange"
+          data-testid="users-listbox"
         >
           <template #header>
-            <div class="mb-6 text-lg">
+            <div class="mb-6 text-lg" data-testid="users-header">
               <p>Add friends to share your todo lists with them.</p>
               <p class="mt-2 text-sm">Click on a user to add or remove them as a friend.</p>
             </div>
           </template>
           <template #option="slotProps">
-            <div class="flex items-center gap-2">
+            <div
+              class="flex items-center gap-2"
+              :data-testid="`user-item-${slotProps.option.userbId}`"
+            >
               <div>{{ slotProps.option.userbFirstName }} {{ slotProps.option.userbLastName }}</div>
               <div v-if="slotProps.option.isFriend">
-                <Tag value="Friend" severity="info" />
+                <Tag value="Friend" severity="info" data-testid="friend-tag" />
               </div>
             </div>
           </template>
           <template #empty>
-            <div class="p-4 text-center text-gray-500">No users found</div>
+            <div class="p-4 text-center text-gray-500" data-testid="no-users-message">
+              No users found
+            </div>
           </template>
         </Listbox>
       </div>

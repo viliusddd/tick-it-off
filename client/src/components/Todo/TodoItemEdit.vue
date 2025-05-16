@@ -4,6 +4,8 @@
       @click="toggleModal"
       class="text-blue-500 hover:text-blue-600 focus:outline-none"
       :title="isSharedWithOthers ? 'Edit or manage sharing' : 'Edit or share with others'"
+      :data-testid="`todo-edit-button-${todoId}`"
+      aria-label="Edit or share with others"
     >
       <PencilSquareIcon class="h-5 w-5" />
     </button>
@@ -14,11 +16,12 @@
       header="Edit Todo Item"
       :style="{width: '90%', maxWidth: '500px'}"
       :dismissableMask="true"
+      :data-testid="`todo-edit-modal-${todoId}`"
     >
-      <div v-if="isLoading" class="flex justify-center">
+      <div v-if="isLoading" class="flex justify-center" data-testid="edit-loading-spinner">
         <ProgressSpinner style="width: 50px; height: 50px" />
       </div>
-      <div v-else-if="error" class="mb-4 text-red-500">
+      <div v-else-if="error" class="mb-4 text-red-500" data-testid="edit-error-message">
         {{ error }}
       </div>
       <div v-else>
@@ -26,12 +29,14 @@
           :todoId="todoId"
           :initialTitle="todoTitle"
           @title-updated="handleTitleUpdated"
+          data-testid="todo-title-editor"
         />
 
         <TodoSharingManager
           :todoId="todoId"
           :isSharedWithOthers="isSharedWithOthers"
           @share-status-changed="handleShareStatusChanged"
+          data-testid="todo-sharing-manager"
         />
       </div>
     </Dialog>

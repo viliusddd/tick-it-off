@@ -1,16 +1,23 @@
 <template>
   <div :class="['flex justify-center']">
-    <div :class="'overflow-hidden rounded-lg shadow-xl max-sm:w-full'">
+    <div
+      :class="'overflow-hidden rounded-lg shadow-xl max-sm:w-full'"
+      data-testid="statistics-container"
+    >
       <div class="mb:p-5 p-3">
-        <h1 class="mb-6 text-2xl font-bold">Statistics</h1>
+        <h1 class="mb-6 text-2xl font-bold" data-testid="statistics-heading">Statistics</h1>
 
-        <div v-if="isLoading" class="flex items-center justify-center p-8">
+        <div
+          v-if="isLoading"
+          class="flex items-center justify-center p-8"
+          data-testid="statistics-loading"
+        >
           <ProgressSpinner style="width: 50px; height: 50px" />
         </div>
 
-        <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-3" data-testid="statistics-grid">
           <!-- Total Todo Count Card -->
-          <Card class="shadow-md">
+          <Card class="shadow-md" data-testid="total-todos-card">
             <template #title>
               <div class="flex items-center">
                 <i class="pi pi-list mr-2 text-xl"></i>
@@ -18,13 +25,15 @@
               </div>
             </template>
             <template #content>
-              <div class="py-4 text-center text-4xl font-bold">{{ stats.totalTodoCount }}</div>
+              <div class="py-4 text-center text-4xl font-bold" data-testid="total-todos-count">
+                {{ stats.totalTodoCount }}
+              </div>
               <div class="text-center text-sm text-gray-500">Total tasks created</div>
             </template>
           </Card>
 
           <!-- Average Completion Card -->
-          <Card class="shadow-md">
+          <Card class="shadow-md" data-testid="daily-average-card">
             <template #title>
               <div class="flex items-center">
                 <i class="pi pi-chart-line mr-2 text-xl"></i>
@@ -32,7 +41,7 @@
               </div>
             </template>
             <template #content>
-              <div class="py-4 text-center text-4xl font-bold">
+              <div class="py-4 text-center text-4xl font-bold" data-testid="daily-average-value">
                 {{ stats.averageCompletionsPerDay.toFixed(1) }}
               </div>
               <div class="text-center text-sm text-gray-500">Tasks completed per day</div>
@@ -40,7 +49,7 @@
           </Card>
 
           <!-- Most Active Day Card -->
-          <Card class="shadow-md">
+          <Card class="shadow-md" data-testid="most-active-day-card">
             <template #title>
               <div class="flex items-center">
                 <i class="pi pi-calendar mr-2 text-xl"></i>
@@ -48,15 +57,21 @@
               </div>
             </template>
             <template #content>
-              <div v-if="stats.mostActiveDay">
-                <div class="py-2 text-center text-xl font-bold">
+              <div v-if="stats.mostActiveDay" data-testid="most-active-day-data">
+                <div class="py-2 text-center text-xl font-bold" data-testid="most-active-day-date">
                   {{ formatDate(stats.mostActiveDay.date) }}
                 </div>
-                <div class="text-center text-sm text-gray-500">
+                <div class="text-center text-sm text-gray-500" data-testid="most-active-day-count">
                   {{ stats.mostActiveDay.dailycount }} Tasks completed
                 </div>
               </div>
-              <div v-else class="py-4 text-center text-gray-500">No completions yet</div>
+              <div
+                v-else
+                class="py-4 text-center text-gray-500"
+                data-testid="no-completions-message"
+              >
+                No completions yet
+              </div>
             </template>
           </Card>
         </div>

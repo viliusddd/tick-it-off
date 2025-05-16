@@ -2,6 +2,7 @@
   <li
     class="group relative flex justify-between rounded-md p-3 transition duration-300 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-900"
     :class="{'hover:bg-surface-hover': true}"
+    :data-testid="`todo-item-${todo.id}`"
   >
     <div class="flex items-center gap-2">
       <Checkbox
@@ -9,6 +10,8 @@
         @change="toggleTodo()"
         class="h-5 w-5"
         :binary="true"
+        :data-testid="`todo-checkbox-${todo.id}`"
+        :aria-label="`Mark ${todo.title} as ${isCompletedLocal ? 'incomplete' : 'complete'}`"
       />
       <div
         :class="[
@@ -18,16 +21,23 @@
             'text-gray-400': isCompletedLocal
           }
         ]"
+        :data-testid="`todo-title-${todo.id}`"
       >
         {{ todo.title }}
         <SharedByMeIndicator v-if="isLocalShared" />
       </div>
-      <Tag v-if="todo.owner" severity="info"> {{ todo.owner }} </Tag>
+      <Tag v-if="todo.owner" severity="info" :data-testid="`todo-owner-${todo.id}`">
+        {{ todo.owner }}
+      </Tag>
     </div>
 
     <div class="flex items-center space-x-2 opacity-0 transition-opacity group-hover:opacity-100">
       <!-- Unshare button for shared items -->
-      <UnshareButton v-if="props.isShared" @confirm="unshareItem" />
+      <UnshareButton
+        v-if="props.isShared"
+        @confirm="unshareItem"
+        :data-testid="`todo-unshare-${todo.id}`"
+      />
 
       <!-- Edit/Share button for own items -->
       <EditTodoButton
@@ -37,10 +47,17 @@
         :isShared="isLocalShared"
         @share-status-changed="updateShareStatus"
         @title-updated="updateTitle"
+        :data-testid="`todo-edit-${todo.id}`"
+        aria-label="Edit or share with others"
       />
 
       <!-- Delete button - disabled for shared items -->
-      <TodoItemDelete @confirm="confirmDelete" :disabled="props.isShared" />
+      <TodoItemDelete
+        @confirm="confirmDelete"
+        :disabled="props.isShared"
+        :data-testid="`todo-delete-${todo.id}`"
+        aria-label="Delete todo"
+      />
     </div>
   </li>
 </template>

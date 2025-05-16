@@ -7,7 +7,5 @@
     "client",
     "server"
   ],
-  "dependencies": {
-    "@primevue/forms": "^4.2.4"
-  }
+  "dependencies": {}
 }

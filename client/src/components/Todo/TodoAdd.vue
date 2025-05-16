@@ -6,6 +6,7 @@
       :initialValues="{title: newTodo}"
       :validateOnBlur="true"
       class="w-full"
+      data-testid="todo-add-form"
     >
       <InputGroup>
         <InputText
@@ -17,12 +18,15 @@
           placeholder="Add a new task..."
           class="flex-grow"
           autocomplete="off"
+          data-testid="todo-input"
+          aria-label="Add a new task"
         />
         <Button
           @mousedown.prevent
           @click="addTodo"
           label="Add"
           :disabled="$form.title?.invalid || !newTodo"
+          data-testid="todo-add-button"
         >
           <p :class="{'cursor-not-allowed': $form.title?.invalid || !newTodo}">Add</p>
         </Button>
@@ -34,6 +38,7 @@
           :life="3000"
           size="small"
           variant="simple"
+          data-testid="todo-validation-message"
           >{{ $form.title.error.message }}</Message
         >
       </div>

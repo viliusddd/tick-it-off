@@ -1,9 +1,12 @@
 <template>
   <Toast />
-  <div class="m-2 flex flex-col gap-8 rounded-xl px-2 py-4 sm:px-8 sm:py-8">
+  <div
+    class="m-2 flex flex-col gap-8 rounded-xl px-2 py-4 sm:px-8 sm:py-8"
+    data-testid="settings-container"
+  >
     <div class="flex flex-col gap-8 lg:flex-row">
       <!-- Profile Information -->
-      <div class="flex-1 rounded-lg p-3 sm:p-6">
+      <div class="flex-1 rounded-lg p-3 sm:p-6" data-testid="profile-info-section">
         <h2 class="mb-4 text-xl font-semibold">Profile Information</h2>
         <Form
           v-if="userValuesLoaded"
@@ -14,6 +17,7 @@
           @submit="onDetailsFormSubmit"
           :validateOnBlur="true"
           class="flex flex-col gap-4"
+          data-testid="profile-form"
         >
           <div>
             <label for="firstName" class="mb-1 block font-medium">
@@ -26,6 +30,7 @@
               autocomplete="given-name"
               fluid
               class="w-full rounded-md border"
+              data-testid="firstName-input"
             />
             <div class="h-6">
               <Message
@@ -33,6 +38,7 @@
                 severity="error"
                 size="small"
                 variant="simple"
+                data-testid="firstName-error"
                 >{{ $form.firstName.error.message }}
               </Message>
             </div>
@@ -48,9 +54,15 @@
               autocomplete="family-name"
               fluid
               class="w-full rounded-md border"
+              data-testid="lastName-input"
             />
             <div class="h-6">
-              <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple"
+              <Message
+                v-if="$form.lastName?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                data-testid="lastName-error"
                 >{{ $form.lastName.error.message }}
               </Message>
             </div>
@@ -65,9 +77,15 @@
               :placeholder="userValues?.email"
               autocomplete="email"
               fluid
+              data-testid="email-input"
             />
             <div class="h-6">
-              <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple"
+              <Message
+                v-if="$form.email?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                data-testid="email-error"
                 >{{ $form.email.error.message }}
               </Message>
             </div>
@@ -79,18 +97,24 @@
               outlined
               @click="onProfileReset"
               class="min-w-[40px] sm:min-w-[120px]"
+              data-testid="profile-reset-button"
             >
               <i class="pi pi-refresh xxs:inline text-base"></i>
               <span class="xxs:hidden">Reset</span>
             </Button>
-            <Button type="submit" severity="primary" label="Update Details" />
+            <Button
+              type="submit"
+              severity="primary"
+              label="Update Details"
+              data-testid="profile-update-button"
+            />
           </div>
         </Form>
       </div>
       <!-- Divider for large screens -->
       <div class="mx-2 hidden w-px lg:block"></div>
       <!-- Change Password -->
-      <div class="flex-1 rounded-lg p-3 sm:p-6">
+      <div class="flex-1 rounded-lg p-3 sm:p-6" data-testid="password-change-section">
         <h2 class="mb-4 text-xl font-semibold">Change Password</h2>
         <Form
           :key="passwordFormKey"
@@ -100,6 +124,7 @@
           @submit="onPasswordFormSubmit"
           :validateOnBlur="true"
           class="flex flex-col gap-4"
+          data-testid="password-form"
         >
           <div>
             <label for="originalPassword" class="mb-1 block font-medium">
@@ -113,6 +138,7 @@
               toggleMask
               autocomplete="current-password"
               class="w-full"
+              data-testid="current-password-input"
             />
             <div class="h-6">
               <Message
@@ -120,6 +146,7 @@
                 severity="error"
                 size="small"
                 variant="simple"
+                data-testid="current-password-error"
                 >{{ $form.originalPassword.error.message }}</Message
               >
             </div>
@@ -135,6 +162,7 @@
               fluid
               toggleMask
               autocomplete="new-password"
+              data-testid="new-password-input"
             />
             <div class="h-6">
               <Message
@@ -142,6 +170,7 @@
                 severity="error"
                 size="small"
                 variant="simple"
+                data-testid="new-password-error"
                 >{{ $form.changePassword.error.message }}</Message
               >
             </div>
@@ -157,6 +186,7 @@
               toggleMask
               autocomplete="new-password"
               class="w-full"
+              data-testid="repeat-password-input"
             />
             <div class="h-6">
               <Message
@@ -164,6 +194,7 @@
                 severity="error"
                 size="small"
                 variant="simple"
+                data-testid="repeat-password-error"
                 >{{ $form.repeatPassword.error.message }}</Message
               >
             </div>
@@ -177,6 +208,7 @@
             severity="error"
             size="small"
             variant="simple"
+            data-testid="passwords-match-error"
             >Passwords don't match.</Message
           >
           <div class="mt-4 flex justify-end gap-2">
@@ -186,11 +218,17 @@
               outlined
               @click="onPasswordReset"
               class="flex min-w-[40px] sm:min-w-[120px]"
+              data-testid="password-reset-button"
             >
               <i class="pi pi-refresh xxs:inline text-base"></i>
               <span class="xxs:hidden">Reset</span>
             </Button>
-            <Button type="submit" severity="danger" label="Change Password" />
+            <Button
+              type="submit"
+              severity="danger"
+              label="Change Password"
+              data-testid="password-update-button"
+            />
           </div>
         </Form>
       </div>

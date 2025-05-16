@@ -1,13 +1,20 @@
 <template>
   <div :class="['flex justify-center']">
-    <div :class="'overflow-hidden rounded-lg shadow-xl max-sm:w-full'">
+    <div
+      :class="'overflow-hidden rounded-lg shadow-xl max-sm:w-full'"
+      data-testid="todo-view-container"
+    >
       <div class="mb:p-5 p-3">
-        <Calendar class="mb-3" />
-        <NewTask class="my-3" @add-todo="createTodo" />
+        <Calendar class="mb-3" data-testid="todo-calendar" />
+        <NewTask class="my-3" @add-todo="createTodo" data-testid="new-task-component" />
 
         <!-- Combined list of all todos -->
-        <div>
-          <div v-for="todo in allTodos" :key="`todo-${todo.id}`">
+        <div data-testid="todos-list">
+          <div
+            v-for="todo in allTodos"
+            :key="`todo-${todo.id}`"
+            :data-testid="`todo-container-${todo.id}`"
+          >
             <TodoItem
               :todo="todo"
               :isShared="todo.isSharedWithMe"
@@ -19,18 +26,18 @@
           </div>
         </div>
 
-        <div v-if="isLoading" class="py-4 text-center">
+        <div v-if="isLoading" class="py-4 text-center" data-testid="loading-spinner">
           <ProgressSpinner style="width: 30px; height: 30px" />
         </div>
-        <div v-if="!isLoading && allTodos.length === 0">
+        <div v-if="!isLoading && allTodos.length === 0" data-testid="empty-todos-message">
           <Message severity="info"
             >No tasks for this day. Add one above to start your journey!</Message
           >
         </div>
-        <div v-if="!isLoading && hasMore">
+        <div v-if="!isLoading && hasMore" data-testid="load-more-message">
           <Message severity="info">Scroll down to reveal more tasks...</Message>
         </div>
-        <div ref="loadMoreTrigger" class="h-1"></div>
+        <div ref="loadMoreTrigger" class="h-1" data-testid="load-more-trigger"></div>
       </div>
     </div>
   </div>

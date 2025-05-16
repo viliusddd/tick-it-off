@@ -5,22 +5,28 @@
       :resolver="zodResolver(todoSchema)"
       :initialValues="{title: initialTitle}"
       :validateOnBlur="true"
+      data-testid="todo-title-edit-form"
     >
       <div class="flex flex-col gap-2">
         <label for="todoTitle" class="text-md mb-2 block font-medium">Change todo title</label>
         <div class="flex">
           <InputText
             name="title"
+            id="todoTitle"
             type="text"
             placeholder="Todo title"
             v-model="editedTitle"
             class="mr-2 w-full"
+            data-testid="todo-title-input"
+            aria-label="Todo title"
           />
           <Button
             icon="pi pi-check"
             :disabled="!titleChanged || $form.title?.invalid"
             @click="updateTodoTitle($form)"
             :class="{'cursor-not-allowed': !titleChanged || $form.title?.invalid}"
+            data-testid="todo-title-save-button"
+            aria-label="Save title"
           >
             <i
               class="pi pi-check"
@@ -35,6 +41,7 @@
             :life="3000"
             size="small"
             variant="simple"
+            data-testid="todo-title-validation-message"
             >{{ $form.title.error.message }}</Message
           >
         </div>
