@@ -73,4 +73,3 @@ test('findByRange returns empty array when no completions in range', async () =>
   // ASSERT
   expect(result.length).toBe(0)
 })
-
