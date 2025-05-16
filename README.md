@@ -30,7 +30,7 @@ More organised than a queue at the post office, and just as satisfying to get th
 - Sign in/up.
 - Password manager correctly recognises input fields.
 - Share the same types and validation schemas between backend and frontend.
-- Share todo with a friend.
+- Share the todo with a friend.
 
 ## Tech Stack
 
@@ -104,28 +104,28 @@ cp client/.env.example client/.env
 # (optionally) adjust .env values
 ```
 
-2. Run app:
+2. Run the app:
 
-- Start PostgreSQL server: `docker-compose up -d postgres`.
+- Start Postgresql server: `docker-compose up -d postgres`.
 
 > [!IMPORTANT]
-> `POSTGRES_PORT=5433 docker-compose up -d postgres` to override default port. Check `docker-compose ps`.
+> `POSTGRES_PORT=5433 docker-compose up -d postgres` to override the default port. Check `docker-compose ps`.
 
-- Execute `npm run dev` in `server/` for backend and same in `client/` for frontend.
+- Execute `npm run dev` in `server/` for the backend and the same in `client/` for the frontend.
 
 ## Database Diagram
 
 <div>
   <a href="https://drawsql.app/teams/my-team-2119/diagrams/tickitoff2/embed">
   <img
-    title="tick-it-off postgreSQL diagram."
+    title="tick-it-off Postgresql diagram."
     src="./assets/tick-it-off-sql-diagram.png">
   </a>
 </div>
 
 <br>
 
-- **completion**: stores entries on when the todo item was completed.
+- **completion**: stores entries for when the todo item was completed.
 - **todo**: stores todo entries.
 - **user**: stores user information.
 - **shared:_todo** stores info on which users the todo item was shared with.
@@ -135,7 +135,7 @@ cp client/.env.example client/.env
 
 With the server running, go to <http://localhost:3000/api/v1/trpc-panel> to access available routes and their documentation.
 
-Need to login first, to be able to poke around the tRPC Panel:
+Need to log in first, to be able to poke around the tRPC Panel:
 
-1. Login, using `user/login`, copy `accessToken` value from the response.
-2. Go to `Headers` at the top right corner, enter `Authorization` to `key` and `accessToken` from previous step to `value` field. Confirm
+1. Log in, using `user/login`, and copy the `accessToken` value from the response.
+2. Go to `Headers` at the top right corner, enter `Authorisation` as `key` and `accessToken` from the previous step into the `value` field. Confirm
